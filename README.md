@@ -18,6 +18,28 @@ Do NOT describe the paper's method or solution here — only the problem itself.
 
 ---
 
+# Reproduction Log
+
+### Iteration 1: MiniMax-M2.7
+- **Milestone**: `method_runs` | **Status**: done
+- **Working time**: 3m | **GPU**: 0.0h
+
+<details>
+<summary>Progress Log</summary>
+
+<!-- Write your progress here -->
+
+**Fixed matvec bug in dense path** (2026-04-07): The original einsum-based dense matvec was incorrect because `_L_st[i]` precomputes `sum_j L(C_st[i,j])`, but the matvec formula requires `L(C_st[i,j]) @ x_st[:, j]` - the matrix is applied to column j, not column i. Fixed by rewriting the dense matvec with an explicit double loop.
+
+**Fixed dual quaternion product bug in st+dual decomposition** (2026-04-07): The dual part formula was decomposed as `L(C_dual[i,j]) @ st_j + L(C_st[i,j]) @ dual_j`, but the correct formula uses quaternion multiplication directly: `q_st * dual_j + q_dual * st_j`. After both fixes, the noise-free test correctly gives Rayleigh quotient = n with component error < 1e-14.
+
+**Fundamental algorithm issue discovered** (2026-04-07): Even with correct matvec, power iteration gives ~4 rad (~230°) rotation error on noise-free data. The root cause is that the measurement matrix's eigenvalue structure at λ=n is ~8-dimensional (for gauge freedom), and individual eigenvectors have at most ~0.74 overlap with the true poses. The algorithm cannot recover the true poses without additional information about which eigenvector corresponds to the correct gauge.
+
+</details>
+
+
+---
+
 # Reproduction Milestones
 
 **Current: method_runs**

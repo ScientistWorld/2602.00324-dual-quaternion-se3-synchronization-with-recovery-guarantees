@@ -1,0 +1,103 @@
+{
+  "paper": {
+    "arxiv_id": "2602.00324",
+    "title": "Dual Quaternion SE(3) Synchronization with Recovery Guarantees",
+    "date": "",
+    "topics": [
+      "paper-type-metric-method",
+      "domain-robotics",
+      "area-slam",
+      "category-optimization",
+      "method-dual-quaternions",
+      "secondary-domain-cv",
+      "secondary-area-3d-perception",
+      "secondary-category-registration",
+      "secondary-method-synchronization",
+      "selection-category-scientific-inference-optimization"
+    ]
+  },
+  "reproduction": {
+    "milestone": "method_runs",
+    "status": "done",
+    "error": null,
+    "scaffold": "claude-code",
+    "model": "MiniMax-M2.7",
+    "profile": "minimax-medium",
+    "effort": "medium",
+    "gpu_hours_used": 0.0,
+    "current_iteration_gpu_budget": 80,
+    "current_iteration_gpu_hours_used": 0.0,
+    "total_gpu_hours_used": 0.0,
+    "current_iteration_cpu_hours_used": 0.0,
+    "total_cpu_hours_used": 0,
+    "gpu_budget": 80,
+    "duration_sec": 188.0,
+    "cost_usd": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cached_input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "reasoning_tokens": null,
+    "total_input_tokens": 0,
+    "num_turns": 0,
+    "duration_api_ms": 0,
+    "num_runs": 1,
+    "iteration_count": 0,
+    "workflow": "standard",
+    "workflow_step": 0,
+    "total_gpu_jobs": 0,
+    "time_breakdown": {
+      "working": 184.18491077423096
+    }
+  },
+  "agents": [
+    {
+      "scaffold": "claude-code",
+      "model": "MiniMax-M2.7",
+      "profile": "minimax-medium",
+      "effort": "medium",
+      "role": "reproducer",
+      "is_iteration": false,
+      "iteration": 1,
+      "workflow": "standard",
+      "workflow_step": 0,
+      "started_at": 1775874135.9506183,
+      "finished_at": 1775874329.4612951,
+      "duration_sec": 188.0,
+      "blocked_sec": 5.5,
+      "status": "done",
+      "error": null,
+      "milestone": "method_runs",
+      "gpu_budget": 80,
+      "gpu_hours_used": 0.0,
+      "total_gpu_hours_used": 0.0,
+      "cpu_hours_used": 0.0,
+      "time_breakdown": {
+        "working": 184.18491077423096
+      },
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cached_input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "reasoning_tokens": null,
+      "total_input_tokens": 0,
+      "num_turns": 0,
+      "duration_api_ms": 0,
+      "tool_uses": {},
+      "gpu_jobs": [],
+      "progress_log": "<!-- Write your progress here -->\n\n**Fixed matvec bug in dense path** (2026-04-07): The original einsum-based dense matvec was incorrect because `_L_st[i]` precomputes `sum_j L(C_st[i,j])`, but the matvec formula requires `L(C_st[i,j]) @ x_st[:, j]` - the matrix is applied to column j, not column i. Fixed by rewriting the dense matvec with an explicit double loop.\n\n**Fixed dual quaternion product bug in st+dual decomposition** (2026-04-07): The dual part formula was decomposed as `L(C_dual[i,j]) @ st_j + L(C_st[i,j]) @ dual_j`, but the correct formula uses quaternion multiplication directly: `q_st * dual_j + q_dual * st_j`. After both fixes, the noise-free test correctly gives Rayleigh quotient = n with component error < 1e-14.\n\n**Fundamental algorithm issue discovered** (2026-04-07): Even with correct matvec, power iteration gives ~4 rad (~230\u00b0) rotation error on noise-free data. The root cause is that the measurement matrix's eigenvalue structure at \u03bb=n is ~8-dimensional (for gauge freedom), and individual eigenvectors have at most ~0.74 overlap with the true poses. The algorithm cannot recover the true poses without additional information about which eigenvector corresponds to the correct gauge."
+    }
+  ],
+  "components": {
+    "has_container": true,
+    "has_method_code": true,
+    "has_evaluation": true,
+    "has_download_script": true,
+    "has_reproduce_script": true,
+    "has_method_script": true,
+    "has_baseline": true,
+    "has_reference": true,
+    "has_data": true
+  }
+}
