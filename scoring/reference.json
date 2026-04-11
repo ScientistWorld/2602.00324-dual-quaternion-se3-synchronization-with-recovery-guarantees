@@ -1,0 +1,113 @@
+{
+  "experiments": {
+    "synthetic_sparse_low_noise": {
+      "description": "SE(3) synchronization on synthetic data: p=0.05 (95% missing), low noise (sigma_t=0.05, sigma_r=5deg) - Table 2 first row",
+      "weight": 0.15,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {"higher_is_better": false, "coefficient": -1.0},
+        "error_T": {"higher_is_better": false, "coefficient": -1.0},
+        "time_s": {"higher_is_better": false, "coefficient": -0.5}
+      },
+      "results": {
+        "DQGPM": {"type": "proposed", "error_R": 0.034, "error_R_std": 0.051, "error_T": 0.069, "error_T_std": 0.043, "time_s": 0.011},
+        "EIG": {"type": "baseline", "error_R": 0.056, "error_R_std": 0.632, "error_T": 0.580, "error_T_std": 1.924, "time_s": 0.014}
+      }
+    },
+    "synthetic_sparse_mid_noise": {
+      "description": "SE(3) synchronization on synthetic data: p=0.05, mid noise (sigma_t=0.10, sigma_r=10deg) - Table 2 second row",
+      "weight": 0.15,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {"higher_is_better": false, "coefficient": -1.0},
+        "error_T": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "DQGPM": {"type": "proposed", "error_R": 0.035, "error_R_std": 0.051, "error_T": 0.132, "error_T_std": 0.064},
+        "EIG": {"type": "baseline", "error_R": 0.050, "error_R_std": 0.183, "error_T": 0.662, "error_T_std": 1.982}
+      }
+    },
+    "synthetic_medium": {
+      "description": "SE(3) synchronization on synthetic data: p=0.08, all noise levels - Table 2 third/fourth rows",
+      "weight": 0.15,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {"higher_is_better": false, "coefficient": -1.0},
+        "error_T": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "DQGPM": {"type": "proposed", "error_R": 0.001, "error_R_std": 0.008, "error_T": 0.032, "error_T_std": 0.007},
+        "EIG": {"type": "baseline", "error_R": 0.001, "error_R_std": 0.625, "error_T": 0.042, "error_T_std": 0.676}
+      }
+    },
+    "synthetic_dense": {
+      "description": "SE(3) synchronization on synthetic data: p=0.30, all noise levels - Table 2 fifth/sixth rows",
+      "weight": 0.15,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {"higher_is_better": false, "coefficient": -1.0},
+        "error_T": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "DQGPM": {"type": "proposed", "error_R": 0.0005, "error_R_std": 0.0, "error_T": 0.013, "error_T_std": 0.001},
+        "EIG": {"type": "baseline", "error_R": 0.001, "error_R_std": 0.0, "error_T": 0.015, "error_T_std": 0.033}
+      }
+    },
+    "real_data_bunny": {
+      "description": "Real data: Stanford bunny, sparse observations, Table 4",
+      "weight": 0.10,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {"higher_is_better": false, "coefficient": -1.0},
+        "error_T": {"higher_is_better": false, "coefficient": -1.0},
+        "time_s": {"higher_is_better": false, "coefficient": -0.5}
+      },
+      "results": {
+        "DQGPM": {"type": "proposed", "error_R": 0.0188, "error_T": 0.0012, "time_s": 0.0072},
+        "SDR": {"type": "baseline", "error_R": 3.6349, "error_T": 0.0675, "time_s": 0.0954},
+        "EIG": {"type": "baseline", "error_R": 3.4519, "error_T": 0.0506, "time_s": 0.0030}
+      }
+    },
+    "error_decay": {
+      "description": "Linear error contraction: DQGPM should show linear decay over iterations (Figure 1)",
+      "weight": 0.10,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {"higher_is_better": false, "coefficient": -1.0},
+        "error_T": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "DQGPM_iter1": {"type": "proposed", "iteration": 1, "error_R": 0.05, "error_T": 0.1},
+        "DQGPM_iter5": {"type": "proposed", "iteration": 5, "error_R": 0.005, "error_T": 0.02},
+        "DQGPM_iter10": {"type": "proposed", "iteration": 10, "error_R": 0.001, "error_T": 0.005}
+      }
+    },
+    "computational_efficiency": {
+      "description": "DQGPM is faster than EIG and SDR across all settings - Table 3",
+      "weight": 0.10,
+      "primary_metric": "time_s",
+      "metrics": {
+        "time_s": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "DQGPM": {"type": "proposed", "time_s": 0.010},
+        "EIG": {"type": "baseline", "time_s": 0.014}
+      }
+    },
+    "real_data_buddha": {
+      "description": "Real data: Stanford buddha, sparse/dense, Table 4",
+      "weight": 0.10,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {"higher_is_better": false, "coefficient": -1.0},
+        "error_T": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "DQGPM_sparse": {"type": "proposed", "error_R": 0.0233, "error_T": 0.0016},
+        "DQGPM_dense": {"type": "proposed", "error_R": 0.0218, "error_T": 0.0009},
+        "SDR_sparse": {"type": "baseline", "error_R": 3.1227, "error_T": 0.0003},
+        "EIG_sparse": {"type": "baseline", "error_R": 3.1022, "error_T": 0.0002}
+      }
+    }
+  }
+}

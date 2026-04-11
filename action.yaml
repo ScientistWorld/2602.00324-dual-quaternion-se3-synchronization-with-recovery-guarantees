@@ -27,8 +27,6 @@
 #   milestone: core_claim
 #   notes: "Reproduced the core claim. Environment packaged."
 
-action: pending
-gpus: 1
-test: false
-milestone: none
-notes: ""
+action: done
+milestone: method_runs
+notes: "Implementation reaches method_runs but blocked at core_claim. Fixed two critical matvec bugs (einsum indexing and dual quaternion product formula). However, the algorithm produces ~230° rotation error even in noise-free conditions because the measurement matrix has a degenerate eigenspace at eigenvalue n, and power iteration converges to a random eigenvector with poor overlap with true poses."

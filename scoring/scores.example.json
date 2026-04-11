@@ -1,15 +1,9 @@
 {
   "experiments": {
-    "imagenet_classification": {
+    "synthetic_sparse_low_noise": {
       "results": {
-        "resnet50":   {"top1_accuracy": 75.8, "top5_accuracy": 92.7, "param_count_M": 25.6},
-        "our_method": {"top1_accuracy": 82.1, "top5_accuracy": 95.0, "param_count_M": 25.6}
-      }
-    },
-    "ablation_key_component": {
-      "results": {
-        "our_method":           {"top1_accuracy": 81.9, "param_count_M": 25.6},
-        "our_method_no_module": {"top1_accuracy": 78.3, "param_count_M": 24.1}
+        "DQGPM": {"error_R": 0.035, "error_R_std": 0.052, "error_T": 0.070, "error_T_std": 0.044, "time_s": 0.012},
+        "EIG": {"error_R": 0.058, "error_R_std": 0.640, "error_T": 0.585, "error_T_std": 1.93}
       }
     }
   }
