@@ -86,3 +86,16 @@ core.[0-9]*
 .torch_backup/
 nltk_data/
 __MACOSX/
+
+# Auto-added by swarm
+.apptainer/
+.apptainer_tmp/
+.apptainer_tools/
+.singularity/
+environment/container_sandbox/
+environment/*sandbox*/
+environment/sandbox*/
+environment/rootfs*/
+environment/*-rootfs*
+environment/*.tar.gz
+environment/*.tar
