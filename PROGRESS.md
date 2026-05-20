@@ -23,6 +23,18 @@ Continuation validation job `b6338986-caa` reran the retained sparse suite
 inside the compute container and passed `validate.py --compare
 --post-reproducer` with the regenerated artifacts.
 
+The latest audit found that the compute entrypoint depended on gitignored
+checkpoint artifacts. `scripts/run.sh` now calls the full reproduction first,
+so a fresh job rebuilds the core artifacts before scoring. It then probes
+`p008_noise010`, `p030_noise005`, and `p030_noise010` into
+`tmp/extension_scores.json` for possible expansion without overwriting the
+accepted core `scores.json`.
+
+The UDQ projection now implements the exact zero-entry fallback from
+Proposition 2.7: zero components of a nonzero vector use a normalized nonzero
+component instead of silently becoming identity. This rarely affects the
+current diagonal synthetic matrix, but it closes an algorithmic mismatch.
+
 Verifier audit on 2026-05-20 corrected the `p005_noise005` Table 2 reference
 value for DQGPM translation error from `0.135 ± 0.043` to `0.069 ± 0.043`.
 The main evaluator now emits the p90 and max stability metrics already
@@ -149,6 +161,13 @@ confirms the retained core suite remains reproducible after the audit cleanup
 that removed the misleading `eig` runner alias and hardened
 `scripts/evaluate.sh` against empty artifact globs.
 
+The next submitted CPU job regenerates the validated core suite from scratch
+after the projection and artifact-size fixes, then evaluates the three
+extension settings separately. A higher milestone should only be claimed if
+those extension results support the paper's trend and pass the same
+paper-consistency checks after being promoted into `reference.json`,
+`TARGETS.md`, and `scores.json`.
+
 ## Deviations from Paper
 
 The completed smoke job used 5 trials and the next job used 30 trials rather
@@ -161,3 +180,7 @@ The DQGPM iteration cap is 200 for the final run. The paper stops by residual
 tolerance and does not emphasize a fixed cap; this cap is a compute budget
 guard, and the 50-iteration and 200-iteration runs gave the same measured
 scores to the displayed precision.
+
+Diagnostic DQGPM histories are no longer stored by default. The method still
+uses the same iterates, but artifacts now keep only final estimates unless
+`--record-history` is requested for plotting or convergence analysis.

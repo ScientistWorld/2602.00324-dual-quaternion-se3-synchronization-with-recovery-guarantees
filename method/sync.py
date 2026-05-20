@@ -122,8 +122,34 @@ def build_synthetic_measurement(
     return MeasurementMatrix(c_st, c_dual, neighbors), poses, edge_count
 
 
+def _is_zero_dq(dq: DualQuaternion) -> bool:
+    return (
+        float(np.dot(dq.q_st, dq.q_st)) < 1e-28
+        and float(np.dot(dq.q_dual, dq.q_dual)) < 1e-28
+    )
+
+
 def project_onto_udq_n(x: np.ndarray) -> np.ndarray:
-    return vector_from_dqs([normalize_dual_quaternion(dq) for dq in dqs_from_vector(x)])
+    """Elementwise projection from Proposition 2.7.
+
+    Nonzero entries are normalized directly.  Exact zero entries in a nonzero
+    vector use the normalized first nonzero entry, corresponding to choosing a
+    coordinate vector e with e*y != 0 in the paper.  The all-zero vector maps to
+    the all-identity point in UDQ^n.
+    """
+    dqs = dqs_from_vector(x)
+    fallback = None
+    for dq in dqs:
+        if not _is_zero_dq(dq):
+            fallback = normalize_dual_quaternion(dq)
+            break
+    if fallback is None:
+        fallback = DualQuaternion.identity()
+
+    projected = [
+        fallback if _is_zero_dq(dq) else normalize_dual_quaternion(dq) for dq in dqs
+    ]
+    return vector_from_dqs(projected)
 
 
 def _dual_vector_norm(x: np.ndarray) -> tuple[float, float]:
@@ -213,6 +239,7 @@ def run_trial(
     seed: int,
     method: str,
     max_iter: int = 50,
+    record_history: bool = False,
 ) -> dict:
     c, poses, edge_count = build_synthetic_measurement(n, p, sigma_t, sigma_r_deg, seed)
     x0, init_iters, init_residual = spectral_power_initializer(c, seed + 10_000)
@@ -221,7 +248,7 @@ def run_trial(
         estimate = x0_projected
         history = []
     elif method == "dqgpm":
-        estimate, history = dqgpm(c, x0, max_iter=max_iter, record_history=True)
+        estimate, history = dqgpm(c, x0, max_iter=max_iter, record_history=record_history)
     else:
         raise ValueError(f"unknown method: {method}")
 

@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-05-20 06:53] - core_claim
+- Continued from the verified `core_claim` package and audited the next expansion path.
+- Fixed `scripts/run.sh` so compute jobs regenerate gitignored artifacts from scratch before validation.
+- Matched Proposition 2.7's zero-entry projection fallback and prepared a CPU job that validates the core suite, then probes additional Table 2 settings without overwriting accepted scores.
+
 ### [2026-05-20 06:49] - core_claim
 - Fixed the final validator failure in `scores_train.json` by switching train/test scoring to a deterministic seed-modulo split that keeps both slices within the paper-consistency guardrail.
 - Reused the main artifact-reading evaluator for train/test scoring, removing the previous regeneration warning.

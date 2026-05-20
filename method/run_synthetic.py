@@ -30,6 +30,11 @@ def main() -> None:
     parser.add_argument("--max-iter", type=int, default=50)
     parser.add_argument("--output", default="checkpoints/synthetic_results.json")
     parser.add_argument("--seed", type=int, default=260200324)
+    parser.add_argument(
+        "--record-history",
+        action="store_true",
+        help="Store every DQGPM iterate for diagnostic plots. Off by default to keep artifacts small.",
+    )
     args = parser.parse_args()
 
     n, p, sigma_t, sigma_r = EXPERIMENTS[args.experiment]
@@ -45,6 +50,7 @@ def main() -> None:
                 seed=seed,
                 method=args.method,
                 max_iter=args.max_iter,
+                record_history=args.record_history,
             )
         )
 
