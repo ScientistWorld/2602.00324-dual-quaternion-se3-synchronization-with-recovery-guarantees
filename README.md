@@ -1,20 +1,103 @@
+# Overview
+
+This paper studies synchronization over `SE(3)`: recovering absolute 3D poses
+from noisy relative transformations. The reproduction implements the paper's
+unit-dual-quaternion pipeline: spectral power initialization followed by
+DQGPM refinement with elementwise projection onto valid poses.
+
+The packaged benchmark focuses on the synthetic experiments from Table 2,
+where DQGPM is compared against the projected spectral estimator under sparse
+and dense Erdos-Renyi observation graphs.
+
+---
+
 # Problem Definition
 
-What problem does this paper address? Write this so that someone with no knowledge of the paper can understand what needs to be solved and how success is measured.
-
-Do NOT describe the paper's method or solution here — only the problem itself. Think about if a future scientist agent try to solve this problem from scratch without knowing what approach the paper took. If you leak the solution, you compromise the benchmark.
+Recover absolute 3D rigid poses from noisy pairwise relative pose measurements.
+The unknowns are `n` elements of `SE(3)`, each with a rotation and translation.
+The observations are an incomplete graph of relative transformations between
+pairs of nodes, corrupted by rotation and translation noise.
 
 ## Research Question
 
-<!-- What problem or challenge does this paper tackle? What gap in existing work does it address? -->
+Can a synchronization method recover globally consistent absolute poses with
+low rotation and translation error when many pairwise measurements are missing
+and the available measurements are noisy?
 
 ## Why It Matters
 
-<!-- Why is this problem important? What would a good solution enable? Make it short -->
+This is a core primitive for pose-graph optimization, SLAM, structure from
+motion, and multi-scan point-set registration. Better synchronization improves
+global alignment before downstream registration or mapping steps.
 
 ## Success Criteria
 
-<!-- What would a successful solution look like? What properties should it have? This is about the goal, not the paper's specific approach. Make it short -->
+A successful method produces valid `SE(3)` poses for every node and, after
+global gauge alignment, has lower mean rotation and translation error than a
+spectral synchronization baseline under the same graph, noise, and trial
+settings.
+
+---
+
+# Paper's Method
+
+## Key Contribution
+
+The paper formulates `SE(3)` synchronization directly over unit dual
+quaternions and uses a two-stage solver with recovery guarantees.
+
+## Approach
+
+Each pose is represented as a unit dual quaternion
+`x = (1 + eps * t / 2) q`. Pairwise relative measurements form a Hermitian
+dual-quaternion matrix `C`. The objective maximizes `x* C x` over one unit
+dual quaternion per node.
+
+The solver first runs power iteration on the Hermitian dual-quaternion
+measurement matrix to obtain a spectral initializer. It then applies the dual
+quaternion generalized power method: repeatedly compute `y = C x` and project
+each entry of `y` onto the unit dual-quaternion set.
+
+## Main Claims
+
+The central empirical claim is that this DQGPM refinement improves pose
+recovery over a projected spectral estimator, especially in sparse synthetic
+measurement graphs. A secondary claim is that the per-iteration projection
+keeps all iterates feasible and produces linear error contraction to a
+noise-dependent floor.
+
+---
+
+# Evaluation
+
+## Metrics
+
+Evaluation first aligns the estimated poses to the ground truth by a single
+global right action. Rotation error is
+`2 arccos(2 <q1, q2>^2 - 1)` for unit quaternions. Translation error is the
+Euclidean norm between aligned translations. `error_R` and `error_T` are means
+over all poses and are lower-is-better. Standard deviations are reported over
+independent trials.
+
+## Baselines and Targets
+
+The main baseline is `eig`, the projected spectral estimator. The proposed
+target is `dqgpm`, which should reduce error after iterative refinement. Paper
+targets are from synthetic Table 2 for `n=100`:
+
+- `p005_noise005`: `p=0.05`, `sigma_t=0.05`, `sigma_r=5 deg`.
+- `p005_noise010`: `p=0.05`, `sigma_t=0.10`, `sigma_r=10 deg`.
+- `p030_noise010`: `p=0.30`, `sigma_t=0.10`, `sigma_r=10 deg`.
+
+## Evaluation Protocol
+
+Generate an Erdos-Renyi measurement graph with observation probability `p`.
+Ground-truth rotations use random axes and angles uniform in `[0, 2pi)`;
+translations have iid `N(0,1)` coordinates. Noise rotations use random axes
+and Gaussian angles with standard deviation `sigma_r` degrees; noise
+translations have iid `N(0, sigma_t^2)` coordinates. The shifted noisy edge
+model is `C_ij = x_i x_j* + xi_ij - 1`, diagonal entries are identity, and
+missing off-diagonal entries are zero. Results are averaged across trials.
 
 ---
 
@@ -83,12 +166,55 @@ Do NOT describe the paper's method or solution here — only the problem itself.
 
 </details>
 
+### Iteration 1: gpt-5.5
+- **Milestone**: `core_claim` | **Status**: done
+- **Working time**: 18m | **GPU**: 0.0h
+- **Jobs**: 4 total (4 completed, 0 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-05-20 00:00] - none
+- Read the paper's synthetic protocol and audited the existing partial implementation.
+- Replaced the fragile method/evaluation scripts with a canonical DQGPM implementation and artifact-based evaluator.
+- Prepared a CPU smoke-test job; milestone remains `none` until the job completes successfully.
+
+### [2026-05-20 00:00] - none
+- Tightened Algorithm 1 to normalize power-iteration vectors with the dual-number norm described in the paper.
+- Removed an undeclared trial-count field from evaluator outputs so `scores.json` mirrors `reference.json`.
+- Revalidated `reference.json`, syntax, and import separation before resubmitting the CPU smoke test.
+
+### [2026-05-20 00:00] - method_runs
+- CPU smoke job completed successfully: DQGPM and EIG artifacts were generated for `p005_noise005`.
+- Artifact-based evaluation wrote valid scores and `validate.py --compare` passed.
+- Verified Algorithm 2 execution from the spectral power-method initializer.
+- Prepared a larger CPU job over all three declared Table 2 settings to test the core claim.
+
+### [2026-05-20 00:00] - method_runs
+- Expanded CPU job completed successfully across all three scored settings.
+- DQGPM improved over the rounded dual-quaternion spectral initializer in each setting, but dense-setting rotation error remained much larger than the paper's near-zero value.
+- Corrected the baseline label from `eig` to `dq_spectral`; the external matrix-EIG baseline from the paper is not implemented.
+- Prepared a 100-trial CPU job to reduce variance and produce paper-scale averages before claiming `core_claim`.
+
+### [2026-05-20 00:00] - method_runs
+- The 100-trial run completed and validated; DQGPM consistently improved over `dq_spectral`.
+- Sparse-setting DQGPM histories hit the 50-iteration cap in almost every trial, so those results may be under-converged.
+- Increased the configurable GPM iteration budget to 200 and prepared one more 100-trial run.
+
+### [2026-05-20 00:00] - core_claim
+- The 100-trial, 200-iteration CPU run completed and `validate.py --compare` passed.
+- DQGPM improved over the rounded dual-quaternion spectral initializer on rotation and translation error in all three scored synthetic settings.
+- Increasing the iteration budget from 50 to 200 did not materially change the scores, so the sparse runs appear to have reached their fixed point.
+- Absolute errors remain higher than the paper's Table 2 values, and the external matrix-EIG/SDR baselines are not implemented.
+
+</details>
+
 
 ---
 
 # Reproduction Milestones
 
-**Current: none**
+**Current: core_claim**
 
 ## Stop Justification
-- Completed at milestone `none`.
+- Completed at milestone `core_claim`.

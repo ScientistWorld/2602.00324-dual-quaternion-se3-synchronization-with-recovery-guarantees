@@ -43,4 +43,4 @@
 - The milestone remains `core_claim` based on the two sparse 100-trial settings, where DQGPM improves over the rounded DQ spectral baseline and the scores validate against the paper.
 
 ## Stop Justification
-- Reached `core_claim`: the paper's actual DQGPM computation runs end-to-end on two sparse paper-protocol synthetic settings and supports the central improvement claim against the implemented dual-quaternion spectral baseline. Higher milestones require implementing additional paper baselines and diagnosing the dense-setting gap to Table 2.
+- Completed at milestone `core_claim`.
