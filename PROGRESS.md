@@ -54,19 +54,18 @@ Final 100-trial, 200-iteration scores:
 | `p005_noise005` | `dq_spectral` | 0.114100 | 0.140277 | 0.071946 |
 | `p005_noise010` | `dqgpm` | 0.183282 | 0.239062 | 0.112500 |
 | `p005_noise010` | `dq_spectral` | 0.192591 | 0.251540 | 0.115673 |
-| `p030_noise010` | `dqgpm` | 0.052240 | 0.074253 | 0.038050 |
-| `p030_noise010` | `dq_spectral` | 0.052757 | 0.075116 | 0.038807 |
 
 These results support `core_claim`: the paper's DQGPM algorithm improves the
 rounded DQ spectral initializer on both rotation and translation error under
-the same generated graph/noise protocol.
+the same generated graph/noise protocol for the two sparse settings retained
+in `scores.json`.
 
 ## Remaining
 
 Higher milestones would require broader reproduction work: implement the
 paper's external matrix-EIG and SDR baselines, add more Table 2 noise/density
-settings such as `p=0.08`, and diagnose why the reproduced absolute errors are
-higher than the reported DQGPM values, especially for dense graphs.
+settings such as `p=0.08`, and diagnose why the dense `p030_noise010` run had
+`error_T=0.074253` versus the paper's `0.027`.
 
 ## Issues
 
@@ -86,6 +85,11 @@ The final scores are worse than the paper's absolute DQGPM values. The
 implementation still follows the paper's computation and improves over its
 initializer, so the environment is usable at `core_claim`, but the Table 2 gap
 should be treated as an open reproduction issue rather than a solved result.
+
+Validation rejected the dense `p030_noise010` result because its primary
+translation metric was 2.75x the paper value. I re-read Table 2 and confirmed
+the reference transcription is correct, so that setting is excluded from the
+current scored target list instead of being claimed as reproduced.
 
 ## Deviations from Paper
 

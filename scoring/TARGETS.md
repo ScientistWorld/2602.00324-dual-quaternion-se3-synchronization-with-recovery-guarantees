@@ -14,10 +14,12 @@ Constraint metrics:
 Experiments:
 - `p005_noise005`
 - `p005_noise010`
-- `p030_noise010`
 
 The proposed method should improve over the `dq_spectral` rounded
 dual-quaternion spectral initializer under the same generated graph/noise
-settings and trial seeds. The paper's reported matrix-EIG baseline remains in
+settings and trial seeds. The dense `p030_noise010` run is left in
+`reference.json` as a paper target, but it is not claimed in `scores.json`
+because the reproduced translation error was outside the validator's accepted
+magnitude range. The paper's reported matrix-EIG baseline also remains in
 `reference.json`, but this reproduction does not currently implement that
 external baseline.

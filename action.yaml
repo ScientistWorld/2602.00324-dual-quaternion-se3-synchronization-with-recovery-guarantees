@@ -3,4 +3,4 @@
 # only after your turn ends. Sleeping blocks the entire pipeline.
 action: done
 milestone: core_claim
-notes: "Reproduced the core synthetic claim: DQGPM runs end-to-end on the paper protocol and improves over the rounded DQ spectral baseline across three 100-trial settings. Absolute Table 2 mismatch and missing external EIG/SDR baselines are documented."
+notes: "Reproduced the core synthetic claim on two sparse 100-trial paper-protocol settings: DQGPM runs end-to-end and improves over the rounded DQ spectral baseline. The dense p030_noise010 result failed paper-consistency validation and is documented as remaining work."
