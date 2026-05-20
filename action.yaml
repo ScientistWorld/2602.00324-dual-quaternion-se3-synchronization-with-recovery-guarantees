@@ -1,9 +1,9 @@
-# This iteration runs the split evaluation on a compute node.
-# Once you set action to 'submit', STOP immediately.
+# This iteration reviewed the completed split-evaluation job.
+# Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: submit
+action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Run scripts/evaluate_train.sh and scripts/evaluate_test.sh against all discovered checkpoint result artifacts; populate split scores."
+notes: "Even/odd seed split; 72 train metrics and 72 test metrics across 3 experiments x 3 methods; train/test DQGPM error_T ratios 0.89, 0.92, 0.89 with no nulls or byte-identical slices. Default artifact discovery now includes checkpoints/ and outputs/."
