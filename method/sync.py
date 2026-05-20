@@ -249,8 +249,12 @@ def spectral_initializer(C, use_eigh=True, tol=1e-8, max_iter=1000):
     2. Project element-wise onto UDQ^n
 
     use_eigh=True builds full operator matrix and uses np.linalg.eig (slow but
-    finds eigenvalue closest to n). use_eigh=False uses pure power iteration
-    (fast but non-deterministic — finds a random eigenvector in eigenspace).
+    finds eigenvector closest to target eigenvalue). use_eigh=False uses pure
+    power iteration (fast but non-deterministic).
+
+    The target eigenvalue depends on graph connectivity:
+    - For sparse graphs: target = 1 + average_degree (not n)
+    - For dense graphs: target = n
     """
     n = C.n
 
@@ -265,7 +269,17 @@ def spectral_initializer(C, use_eigh=True, tol=1e-8, max_iter=1000):
         eigvals, eigvecs = np.linalg.eig(M_op)
         eigvals_r = np.real(eigvals)
 
-        target = float(n)
+        # Determine target eigenvalue based on connectivity
+        # For each node i, the diagonal contribution is 1
+        # The off-diagonal contribution is the number of neighbors
+        if C.is_sparse and C.neighbors is not None:
+            # Sparse: average degree determines eigenvalue
+            avg_degree = sum(len(neighs) for neighs in C.neighbors.values()) / n
+            target = 1.0 + avg_degree
+        else:
+            # Dense: eigenvalue is n
+            target = float(n)
+
         idx = np.argmin(np.abs(eigvals_r - target))
         v = np.real(eigvecs[:, idx])
         if v[0] < 0:
@@ -347,7 +361,8 @@ def align_and_compute_errors(est_x, true_poses):
         )
     q_align = normalize_quaternion(s)
 
-    # Translation alignment
+    # Translation alignment: compute offset after removing rotation effect
+    # For each node: t_true = R * t_est + t_align, so t_align = true - R * est
     t_align = np.zeros(3)
     for j in range(n):
         q_true = true_rots[j]
@@ -355,6 +370,7 @@ def align_and_compute_errors(est_x, true_poses):
         t_true = true_trans[j]
         t_est = est_trans[j]
 
+        # Rotate estimated translation by q_align (inverse is conjugate for unit quat)
         t_est_quat = np.array([0.0, t_est[0], t_est[1], t_est[2]])
         t_rot = quaternion_multiply(
             quaternion_multiply(q_align, t_est_quat),
@@ -405,6 +421,8 @@ class DualQuaternionMatrix:
         self.noise_dict = noise_dict or {}
         self.edge_mask = edge_mask
         self.measurement = build_measurement_matrix(poses, self.noise_dict, edge_mask)
+        self.is_sparse = self.measurement.is_sparse
+        self.neighbors = self.measurement.neighbors
 
     def matvec(self, x):
         return self.measurement.matvec(x)

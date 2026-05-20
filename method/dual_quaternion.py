@@ -251,20 +251,31 @@ def sample_random_unit_dual_quaternion():
 
 def sample_random_noise_dual_quaternion(sigma_t, sigma_r_deg):
     """
-    Sample a noise dual quaternion.
-    Rotation noise: axis uniform from sphere, angle from N(0, sigma_r^2)
-    Translation noise: N(0, sigma_t^2) per component
+    Sample a small noise dual quaternion for pose perturbation.
+    Noise is a small SE(3) perturbation near identity:
+    - Rotation: axis uniform from sphere, angle from N(0, sigma_r^2)
+    - Translation: N(0, sigma_t^2) per component
+    The dual part is a PURE translation quaternion [0, t] so sc(q_st*, q_dual) = 0.
+    This ensures the additive noise preserves the eigenvector property of the
+    measurement matrix for the DQGPM algorithm.
     """
+    # Small rotation noise around identity
     axis = np.random.randn(3)
     axis = axis / np.linalg.norm(axis)
     angle = np.random.randn() * np.radians(sigma_r_deg)
+    # Clip to avoid numerical issues
+    angle = np.clip(angle, -np.pi/4, np.pi/4)
 
-    # Clamp angle to avoid numerical issues
-    angle = np.clip(angle, -np.pi/2, np.pi/2)
+    # Standard part: rotation quaternion (small angle approximation)
+    w = np.cos(angle / 2)
+    xyz = np.sin(angle / 2) * axis
+    q_st = np.array([w, xyz[0], xyz[1], xyz[2]])
 
-    translation_noise = np.random.randn(3) * sigma_t
+    # Translation noise: pure translation quaternion [0, t]
+    t_noise = np.random.randn(3) * sigma_t
+    q_dual = np.array([0.0, t_noise[0], t_noise[1], t_noise[2]])
 
-    return DualQuaternion.from_rotation_translation(axis, angle, translation_noise)
+    return DualQuaternion(q_st, q_dual)
 
 
 def dual_quaternion_to_matrix(dq):
