@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
 test: true
 milestone: core_claim
-notes: "Run the expanded synthetic suite including p008_noise010 with 100 trials and 200 DQGPM iterations. Existing audit restores core_claim; this job tests whether we can advance to core_claim_plus."
+notes: "Job a5472b1a-918 completed the p008 extension, but validation rejected its absolute translation error (0.1525 vs paper 0.064). The failed extension is documented and excluded from scores; the stable sparse suite validates at core_claim."

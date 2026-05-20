@@ -66,18 +66,22 @@ rounded DQ spectral initializer on both rotation and translation error under
 the same generated graph/noise protocol for the two sparse settings retained
 in `scores.json`.
 
-The next submitted job expands the scored synthetic suite with
-`p008_noise010`, the Table 2 setting with `p=0.08`,
-`sigma_t=0.10`, and `sigma_r=10 deg`. If it validates and DQGPM again improves
-over the rounded dual-quaternion spectral initializer, the reproduction should
-advance to `core_claim_plus`.
+The follow-up CPU job `a5472b1a-918` expanded the scored suite with
+`p008_noise010`, the Table 2 setting with `p=0.08`, `sigma_t=0.10`, and
+`sigma_r=10 deg`. The job completed method and baseline runs, and DQGPM again
+improved over the rounded dual-quaternion spectral initializer
+(`error_T=0.152492` vs `0.159884`). However, post-reproducer validation failed
+because the reproduced DQGPM translation error was 2.38x the paper's `0.064`.
+That setting is therefore documented as attempted but excluded from the current
+claimed scored suite.
 
 ## Remaining
 
 Higher milestones would require broader reproduction work: implement the
-paper's external matrix-EIG and SDR baselines, add more Table 2 noise/density
-settings beyond the submitted `p=0.08` run, and diagnose why the dense
-`p030_noise010` run had `error_T=0.074253` versus the paper's `0.027`.
+paper's external matrix-EIG and SDR baselines, diagnose the mismatch on the
+less sparse `p008_noise010` setting, add more Table 2 noise/density settings,
+and diagnose why the dense `p030_noise010` run had `error_T=0.074253` versus
+the paper's `0.027`.
 
 ## Issues
 
@@ -102,6 +106,12 @@ Validation rejected the dense `p030_noise010` result because its primary
 translation metric was 2.75x the paper value. I re-read Table 2 and confirmed
 the reference transcription is correct, so that setting is excluded from the
 current scored target list instead of being claimed as reproduced.
+
+Validation also rejected the attempted `p008_noise010` extension from job
+`a5472b1a-918`: DQGPM still improved over the implemented initializer, but its
+primary translation metric was too far from the paper's reported value. The
+core sparse settings remain valid and are the only experiments in the final
+`scores.json`.
 
 ## Deviations from Paper
 

@@ -8,15 +8,12 @@ percent of pairwise measurements are observed.
 and translation noise. It measures whether the method preserves its advantage
 as measurement corruption grows.
 
-`p008_noise010` uses the same noise level as `p005_noise010` with a less sparse
-measurement graph. It checks whether the same evaluation surface extends beyond
-the hardest five-percent observation regime.
-
 Each experiment scores the final feasible poses written by a method artifact.
 The included baseline is the rounded spectral initializer for the same
 dual-quaternion measurement matrix, not the separate matrix-EIG method from
 the paper's comparison table.
 
-The dense `p030_noise010` setting was run, but its DQGPM translation error was
-too far from the paper's reported value to claim as reproduced. It remains a
-documented next target rather than part of the current scored gym.
+The `p008_noise010` and `p030_noise010` settings were run, but their DQGPM
+translation errors were too far from the paper's reported values to claim as
+reproduced. They remain documented next targets rather than part of the current
+scored gym.

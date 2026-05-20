@@ -2,7 +2,7 @@
   "experiments": {
     "p005_noise005": {
       "description": "Synthetic SE(3) synchronization, n=100, p=0.05, sigma_t=0.05, sigma_r=5 deg; Table 2.",
-      "weight": 0.3,
+      "weight": 0.4,
       "primary_metric": "error_T",
       "metrics": {
         "error_R": {"higher_is_better": false, "coefficient": -1.0},
@@ -18,7 +18,7 @@
     },
     "p005_noise010": {
       "description": "Synthetic SE(3) synchronization, n=100, p=0.05, sigma_t=0.10, sigma_r=10 deg; Table 2.",
-      "weight": 0.25,
+      "weight": 0.3,
       "primary_metric": "error_T",
       "metrics": {
         "error_R": {"higher_is_better": false, "coefficient": -1.0},
@@ -32,25 +32,9 @@
         "eig": {"type": "baseline", "error_R": 0.050, "error_R_std": 0.183, "error_T": 0.662, "error_T_std": 1.982}
       }
     },
-    "p008_noise010": {
-      "description": "Synthetic SE(3) synchronization, n=100, p=0.08, sigma_t=0.10, sigma_r=10 deg; Table 2.",
-      "weight": 0.25,
-      "primary_metric": "error_T",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.25},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.25}
-      },
-      "results": {
-        "dqgpm": {"type": "proposed", "error_R": 0.002, "error_R_std": 0.008, "error_T": 0.064, "error_T_std": 0.009},
-        "dq_spectral": {"type": "baseline"},
-        "eig": {"type": "baseline", "error_R": 0.003, "error_R_std": 0.013, "error_T": 0.085, "error_T_std": 0.814}
-      }
-    },
     "p030_noise010": {
       "description": "Synthetic SE(3) synchronization, n=100, p=0.30, sigma_t=0.10, sigma_r=10 deg; Table 2.",
-      "weight": 0.2,
+      "weight": 0.3,
       "primary_metric": "error_T",
       "metrics": {
         "error_R": {"higher_is_better": false, "coefficient": -1.0},

@@ -8,7 +8,7 @@ mkdir -p checkpoints scoring
 
 TRIALS="${TRIALS:-100}"
 MAX_ITER="${MAX_ITER:-200}"
-EXPERIMENTS=(p005_noise005 p005_noise010 p008_noise010)
+EXPERIMENTS=(p005_noise005 p005_noise010)
 ARTIFACTS=()
 
 for exp in "${EXPERIMENTS[@]}"; do
