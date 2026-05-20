@@ -11,13 +11,21 @@ independent trials.
 
 ## Baselines and Targets
 
-The main baseline is `eig`, the projected spectral estimator. The proposed
-target is `dqgpm`, which should reduce error after iterative refinement. Paper
-targets are from synthetic Table 2 for `n=100`:
+The paper compares DQGPM against external matrix-based EIG and SDR methods.
+This reproduction implements the paper's DQGPM method and uses
+`dq_spectral`, the rounded dual-quaternion spectral initializer, as the
+implemented benchmark-local baseline. The central target is that `dqgpm`
+reduces aligned pose error after iterative refinement while preserving the same
+measurement protocol. Paper reference targets are from synthetic Table 2 for
+`n=100`:
 
 - `p005_noise005`: `p=0.05`, `sigma_t=0.05`, `sigma_r=5 deg`.
 - `p005_noise010`: `p=0.05`, `sigma_t=0.10`, `sigma_r=10 deg`.
 - `p030_noise010`: `p=0.30`, `sigma_t=0.10`, `sigma_r=10 deg`.
+
+Current reproduced scores cover the two sparse `p=0.05` settings. The dense
+`p030_noise010` reference remains documented as an unreproduced target because
+the measured translation error was outside the accepted reproduction range.
 
 ## Evaluation Protocol
 

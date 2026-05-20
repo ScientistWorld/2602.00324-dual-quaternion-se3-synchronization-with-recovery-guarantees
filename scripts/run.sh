@@ -19,4 +19,4 @@ for exp in "${EXPERIMENTS[@]}"; do
 done
 
 bash scripts/evaluate.sh "${ARTIFACTS[@]}"
-python3 validate.py --compare
+python3 validate.py --compare --post-reproducer
