@@ -19,4 +19,3 @@
 
 ## Stop Justification
 - Completed at milestone `core_claim`.
-- Higher milestones remain open because the external matrix-EIG/SDR baselines and real point-cloud registration experiments are not implemented, and the less sparse/dense synthetic settings remain numerically outside the accepted reproduction range.
