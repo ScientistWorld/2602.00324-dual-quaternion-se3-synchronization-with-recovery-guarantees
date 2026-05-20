@@ -1,0 +1,20 @@
+{
+  "experiments": {
+    "sparse_low_noise": {
+      "n": 100,
+      "p": 0.05,
+      "sigma_t": 0.05,
+      "sigma_r": 5,
+      "n_trials": 5,
+      "results": {
+        "baseline": {
+          "type": "baseline",
+          "error_R": 4.464572,
+          "error_R_std": 0.142675,
+          "error_T": 3.439718,
+          "error_T_std": 3.750712
+        }
+      }
+    }
+  }
+}

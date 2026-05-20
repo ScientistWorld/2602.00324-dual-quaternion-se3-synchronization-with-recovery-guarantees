@@ -256,12 +256,12 @@ def sample_random_noise_dual_quaternion(sigma_t, sigma_r_deg):
     axis = np.random.randn(3)
     axis = axis / np.linalg.norm(axis)
     angle = np.random.randn() * np.radians(sigma_r_deg)
-    
+
     # Clamp angle to avoid numerical issues
     angle = np.clip(angle, -np.pi/2, np.pi/2)
-    
+
     translation_noise = np.random.randn(3) * sigma_t
-    
+
     return DualQuaternion.from_rotation_translation(axis, angle, translation_noise)
 
 

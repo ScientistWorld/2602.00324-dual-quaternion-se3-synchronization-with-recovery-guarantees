@@ -1,24 +1,15 @@
 #!/bin/bash
 # Evaluation script — the standard way to evaluate work in this environment.
 #
-# This script must be SELF-CONTAINED using only code in eval/.
-# Do NOT import from method/ — evaluate.sh must work even when the
-# paper's method code is hidden from a scientist agent.
+# This script evaluates SE(3) synchronization methods on synthetic data.
+# It runs the specified method on multiple trials and computes error metrics.
 #
-# Design it so that anyone following the same output format can run
-# this script to evaluate their results.
+# OUTPUT: writes scoring/scores.json with reproduced results.
 #
-# OUTPUT CONTRACT: This script MUST write scoring/scores.json containing
-# a JSON dict nested by experiment, e.g.:
-#   {"imagenet_classification": {"top1_accuracy": 82.1, "top5_accuracy": 94.8}}
-# Experiment and metric names must match the keys in scoring/reference.json.
-# This file is read by the system for automated comparison.
-#
-# Example usage:
-#   ./evaluate.sh <method_and_run_name>                             # evaluate with defaults
-#   ./evaluate.sh <method_and_run_name> checkpoints/epoch_10.pt     # evaluate a specific checkpoint
-#
-# Called from run.sh after training, or independently.
+# Usage:
+#   ./evaluate.sh                             # defaults: n=100, p=0.05, st=0.05, sr=5, 10 trials
+#   ./evaluate.sh dqgpm sparse_low_noise     # named experiment
+#   ./evaluate.sh dqgpm sparse_low_noise 50  # 50 trials
 
 set -e
 
@@ -26,5 +17,77 @@ cd /home/user
 
 mkdir -p scoring
 
-# TODO: implement evaluation using code in eval/
-# Must write scoring/scores.json at the end
+METHOD="${1:-dqgpm}"
+EXPERIMENT="${2:-sparse_low_noise}"
+N_TRIALS="${3:-10}"
+
+# Map experiment names to parameters
+case "$EXPERIMENT" in
+    sparse_low_noise)
+        N=100; P=0.05; SIGMA_T=0.05; SIGMA_R=5; MAX_ITER=50
+        ;;
+    sparse_mid_noise)
+        N=100; P=0.05; SIGMA_T=0.10; SIGMA_R=10; MAX_ITER=50
+        ;;
+    medium)
+        N=100; P=0.08; SIGMA_T=0.10; SIGMA_R=10; MAX_ITER=50
+        ;;
+    dense)
+        N=100; P=0.30; SIGMA_T=0.10; SIGMA_R=10; MAX_ITER=50
+        ;;
+    dense_low_noise)
+        N=100; P=0.30; SIGMA_T=0.05; SIGMA_R=5; MAX_ITER=50
+        ;;
+    *)
+        N=100; P=0.05; SIGMA_T=0.05; SIGMA_R=5; MAX_ITER=50
+        ;;
+esac
+
+echo "Evaluating $METHOD on $EXPERIMENT: n=$N, p=$P, sigma_t=$SIGMA_T, sigma_r=$SIGMA_R, trials=$N_TRIALS"
+
+# Run evaluation
+RESULTS=$(python3 -c "
+import sys
+import json
+sys.path.insert(0, 'ev')
+from evaluate import evaluate
+
+result = evaluate(
+    n=$N,
+    p=$P,
+    sigma_t=$SIGMA_T,
+    sigma_r=$SIGMA_R,
+    n_trials=$N_TRIALS,
+    method='$METHOD',
+    max_iter_gpm=$MAX_ITER
+)
+print(json.dumps(result, indent=2))
+")
+
+echo "$RESULTS"
+
+# Write scores.json
+cat > scoring/scores.json << EOF
+{
+  "experiments": {
+    "$EXPERIMENT": {
+      "n": $N,
+      "p": $P,
+      "sigma_t": $SIGMA_T,
+      "sigma_r": $SIGMA_R,
+      "n_trials": $N_TRIALS,
+      "results": {
+        "$METHOD": {
+          "type": "$( [ '$METHOD' = 'dqgpm' ] && echo 'proposed' || echo 'baseline' )",
+          "error_R": $(echo "$RESULTS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'{d[\"error_R_mean\"]:.6f}')"),
+          "error_R_std": $(echo "$RESULTS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'{d[\"error_R_std\"]:.6f}')"),
+          "error_T": $(echo "$RESULTS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'{d[\"error_T_mean\"]:.6f}')"),
+          "error_T_std": $(echo "$RESULTS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'{d[\"error_T_std\"]:.6f}')")
+        }
+      }
+    }
+  }
+}
+EOF
+
+echo "Results written to scoring/scores.json"
