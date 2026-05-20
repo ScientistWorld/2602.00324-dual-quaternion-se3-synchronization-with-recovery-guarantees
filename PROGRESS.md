@@ -2,36 +2,34 @@
 
 ## What Works
 
-<!-- What has been successfully reproduced so far. -->
+The workspace now contains a canonical implementation of the paper's synthetic
+dual-quaternion synchronization pipeline: shifted ER measurement generation,
+spectral power initialization, DQGPM refinement, and artifact-based scoring.
+
+`eval/` no longer imports `method/`; it reads pose artifacts and computes
+gauge-aligned rotation and translation errors independently.
 
 ## Results
 
-<!-- Reproduced numbers compared to the paper's reported numbers. -->
+No verified reproduced scores yet in this turn. A CPU test job is being
+submitted to run `p005_noise005` for DQGPM and the projected spectral baseline.
 
 ## Remaining
 
-<!-- What still needs to be done to reach higher milestones. -->
+Analyze the smoke-test output, fix any container or numerical issues, then run
+more trials and additional Table 2 settings. The minimum target is to show
+DQGPM improves over `eig` on at least the sparse synthetic setting.
 
 ## Issues
 
-<!-- Blockers, bugs, or difficulties encountered. -->
+The inherited workspace had fabricated `scores.json` values and a
+`reference.json` that did not match Table 2. The reference file has been
+rewritten with actual paper values, but `scores.json` will only become valid
+after the submitted job writes fresh measured results.
 
 ## Deviations from Paper
 
-<!-- Do not edit this section unless you deviated from the paper's original setup.
-     For each deviation, document: what the paper used, what you substituted, and why.
-
-     ACCEPTABLE deviations (data/resource/scale substitutions — milestones still valid):
-       - Replaced a proprietary dataset with a public one
-       - Used a smaller model of the same architecture
-       - Scaled down training (fewer epochs, smaller batch)
-       - Used a different library for the same algorithm
-
-     UNACCEPTABLE deviations (algorithm substitutions — milestones above 'none' are void):
-       - Replaced the paper's algorithm with a fundamentally different one
-       - Wrote a generic model trained to approximate the method's outputs
-         instead of implementing the method's computational steps
-
-     The test: could someone reading your code identify which algorithm from
-     the paper you implemented? If not, you replaced the method. -->
-
+The first submitted job uses 5 trials rather than the paper's 100 trials so the
+container and algorithm can be smoke-tested quickly on a CPU test node. The
+data model, noise model, metrics, and algorithms are otherwise kept aligned
+with the paper's synthetic protocol.

@@ -1,19 +1,14 @@
 #!/bin/bash
-# Run the paper's proposed method (DQGPM).
-#
-# Usage:
-#   bash scripts/method.sh
+# Run the paper's DQGPM method on one synthetic benchmark setting.
 
-set -e
-
+set -euo pipefail
 cd /home/user
 
-echo "Running DQGPM on synthetic data..."
+EXPERIMENT="${1:-p005_noise005}"
+TRIALS="${2:-5}"
 
-# Run on key experiment settings
-for experiment in sparse_low_noise sparse_mid_noise dense; do
-    echo "=== $experiment ==="
-    bash scripts/evaluate.sh dqgpm $experiment 10
-done
-
-echo "Method evaluation complete."
+python3 -m method.run_synthetic \
+  --experiment "$EXPERIMENT" \
+  --method dqgpm \
+  --trials "$TRIALS" \
+  --output "checkpoints/${EXPERIMENT}_dqgpm_results.json"

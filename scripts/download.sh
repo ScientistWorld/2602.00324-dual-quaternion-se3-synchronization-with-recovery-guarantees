@@ -1,27 +1,13 @@
 #!/bin/bash
-# Download all data and models needed for this environment.
+# No external downloads are required.
 #
-# Run on a node with internet access BEFORE building the container
-# or submitting compute jobs.
+# Estimated total download size: 0 GB
+# Estimated disk usage after extraction: 0 GB
 #
-# This script should be idempotent — safe to run multiple times.
-# It should skip files that already exist.
-#
-# Update the storage estimate below as you add downloads.
-#
-# Estimated total download size: TODO GB
-# Estimated disk usage after extraction: TODO GB
-#
-# During reproduction, prefer downloading to workspace-local
-# paths (data/, checkpoints/) instead of data/downloads/ so a future user
-# with just the workspace can run this script and get everything they need.
+# The core benchmark uses the paper's synthetic ER measurement model generated
+# deterministically by method/run_synthetic.py.
 
-set -e
-
-cd "$(dirname "$0")"
-
-# TODO: implement downloads
-# Examples:
-#   wget -nc https://example.com/dataset.tar.gz -P data/
-#   python -c "from huggingface_hub import snapshot_download; snapshot_download('model/name', local_dir='checkpoints/')"
-#   huggingface-cli download Qwen/Qwen3-1.7B --local-dir /checkpoints/Qwen3-1.7B
+set -euo pipefail
+cd /home/user
+mkdir -p data/downloads
+echo "Synthetic-only reproduction: no datasets or pretrained models to download."

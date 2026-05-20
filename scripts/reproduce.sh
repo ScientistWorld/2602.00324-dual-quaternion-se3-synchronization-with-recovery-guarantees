@@ -1,25 +1,15 @@
 #!/bin/bash
-# Reproduce the paper's results end-to-end.
-#
-# This script runs DQGPM and baseline methods on all experiment settings
-# and generates the final scoring/scores.json.
+# End-to-end reproduction for the core synthetic claim.
 
-set -e
-
+set -euo pipefail
 cd /home/user
 
-echo "=== SE(3) Synchronization Reproduction ==="
+TRIALS="${1:-20}"
+EXPERIMENTS=(p005_noise005 p005_noise010 p030_noise010)
 
-# Run DQGPM on all experiment settings
-echo "Running DQGPM..."
-bash scripts/evaluate.sh dqgpm sparse_low_noise 20
-bash scripts/evaluate.sh dqgpm sparse_mid_noise 20
-bash scripts/evaluate.sh dqgpm dense 20
+for exp in "${EXPERIMENTS[@]}"; do
+  bash scripts/method.sh "$exp" "$TRIALS"
+  bash scripts/baseline.sh "$exp" "$TRIALS"
+done
 
-# Run baseline (spectral initializer only)
-echo "Running baseline (EIG)..."
-bash scripts/evaluate.sh baseline sparse_low_noise 20
-
-echo ""
-echo "=== Reproduction Complete ==="
-echo "Results in scoring/scores.json"
+bash scripts/evaluate.sh checkpoints/*_results.json

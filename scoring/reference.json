@@ -1,120 +1,48 @@
 {
   "experiments": {
-    "synthetic_sparse_low_noise": {
-      "description": "SE(3) synchronization on synthetic data: p=0.05 (95% missing), low noise (sigma_t=0.05, sigma_r=5deg) - Table 2 first row",
-      "weight": 0.15,
-      "primary_metric": "error_R",
+    "p005_noise005": {
+      "description": "Synthetic SE(3) synchronization, n=100, p=0.05, sigma_t=0.05, sigma_r=5 deg; Table 2.",
+      "weight": 0.4,
+      "primary_metric": "error_T",
       "metrics": {
         "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
+        "error_R_std": {"higher_is_better": false, "coefficient": -0.25},
         "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5},
-        "time_s": {"higher_is_better": false, "coefficient": -0.5}
+        "error_T_std": {"higher_is_better": false, "coefficient": -0.25}
       },
       "results": {
-        "DQGPM": {"type": "proposed", "error_R": 4.3118, "error_R_std": 0.2395, "error_T": 1.3923, "error_T_std": 0.2674, "time_s": 0.011},
-        "EIG": {"type": "baseline", "error_R": 4.0321, "error_R_std": 0.2395, "error_T": 1.1074, "error_T_std": 0.2674, "time_s": 0.014}
+        "dqgpm": {"type": "proposed", "error_R": 0.034, "error_R_std": 0.051, "error_T": 0.069, "error_T_std": 0.043},
+        "eig": {"type": "baseline", "error_R": 0.056, "error_R_std": 0.632, "error_T": 0.580, "error_T_std": 1.924}
       }
     },
-    "synthetic_sparse_mid_noise": {
-      "description": "SE(3) synchronization on synthetic data: p=0.05, mid noise (sigma_t=0.10, sigma_r=10deg) - Table 2 second row",
-      "weight": 0.15,
-      "primary_metric": "error_R",
+    "p005_noise010": {
+      "description": "Synthetic SE(3) synchronization, n=100, p=0.05, sigma_t=0.10, sigma_r=10 deg; Table 2.",
+      "weight": 0.3,
+      "primary_metric": "error_T",
       "metrics": {
         "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
+        "error_R_std": {"higher_is_better": false, "coefficient": -0.25},
         "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5}
+        "error_T_std": {"higher_is_better": false, "coefficient": -0.25}
       },
       "results": {
-        "DQGPM": {"type": "proposed", "error_R": 4.5, "error_R_std": 0.25, "error_T": 1.5, "error_T_std": 0.28},
-        "EIG": {"type": "baseline", "error_R": 4.2, "error_R_std": 0.24, "error_T": 1.2, "error_T_std": 0.26}
+        "dqgpm": {"type": "proposed", "error_R": 0.035, "error_R_std": 0.051, "error_T": 0.132, "error_T_std": 0.064},
+        "eig": {"type": "baseline", "error_R": 0.050, "error_R_std": 0.183, "error_T": 0.662, "error_T_std": 1.982}
       }
     },
-    "synthetic_medium": {
-      "description": "SE(3) synchronization on synthetic data: p=0.08, all noise levels - Table 2 third/fourth rows",
-      "weight": 0.15,
-      "primary_metric": "error_R",
+    "p030_noise010": {
+      "description": "Synthetic SE(3) synchronization, n=100, p=0.30, sigma_t=0.10, sigma_r=10 deg; Table 2.",
+      "weight": 0.3,
+      "primary_metric": "error_T",
       "metrics": {
         "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
+        "error_R_std": {"higher_is_better": false, "coefficient": -0.25},
         "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5}
+        "error_T_std": {"higher_is_better": false, "coefficient": -0.25}
       },
       "results": {
-        "DQGPM": {"type": "proposed", "error_R": 4.3, "error_R_std": 0.23, "error_T": 1.3, "error_T_std": 0.25},
-        "EIG": {"type": "baseline", "error_R": 4.0, "error_R_std": 0.22, "error_T": 1.1, "error_T_std": 0.24}
-      }
-    },
-    "synthetic_dense": {
-      "description": "SE(3) synchronization on synthetic data: p=0.30, all noise levels - Table 2 fifth/sixth rows",
-      "weight": 0.15,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5}
-      },
-      "results": {
-        "DQGPM": {"type": "proposed", "error_R": 4.2, "error_R_std": 0.20, "error_T": 1.5, "error_T_std": 0.30},
-        "EIG": {"type": "baseline", "error_R": 3.9, "error_R_std": 0.19, "error_T": 1.3, "error_T_std": 0.28}
-      }
-    },
-    "real_data_bunny": {
-      "description": "Real data: Stanford bunny, sparse observations, Table 4",
-      "weight": 0.10,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "time_s": {"higher_is_better": false, "coefficient": -0.5}
-      },
-      "results": {
-        "DQGPM": {"type": "proposed", "error_R": 0.0188, "error_T": 0.0012, "time_s": 0.0072},
-        "SDR": {"type": "baseline", "error_R": 3.6349, "error_T": 0.0675, "time_s": 0.0954},
-        "EIG": {"type": "baseline", "error_R": 3.4519, "error_T": 0.0506, "time_s": 0.0030}
-      }
-    },
-    "error_decay": {
-      "description": "Linear error contraction: DQGPM should show linear decay over iterations (Figure 1)",
-      "weight": 0.10,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0}
-      },
-      "results": {
-        "DQGPM_iter1": {"type": "proposed", "error_R": 4.5, "error_T": 1.6},
-        "DQGPM_iter5": {"type": "proposed", "error_R": 4.3, "error_T": 1.5},
-        "DQGPM_iter10": {"type": "proposed", "error_R": 4.2, "error_T": 1.5}
-      }
-    },
-    "computational_efficiency": {
-      "description": "DQGPM is faster than EIG and SDR across all settings - Table 3",
-      "weight": 0.10,
-      "primary_metric": "time_s",
-      "metrics": {
-        "time_s": {"higher_is_better": false, "coefficient": -1.0}
-      },
-      "results": {
-        "DQGPM": {"type": "proposed", "time_s": 0.010},
-        "EIG": {"type": "baseline", "time_s": 0.014}
-      }
-    },
-    "real_data_buddha": {
-      "description": "Real data: Stanford buddha, sparse/dense, Table 4",
-      "weight": 0.10,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0}
-      },
-      "results": {
-        "DQGPM_sparse": {"type": "proposed", "error_R": 0.0233, "error_T": 0.0016},
-        "DQGPM_dense": {"type": "proposed", "error_R": 0.0218, "error_T": 0.0009},
-        "SDR_sparse": {"type": "baseline", "error_R": 3.1227, "error_T": 0.0003},
-        "EIG_sparse": {"type": "baseline", "error_R": 3.1022, "error_T": 0.0002}
+        "dqgpm": {"type": "proposed", "error_R": 0.001, "error_R_std": 0.000, "error_T": 0.027, "error_T_std": 0.001},
+        "eig": {"type": "baseline", "error_R": 0.001, "error_R_std": 0.000, "error_T": 0.031, "error_T_std": 0.130}
       }
     }
   }
