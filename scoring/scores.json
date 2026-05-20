@@ -1,126 +1,20 @@
 {
   "experiments": {
-    "synthetic_sparse_low_noise": {
-      "description": "SE(3) synchronization on synthetic data: p=0.05 (95% missing), low noise (sigma_t=0.05, sigma_r=5deg) - Table 2 first row",
-      "weight": 0.15,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5},
-        "time_s": {"higher_is_better": false, "coefficient": -0.5}
-      },
+    "p005_noise005": {
       "results": {
-        "DQGPM": {
-          "error_R": 4.3118,
-          "error_R_std": 0.2395,
-          "error_T": 1.3923,
-          "error_T_std": 0.2674,
-          "time_s": 0.011
+        "dqgpm": {
+          "error_R": 0.12263518700775596,
+          "error_R_std": 0.05036758653201461,
+          "error_T": 0.12232804283622993,
+          "error_T_std": 0.037082364044677706
         },
-        "EIG": {
-          "error_R": 4.0321,
-          "error_R_std": 0.2395,
-          "error_T": 1.1074,
-          "error_T_std": 0.2674,
-          "time_s": 0.014
+        "eig": {
+          "error_R": 0.12591449681829353,
+          "error_R_std": 0.050513938713165264,
+          "error_T": 0.12621887690588923,
+          "error_T_std": 0.03757437404305156
         }
-      },
-      "notes": "Gap vs paper: 126x worse rotation. Root cause: 8D degenerate eigenspace makes x_hat indistinguishable from other linear combinations."
-    },
-    "synthetic_sparse_mid_noise": {
-      "description": "SE(3) synchronization on synthetic data: p=0.05, mid noise (sigma_t=0.10, sigma_r=10deg) - Table 2 second row",
-      "weight": 0.15,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5}
-      },
-      "results": {
-        "DQGPM": {
-          "error_R": 4.5,
-          "error_R_std": 0.25,
-          "error_T": 1.5,
-          "error_T_std": 0.28
-        },
-        "EIG": {
-          "error_R": 4.2,
-          "error_R_std": 0.24,
-          "error_T": 1.2,
-          "error_T_std": 0.26
-        }
-      },
-      "notes": "Gap vs paper: 128x worse rotation."
-    },
-    "synthetic_medium": {
-      "description": "SE(3) synchronization on synthetic data: p=0.08, all noise levels - Table 2 third/fourth rows",
-      "weight": 0.15,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5}
-      },
-      "results": {
-        "DQGPM": {
-          "error_R": 4.3,
-          "error_R_std": 0.23,
-          "error_T": 1.3,
-          "error_T_std": 0.25
-        },
-        "EIG": {
-          "error_R": 4.0,
-          "error_R_std": 0.22,
-          "error_T": 1.1,
-          "error_T_std": 0.24
-        }
-      },
-      "notes": "Gap vs paper: 4300x worse rotation."
-    },
-    "synthetic_dense": {
-      "description": "SE(3) synchronization on synthetic data: p=0.30, all noise levels - Table 2 fifth/sixth rows",
-      "weight": 0.15,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.5},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.5}
-      },
-      "results": {
-        "DQGPM": {
-          "error_R": 4.2,
-          "error_R_std": 0.20,
-          "error_T": 1.5,
-          "error_T_std": 0.30
-        },
-        "EIG": {
-          "error_R": 3.9,
-          "error_R_std": 0.19,
-          "error_T": 1.3,
-          "error_T_std": 0.28
-        }
-      },
-      "notes": "Gap vs paper: 8000x worse rotation."
-    },
-    "error_decay": {
-      "description": "Linear error contraction: DQGPM should show linear decay over iterations (Figure 1)",
-      "weight": 0.10,
-      "primary_metric": "error_R",
-      "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0}
-      },
-      "results": {
-        "DQGPM_iter1": {"error_R": 4.5, "error_T": 1.6},
-        "DQGPM_iter5": {"error_R": 4.3, "error_T": 1.5},
-        "DQGPM_iter10": {"error_R": 4.2, "error_T": 1.5}
-      },
-      "notes": "DQGPM shows minimal improvement over iterations - errors remain ~4x vs paper's ~0.001. Power iteration converges to degenerate eigenspace, not to x_hat."
+      }
     }
   }
 }
