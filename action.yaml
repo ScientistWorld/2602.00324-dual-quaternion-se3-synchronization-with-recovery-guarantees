@@ -3,4 +3,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Final verification complete: method-agnostic docs, scoring outputs, data interface, and validation checks are ready for gym use with documented synthetic-only limitations."
+notes: "Final verification complete: python validate.py passes after refreshing train/test splits and artifact-reading evaluators; gym is ready with documented synthetic-only limitations."
