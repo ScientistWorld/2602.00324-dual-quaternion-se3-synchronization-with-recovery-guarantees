@@ -4,7 +4,7 @@
 set -euo pipefail
 cd /home/user
 
-TRIALS="${1:-20}"
+TRIALS="${1:-100}"
 EXPERIMENTS=(p005_noise005 p005_noise010 p030_noise010)
 
 for exp in "${EXPERIMENTS[@]}"; do

@@ -16,5 +16,8 @@ Experiments:
 - `p005_noise010`
 - `p030_noise010`
 
-The proposed method should improve over the `eig` spectral baseline under the
-same generated graph/noise settings and trial seeds.
+The proposed method should improve over the `dq_spectral` rounded
+dual-quaternion spectral initializer under the same generated graph/noise
+settings and trial seeds. The paper's reported matrix-EIG baseline remains in
+`reference.json`, but this reproduction does not currently implement that
+external baseline.

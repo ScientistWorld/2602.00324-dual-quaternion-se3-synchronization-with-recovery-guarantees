@@ -12,6 +12,7 @@
       },
       "results": {
         "dqgpm": {"type": "proposed", "error_R": 0.034, "error_R_std": 0.051, "error_T": 0.069, "error_T_std": 0.043},
+        "dq_spectral": {"type": "baseline"},
         "eig": {"type": "baseline", "error_R": 0.056, "error_R_std": 0.632, "error_T": 0.580, "error_T_std": 1.924}
       }
     },
@@ -27,6 +28,7 @@
       },
       "results": {
         "dqgpm": {"type": "proposed", "error_R": 0.035, "error_R_std": 0.051, "error_T": 0.132, "error_T_std": 0.064},
+        "dq_spectral": {"type": "baseline"},
         "eig": {"type": "baseline", "error_R": 0.050, "error_R_std": 0.183, "error_T": 0.662, "error_T_std": 1.982}
       }
     },
@@ -42,6 +44,7 @@
       },
       "results": {
         "dqgpm": {"type": "proposed", "error_R": 0.001, "error_R_std": 0.000, "error_T": 0.027, "error_T_std": 0.001},
+        "dq_spectral": {"type": "baseline"},
         "eig": {"type": "baseline", "error_R": 0.001, "error_R_std": 0.000, "error_T": 0.031, "error_T_std": 0.130}
       }
     }

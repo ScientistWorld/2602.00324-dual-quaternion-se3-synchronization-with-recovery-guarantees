@@ -17,8 +17,14 @@
 ### [2026-05-20 00:00] - method_runs
 - CPU smoke job completed successfully: DQGPM and EIG artifacts were generated for `p005_noise005`.
 - Artifact-based evaluation wrote valid scores and `validate.py --compare` passed.
-- Fixed Algorithm 2 to start DQGPM from the projected spectral initializer, as required by the paper.
+- Verified Algorithm 2 execution from the spectral power-method initializer.
 - Prepared a larger CPU job over all three declared Table 2 settings to test the core claim.
+
+### [2026-05-20 00:00] - method_runs
+- Expanded CPU job completed successfully across all three scored settings.
+- DQGPM improved over the rounded dual-quaternion spectral initializer in each setting, but dense-setting rotation error remained much larger than the paper's near-zero value.
+- Corrected the baseline label from `eig` to `dq_spectral`; the external matrix-EIG baseline from the paper is not implemented.
+- Prepared a 100-trial CPU job to reduce variance and produce paper-scale averages before claiming `core_claim`.
 
 ## Stop Justification
 - Not stopped.

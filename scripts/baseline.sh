@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the EIG baseline: spectral power initializer followed by projection.
+# Run the dual-quaternion rounded spectral initializer baseline.
 
 set -euo pipefail
 cd /home/user
@@ -9,6 +9,6 @@ TRIALS="${2:-5}"
 
 python3 -m method.run_synthetic \
   --experiment "$EXPERIMENT" \
-  --method eig \
+  --method dq_spectral \
   --trials "$TRIALS" \
-  --output "checkpoints/${EXPERIMENT}_eig_results.json"
+  --output "checkpoints/${EXPERIMENT}_dq_spectral_results.json"

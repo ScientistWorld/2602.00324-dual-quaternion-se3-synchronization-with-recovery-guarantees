@@ -19,18 +19,26 @@ The first CPU smoke job completed with valid measured scores for five trials on
 `p005_noise005`:
 
 - `dqgpm`: `error_R=0.123`, `error_T=0.122`
-- `eig`: `error_R=0.126`, `error_T=0.126`
+- `dq_spectral`: `error_R=0.126`, `error_T=0.126`
 
 This restores `method_runs`: the paper's algorithm executes end-to-end and the
-independent evaluator scores its outputs. The gap is too small and the trial
-count too low to claim `core_claim`, so the next job expands to 30 trials over
+independent evaluator scores its outputs. The gap was too small and the trial
+count too low to claim `core_claim`, so the next job expanded to 30 trials over
 all three declared Table 2 settings.
+
+The 30-trial run completed successfully and showed DQGPM improving over the
+rounded dual-quaternion spectral initializer in all three settings, but the
+dense rotation error is still far above the near-zero paper number. I checked
+the paper's data-generation specification against the implementation; the next
+run uses 100 trials and corrected artifact labels to get paper-scale averages
+before deciding the final milestone.
 
 ## Remaining
 
-Analyze the smoke-test output, fix any container or numerical issues, then run
-more trials and additional Table 2 settings. The minimum target is to show
-DQGPM improves over `eig` on at least the sparse synthetic setting.
+Run the 100-trial synthetic evaluation, then update the final milestone and
+documentation from the paper-scale averages. The minimum target is to show
+DQGPM improves over `dq_spectral` on the synthetic settings while preserving
+the same generated graph/noise protocol.
 
 ## Issues
 
@@ -42,14 +50,14 @@ after the submitted job writes fresh measured results.
 The evaluator previously emitted `n_trials`, which was not a declared metric in
 `reference.json`; this has been removed so structural comparison is meaningful.
 
-The first smoke run exposed a method mismatch: DQGPM was initialized with the
-raw scaled power vector, while Algorithm 2 expects a projected UDQ initializer.
-The call path now uses the projected spectral initializer.
+The artifact label `eig` was inaccurate: the implemented baseline is the
+paper's rounded dual-quaternion spectral initializer, not the external
+matrix-EIG baseline reported in Table 2. It is now labeled `dq_spectral`.
 
 ## Deviations from Paper
 
-The completed smoke job used 5 trials rather than the paper's 100 trials to
-test the container and pipeline quickly. The next submitted job uses 30 trials
-per setting across the three scored settings. The data model, noise model,
-metrics, and algorithms are otherwise kept aligned with the paper's synthetic
-protocol.
+The completed smoke job used 5 trials and the next job used 30 trials rather
+than the paper's 100 trials to test the container and pipeline quickly. The
+next submitted job uses 100 trials per scored synthetic setting. This
+reproduction implements the paper's DQGPM method and rounded DQ spectral
+initializer, but not the external matrix-EIG or SDR comparison methods.

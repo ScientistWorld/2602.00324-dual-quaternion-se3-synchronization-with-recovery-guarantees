@@ -217,11 +217,11 @@ def run_trial(
     c, poses, edge_count = build_synthetic_measurement(n, p, sigma_t, sigma_r_deg, seed)
     x0, init_iters, init_residual = spectral_power_initializer(c, seed + 10_000)
     x0_projected = project_onto_udq_n(x0)
-    if method == "eig":
+    if method in {"dq_spectral", "eig"}:
         estimate = x0_projected
         history = []
     elif method == "dqgpm":
-        estimate, history = dqgpm(c, x0_projected, max_iter=max_iter, record_history=True)
+        estimate, history = dqgpm(c, x0, max_iter=max_iter, record_history=True)
     else:
         raise ValueError(f"unknown method: {method}")
 

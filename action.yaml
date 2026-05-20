@@ -3,6 +3,6 @@
 # only after your turn ends. Sleeping blocks the entire pipeline.
 action: submit
 gpus: 0
-test: true
+test: false
 milestone: method_runs
-notes: "Core-claim CPU run after Algorithm 2 initializer fix: run 30 trials for p005_noise005, p005_noise010, and p030_noise010 with DQGPM and EIG, then score and validate."
+notes: "Paper-scale CPU run with corrected dq_spectral baseline label: run 100 trials for p005_noise005, p005_noise010, and p030_noise010 with DQGPM and rounded DQ spectral, then score and validate."
