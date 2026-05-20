@@ -1,5 +1,3 @@
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: core_claim
-notes: "CPU job: regenerate the validated core DQGPM synthetic suite from scratch after projection/run.sh fixes, then probe p008 and p030 Table 2 extension settings into tmp/extension_scores.json without overwriting accepted scores."
+notes: "Final verification complete: validation passes and the workspace is ready as a narrow synthetic core-claim gym with documented limitations."

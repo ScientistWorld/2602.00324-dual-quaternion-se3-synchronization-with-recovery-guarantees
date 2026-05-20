@@ -13,16 +13,15 @@ independent trials.
 
 The benchmark target is low gauge-aligned rotation and translation error on
 synthetic pose synchronization instances with fixed graph density, noise level,
-problem size, and trial seeds. Paper reference targets are from the synthetic
-`n=100` results table:
+problem size, and trial seeds. The currently scored paper reference targets are
+from the synthetic `n=100` results table:
 
 - `p005_noise005`: `p=0.05`, `sigma_t=0.05`, `sigma_r=5 deg`.
 - `p005_noise010`: `p=0.05`, `sigma_t=0.10`, `sigma_r=10 deg`.
-- `p030_noise010`: `p=0.30`, `sigma_t=0.10`, `sigma_r=10 deg`.
 
 Current reproduced scores cover the two sparse `p=0.05` settings. Additional
-settings are documented as possible extensions but are not part of the current
-scored suite.
+settings, including denser graphs such as `p=0.08` and `p=0.30`, are possible
+extensions but are not part of the current scored suite.
 
 ## Evaluation Protocol
 

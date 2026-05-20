@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-05-20 07:05] - core_claim
+- Completed final verification for the packaged research gym.
+- Confirmed `python3 validate.py --compare --post-reproducer` passes and that scoring/evaluation remain artifact-based and method-independent.
+- Clarified the evaluation target documentation so it exactly matches the currently scored sparse synthetic experiments.
+
 ### [2026-05-20 06:53] - core_claim
 - Continued from the verified `core_claim` package and audited the next expansion path.
 - Fixed `scripts/run.sh` so compute jobs regenerate gitignored artifacts from scratch before validation.
