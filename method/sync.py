@@ -126,6 +126,37 @@ def project_onto_udq_n(x: np.ndarray) -> np.ndarray:
     return vector_from_dqs([normalize_dual_quaternion(dq) for dq in dqs_from_vector(x)])
 
 
+def _dual_vector_norm(x: np.ndarray) -> tuple[float, float]:
+    """Return standard and dual parts of the DQ-vector norm used in Algorithm 1."""
+    n = len(x) // 8
+    st = x[: 4 * n]
+    dual = x[4 * n :]
+    norm_sq_st = float(np.dot(st, st))
+    if norm_sq_st < 1e-28:
+        return 0.0, 0.0
+    norm_st = float(np.sqrt(norm_sq_st))
+    norm_dual = float(np.dot(st, dual) / norm_st)
+    return norm_st, norm_dual
+
+
+def _right_scale_by_dual_scalar(x: np.ndarray, standard: float, dual: float) -> np.ndarray:
+    """Right-multiply each vector entry by a real dual scalar."""
+    n = len(x) // 8
+    out = np.empty_like(x)
+    out[: 4 * n] = standard * x[: 4 * n]
+    out[4 * n :] = standard * x[4 * n :] + dual * x[: 4 * n]
+    return out
+
+
+def normalize_dq_vector(x: np.ndarray) -> np.ndarray:
+    norm_st, norm_dual = _dual_vector_norm(x)
+    if norm_st < 1e-14:
+        return x.copy()
+    inv_st = 1.0 / norm_st
+    inv_dual = -norm_dual / (norm_st * norm_st)
+    return _right_scale_by_dual_scalar(x, inv_st, inv_dual)
+
+
 def spectral_power_initializer(
     c: MeasurementMatrix,
     seed: int,
@@ -135,15 +166,15 @@ def spectral_power_initializer(
     """Algorithm 1: power iteration on the dual-quaternion measurement matrix."""
     rng = np.random.default_rng(seed)
     x = rng.normal(size=8 * c.n)
-    x /= np.linalg.norm(x[: 4 * c.n])
+    x = normalize_dq_vector(x)
     residual = np.inf
 
     for it in range(1, max_iter + 1):
         y = c.matvec(x)
-        st_norm = np.linalg.norm(y[: 4 * c.n])
-        if st_norm < 1e-14:
+        y_norm_st, _ = _dual_vector_norm(y)
+        if y_norm_st < 1e-14:
             break
-        x_next = y / st_norm
+        x_next = normalize_dq_vector(y)
         residual = np.linalg.norm(x_next - x) / max(np.linalg.norm(x), 1e-14)
         x = x_next
         if residual < tol:

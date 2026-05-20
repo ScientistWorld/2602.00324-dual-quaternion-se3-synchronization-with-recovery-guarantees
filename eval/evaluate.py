@@ -93,7 +93,6 @@ def evaluate_artifact(path: Path) -> dict:
     return {
         "experiment": artifact["experiment"],
         "method": artifact["method"],
-        "n_trials": len(artifact["trials"]),
         "error_R": float(np.mean(err_r)),
         "error_R_std": float(np.std(err_r)),
         "error_T": float(np.mean(err_t)),

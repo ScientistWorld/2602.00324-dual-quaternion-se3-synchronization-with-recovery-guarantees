@@ -9,6 +9,10 @@ spectral power initialization, DQGPM refinement, and artifact-based scoring.
 `eval/` no longer imports `method/`; it reads pose artifacts and computes
 gauge-aligned rotation and translation errors independently.
 
+The spectral initializer now uses the standard and dual parts of the
+dual-quaternion vector norm, matching Algorithm 1 more closely than the
+previous standard-part-only normalization.
+
 ## Results
 
 No verified reproduced scores yet in this turn. A CPU test job is being
@@ -26,6 +30,9 @@ The inherited workspace had fabricated `scores.json` values and a
 `reference.json` that did not match Table 2. The reference file has been
 rewritten with actual paper values, but `scores.json` will only become valid
 after the submitted job writes fresh measured results.
+
+The evaluator previously emitted `n_trials`, which was not a declared metric in
+`reference.json`; this has been removed so structural comparison is meaningful.
 
 ## Deviations from Paper
 
