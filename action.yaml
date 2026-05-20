@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: true
 milestone: none
-notes: "CPU smoke test for the synthetic DQGPM pipeline: run p005_noise005 for DQGPM and EIG, score artifacts, and validate reference/score structure."
+notes: "CPU smoke test after initializer/evaluator fixes: run p005_noise005 for DQGPM and EIG, score artifacts, and validate reference/score structure."
