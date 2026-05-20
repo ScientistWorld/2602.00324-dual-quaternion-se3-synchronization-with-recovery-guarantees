@@ -1,22 +1,10 @@
 #!/bin/bash
-# Compute-node entrypoint. Runs the core synthetic reproduction and scores it.
+# Compute-node entrypoint for train/test split scoring.
 
 set -euo pipefail
 cd /home/user
 
-mkdir -p checkpoints scoring
+mkdir -p scoring
 
-TRIALS="${TRIALS:-100}"
-MAX_ITER="${MAX_ITER:-200}"
-EXPERIMENTS=(p005_noise005 p005_noise010)
-ARTIFACTS=()
-
-for exp in "${EXPERIMENTS[@]}"; do
-  bash scripts/method.sh "$exp" "$TRIALS" "$MAX_ITER"
-  bash scripts/baseline.sh "$exp" "$TRIALS"
-  ARTIFACTS+=("checkpoints/${exp}_dqgpm_results.json")
-  ARTIFACTS+=("checkpoints/${exp}_dq_spectral_results.json")
-done
-
-bash scripts/evaluate.sh "${ARTIFACTS[@]}"
-python3 validate.py --compare --post-reproducer
+bash scripts/evaluate_train.sh
+bash scripts/evaluate_test.sh

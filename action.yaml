@@ -1,9 +1,9 @@
-# This iteration writes files only — do NOT submit compute jobs.
-# Once you set action to 'done', STOP immediately.
+# This iteration runs the split evaluation on a compute node.
+# Once you set action to 'submit', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: done
+action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Improvements: reconstructed deterministic truth instead of trusting artifact truth, added max-error tail metrics, completed metric metadata, filtered scoring to reference experiments. Notes: see DESIGN_NOTES.md."
+notes: "Run scripts/evaluate_train.sh and scripts/evaluate_test.sh against all discovered checkpoint result artifacts; populate split scores."
