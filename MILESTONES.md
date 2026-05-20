@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
@@ -31,5 +31,11 @@
 - Sparse-setting DQGPM histories hit the 50-iteration cap in almost every trial, so those results may be under-converged.
 - Increased the configurable GPM iteration budget to 200 and prepared one more 100-trial run.
 
+### [2026-05-20 00:00] - core_claim
+- The 100-trial, 200-iteration CPU run completed and `validate.py --compare` passed.
+- DQGPM improved over the rounded dual-quaternion spectral initializer on rotation and translation error in all three scored synthetic settings.
+- Increasing the iteration budget from 50 to 200 did not materially change the scores, so the sparse runs appear to have reached their fixed point.
+- Absolute errors remain higher than the paper's Table 2 values, and the external matrix-EIG/SDR baselines are not implemented.
+
 ## Stop Justification
-- Not stopped.
+- Reached `core_claim`: the paper's actual DQGPM computation runs end-to-end on the paper's synthetic protocol and supports the central improvement claim against the implemented dual-quaternion spectral baseline. Higher milestones require implementing additional paper baselines and diagnosing the remaining absolute gap to Table 2.

@@ -1,8 +1,6 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
-gpus: 0
-test: false
-milestone: method_runs
-notes: "Run 100 trials with DQGPM max_iter=200 because sparse 100-trial histories hit the previous 50-iteration cap; compare against rounded DQ spectral and validate."
+action: done
+milestone: core_claim
+notes: "Reproduced the core synthetic claim: DQGPM runs end-to-end on the paper protocol and improves over the rounded DQ spectral baseline across three 100-trial settings. Absolute Table 2 mismatch and missing external EIG/SDR baselines are documented."

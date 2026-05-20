@@ -33,7 +33,7 @@ the paper's data-generation specification against the implementation; the next
 run uses 100 trials and corrected artifact labels to get paper-scale averages
 before deciding the final milestone.
 
-The 100-trial run also completed and validated. DQGPM improved over
+The 100-trial, 50-iteration run completed and validated. DQGPM improved over
 `dq_spectral` in every scored setting:
 
 - `p005_noise005`: translation error `0.135` vs `0.140`
@@ -41,22 +41,39 @@ The 100-trial run also completed and validated. DQGPM improved over
 - `p030_noise010`: translation error `0.074` vs `0.075`
 
 Sparse-setting histories were capped by `max_iter=50` in nearly every trial.
-The next submitted run increases the GPM budget to 200 iterations while
-keeping the same 100-trial evaluation.
+The follow-up 100-trial run increased the GPM budget to 200 iterations while
+keeping the same evaluation protocol. It completed successfully and produced
+nearly identical scores, indicating that the sparse runs had effectively
+settled at the fixed point reached by the implementation.
+
+Final 100-trial, 200-iteration scores:
+
+| Experiment | Method | error_R | error_T | error_T_std |
+| --- | --- | ---: | ---: | ---: |
+| `p005_noise005` | `dqgpm` | 0.110003 | 0.134546 | 0.071228 |
+| `p005_noise005` | `dq_spectral` | 0.114100 | 0.140277 | 0.071946 |
+| `p005_noise010` | `dqgpm` | 0.183282 | 0.239062 | 0.112500 |
+| `p005_noise010` | `dq_spectral` | 0.192591 | 0.251540 | 0.115673 |
+| `p030_noise010` | `dqgpm` | 0.052240 | 0.074253 | 0.038050 |
+| `p030_noise010` | `dq_spectral` | 0.052757 | 0.075116 | 0.038807 |
+
+These results support `core_claim`: the paper's DQGPM algorithm improves the
+rounded DQ spectral initializer on both rotation and translation error under
+the same generated graph/noise protocol.
 
 ## Remaining
 
-Run the 100-trial, 200-iteration synthetic evaluation, then update the final
-milestone and documentation from the paper-scale averages. The minimum target
-is to show DQGPM improves over `dq_spectral` on the synthetic settings while
-preserving the same generated graph/noise protocol.
+Higher milestones would require broader reproduction work: implement the
+paper's external matrix-EIG and SDR baselines, add more Table 2 noise/density
+settings such as `p=0.08`, and diagnose why the reproduced absolute errors are
+higher than the reported DQGPM values, especially for dense graphs.
 
 ## Issues
 
 The inherited workspace had fabricated `scores.json` values and a
 `reference.json` that did not match Table 2. The reference file has been
-rewritten with actual paper values, but `scores.json` will only become valid
-after the submitted job writes fresh measured results.
+rewritten with actual paper values, and `scores.json` now contains fresh
+measured results from the final job.
 
 The evaluator previously emitted `n_trials`, which was not a declared metric in
 `reference.json`; this has been removed so structural comparison is meaningful.
@@ -65,10 +82,20 @@ The artifact label `eig` was inaccurate: the implemented baseline is the
 paper's rounded dual-quaternion spectral initializer, not the external
 matrix-EIG baseline reported in Table 2. It is now labeled `dq_spectral`.
 
+The final scores are worse than the paper's absolute DQGPM values. The
+implementation still follows the paper's computation and improves over its
+initializer, so the environment is usable at `core_claim`, but the Table 2 gap
+should be treated as an open reproduction issue rather than a solved result.
+
 ## Deviations from Paper
 
 The completed smoke job used 5 trials and the next job used 30 trials rather
 than the paper's 100 trials to test the container and pipeline quickly. The
-next submitted job uses 100 trials per scored synthetic setting. This
+final reported scores use 100 trials per scored synthetic setting. This
 reproduction implements the paper's DQGPM method and rounded DQ spectral
 initializer, but not the external matrix-EIG or SDR comparison methods.
+
+The DQGPM iteration cap is 200 for the final run. The paper stops by residual
+tolerance and does not emphasize a fixed cap; this cap is a compute budget
+guard, and the 50-iteration and 200-iteration runs gave the same measured
+scores to the displayed precision.
