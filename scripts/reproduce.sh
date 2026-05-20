@@ -13,4 +13,8 @@ for exp in "${EXPERIMENTS[@]}"; do
   bash scripts/baseline.sh "$exp" "$TRIALS"
 done
 
-bash scripts/evaluate.sh checkpoints/*_results.json
+bash scripts/evaluate.sh \
+  checkpoints/p005_noise005_dqgpm_results.json \
+  checkpoints/p005_noise005_dq_spectral_results.json \
+  checkpoints/p005_noise010_dqgpm_results.json \
+  checkpoints/p005_noise010_dq_spectral_results.json

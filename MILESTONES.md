@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-05-20 06:38] - core_claim
+- Continued verifier audit of the packaged reproduction.
+- Corrected the `p005_noise005` paper reference translation error from Table 2 (`0.069 ± 0.043`) and updated target docs to include the declared p90/max stability metrics.
+- Submitting a CPU validation job to refresh `scores.json` from existing artifacts with the full metric set and rerun post-reproducer validation inside the container.
+
 ### [2026-05-20 06:12] - core_claim
 - Reviewed compute job `b6338986-caa`: it regenerated the two retained 100-trial sparse synthetic experiments, scored method and baseline artifacts, and exited successfully.
 - `validate.py --compare --post-reproducer` passed inside the container, including score consistency, import separation, artifact-based evaluation, and shared-path checks.

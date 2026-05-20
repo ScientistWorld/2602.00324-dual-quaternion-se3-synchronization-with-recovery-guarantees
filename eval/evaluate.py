@@ -95,8 +95,12 @@ def evaluate_artifact(path: Path) -> dict:
         "method": artifact["method"],
         "error_R": float(np.mean(err_r)),
         "error_R_std": float(np.std(err_r)),
+        "error_R_p90": float(np.percentile(err_r, 90)),
+        "error_R_max": float(np.max(err_r)),
         "error_T": float(np.mean(err_t)),
         "error_T_std": float(np.std(err_t)),
+        "error_T_p90": float(np.percentile(err_t, 90)),
+        "error_T_max": float(np.max(err_t)),
     }
 
 

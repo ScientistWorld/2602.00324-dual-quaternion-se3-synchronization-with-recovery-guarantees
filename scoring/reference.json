@@ -15,7 +15,7 @@
         "error_T_max": {"higher_is_better": false, "coefficient": -0.2, "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."}
       },
       "results": {
-        "dqgpm": {"type": "proposed", "error_R": 0.034, "error_R_std": 0.051, "error_T": 0.135, "error_T_std": 0.043},
+        "dqgpm": {"type": "proposed", "error_R": 0.034, "error_R_std": 0.051, "error_T": 0.069, "error_T_std": 0.043},
         "dq_spectral": {"type": "baseline"}
       }
     },

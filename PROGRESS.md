@@ -23,6 +23,12 @@ Continuation validation job `b6338986-caa` reran the retained sparse suite
 inside the compute container and passed `validate.py --compare
 --post-reproducer` with the regenerated artifacts.
 
+Verifier audit on 2026-05-20 corrected the `p005_noise005` Table 2 reference
+value for DQGPM translation error from `0.135 ± 0.043` to `0.069 ± 0.043`.
+The main evaluator now emits the p90 and max stability metrics already
+declared in `reference.json`, and `scripts/reproduce.sh` evaluates only the
+two claimed sparse artifacts instead of globbing stale checkpoint files.
+
 ## Results
 
 The first CPU smoke job completed with valid measured scores for five trials on
@@ -56,7 +62,8 @@ keeping the same evaluation protocol. It completed successfully and produced
 nearly identical scores, indicating that the sparse runs had effectively
 settled at the fixed point reached by the implementation.
 
-Final 100-trial, 200-iteration scores:
+Final 100-trial, 200-iteration scores before the reference correction and
+p90/max metric refresh:
 
 | Experiment | Method | error_R | error_T | error_T_std |
 | --- | --- | ---: | ---: | ---: |
@@ -65,10 +72,12 @@ Final 100-trial, 200-iteration scores:
 | `p005_noise010` | `dqgpm` | 0.183282 | 0.239062 | 0.112500 |
 | `p005_noise010` | `dq_spectral` | 0.192591 | 0.251540 | 0.115673 |
 
-These results support `core_claim`: the paper's DQGPM algorithm improves the
-rounded DQ spectral initializer on both rotation and translation error under
-the same generated graph/noise protocol for the two sparse settings retained
-in `scores.json`.
+These results support a narrow `core_claim`: the paper's DQGPM algorithm
+improves the rounded DQ spectral initializer on both rotation and translation
+error under the same generated graph/noise protocol for the two sparse
+settings retained in `scores.json`. The corrected paper reference makes clear
+that the absolute translation error for `p005_noise005` is still materially
+worse than Table 2.
 
 The continuation validation job `b6338986-caa` reproduced the same final
 100-trial, 200-iteration scores and confirmed that the reusable scripts remain

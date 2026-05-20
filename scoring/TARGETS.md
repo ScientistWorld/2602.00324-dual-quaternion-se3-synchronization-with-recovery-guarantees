@@ -10,6 +10,8 @@ Primary metrics:
 Constraint metrics:
 - `error_T_std`: trial-to-trial translation stability.
 - `error_R_std`: trial-to-trial rotation stability.
+- `error_T_p90` and `error_R_p90`: high-percentile recovery error.
+- `error_T_max` and `error_R_max`: worst-trial recovery error.
 
 Experiments:
 - `p005_noise005`
