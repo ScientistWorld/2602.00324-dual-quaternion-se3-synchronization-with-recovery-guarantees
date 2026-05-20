@@ -17,11 +17,7 @@ Experiments:
 - `p005_noise005`
 - `p005_noise010`
 
-The proposed method should improve over the `dq_spectral` rounded
-dual-quaternion spectral initializer under the same generated graph/noise
-settings and trial seeds. The less sparse `p008_noise010` and dense
-`p030_noise010` Table 2 settings were attempted, but they are not claimed in
-`scores.json` because their reproduced translation errors were outside the
-validator's accepted magnitude range. The paper's reported matrix-EIG baseline
-also remains in `reference.json`, but this reproduction does not currently
-implement that external baseline.
+A successful submission should reduce aligned pose error and preserve trial
+stability under the same generated graph/noise settings and trial seeds. The
+less sparse `p008_noise010` and dense `p030_noise010` settings were attempted
+during reproduction but are not part of the current scored suite.

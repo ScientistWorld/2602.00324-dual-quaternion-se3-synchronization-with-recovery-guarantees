@@ -5,52 +5,70 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
-import numpy as np
+Vector = list[float]
 
 
-def q_conj(q: np.ndarray) -> np.ndarray:
-    return np.array([q[0], -q[1], -q[2], -q[3]], dtype=np.float64)
+def q_conj(q: Vector) -> Vector:
+    return [q[0], -q[1], -q[2], -q[3]]
 
 
-def q_mul(p: np.ndarray, q: np.ndarray) -> np.ndarray:
+def q_mul(p: Vector, q: Vector) -> Vector:
     w1, x1, y1, z1 = p
     w2, x2, y2, z2 = q
-    return np.array(
-        [
-            w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2,
-            w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
-            w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2,
-            w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2,
-        ],
-        dtype=np.float64,
-    )
+    return [
+        w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2,
+        w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
+        w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2,
+        w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2,
+    ]
 
 
-def q_norm(q: np.ndarray) -> np.ndarray:
-    n = np.linalg.norm(q)
+def dot(p: Vector, q: Vector) -> float:
+    return sum(a * b for a, b in zip(p, q, strict=True))
+
+
+def add(p: Vector, q: Vector) -> Vector:
+    return [a + b for a, b in zip(p, q, strict=True)]
+
+
+def sub(p: Vector, q: Vector) -> Vector:
+    return [a - b for a, b in zip(p, q, strict=True)]
+
+
+def scale(a: float, v: Vector) -> Vector:
+    return [a * x for x in v]
+
+
+def norm(v: Vector) -> float:
+    return math.sqrt(dot(v, v))
+
+
+def q_norm(q: Vector) -> Vector:
+    n = norm(q)
     if n < 1e-14:
-        return np.array([1.0, 0.0, 0.0, 0.0], dtype=np.float64)
-    return q / n
+        return [1.0, 0.0, 0.0, 0.0]
+    return scale(1.0 / n, q)
 
 
-def rotate(q: np.ndarray, v: np.ndarray) -> np.ndarray:
-    pure = np.array([0.0, v[0], v[1], v[2]])
+def rotate(q: Vector, v: Vector) -> Vector:
+    pure = [0.0, v[0], v[1], v[2]]
     return q_mul(q_mul(q_norm(q), pure), q_conj(q_norm(q)))[1:4]
 
 
-def record_pose(record: dict) -> tuple[np.ndarray, np.ndarray]:
-    q_st = q_norm(np.asarray(record["q_st"], dtype=np.float64))
-    q_dual = np.asarray(record["q_dual"], dtype=np.float64)
-    t = 2.0 * q_mul(q_dual, q_conj(q_st))[1:4]
+def record_pose(record: dict) -> tuple[Vector, Vector]:
+    q_st = q_norm([float(x) for x in record["q_st"]])
+    q_dual = [float(x) for x in record["q_dual"]]
+    t = scale(2.0, q_mul(q_dual, q_conj(q_st))[1:4])
     return q_st, t
 
 
-def rotation_error(q1: np.ndarray, q2: np.ndarray) -> float:
-    inner = abs(float(np.dot(q_norm(q1), q_norm(q2))))
-    inner = np.clip(inner, 0.0, 1.0)
-    return float(2.0 * np.arccos(np.clip(2.0 * inner * inner - 1.0, -1.0, 1.0)))
+def rotation_error(q1: Vector, q2: Vector) -> float:
+    inner = max(0.0, min(1.0, abs(dot(q_norm(q1), q_norm(q2)))))
+    argument = max(-1.0, min(1.0, 2.0 * inner * inner - 1.0))
+    return float(2.0 * math.acos(argument))
 
 
 def aligned_errors(truth: list[dict], estimate: list[dict]) -> tuple[float, float]:
@@ -64,22 +82,44 @@ def aligned_errors(truth: list[dict], estimate: list[dict]) -> tuple[float, floa
         est_t.append(t_e)
 
     # Right-alignment from the paper/Hadi et al.: estimate x truth*z.
-    s = np.zeros(4)
+    s = [0.0, 0.0, 0.0, 0.0]
     for q_hat, q in zip(true_q, est_q, strict=True):
-        s += q_mul(q_conj(q_hat), q)
+        s = add(s, q_mul(q_conj(q_hat), q))
     q_align = q_norm(s)
-    t_align = np.zeros(3)
+    t_align = [0.0, 0.0, 0.0]
     for q_hat, t_hat, t in zip(true_q, true_t, est_t, strict=True):
-        t_align += rotate(q_conj(q_hat), t - t_hat)
-    t_align /= len(truth)
+        t_align = add(t_align, rotate(q_conj(q_hat), sub(t, t_hat)))
+    t_align = scale(1.0 / len(truth), t_align)
 
     err_r, err_t = [], []
     for q_hat, t_hat, q, t in zip(true_q, true_t, est_q, est_t, strict=True):
         q_right = q_mul(q_hat, q_align)
-        t_right = t_hat + rotate(q_hat, t_align)
+        t_right = add(t_hat, rotate(q_hat, t_align))
         err_r.append(rotation_error(q, q_right))
-        err_t.append(float(np.linalg.norm(t - t_right)))
-    return float(np.mean(err_r)), float(np.mean(err_t))
+        err_t.append(norm(sub(t, t_right)))
+    return mean(err_r), mean(err_t)
+
+
+def mean(values: list[float]) -> float:
+    return float(sum(values) / len(values))
+
+
+def std(values: list[float]) -> float:
+    mu = mean(values)
+    return math.sqrt(sum((x - mu) ** 2 for x in values) / len(values))
+
+
+def percentile(values: list[float], q: float) -> float:
+    ordered = sorted(values)
+    if len(ordered) == 1:
+        return float(ordered[0])
+    position = (len(ordered) - 1) * q / 100.0
+    lower = math.floor(position)
+    upper = math.ceil(position)
+    if lower == upper:
+        return float(ordered[int(position)])
+    weight = position - lower
+    return float(ordered[lower] * (1.0 - weight) + ordered[upper] * weight)
 
 
 def evaluate_artifact(path: Path) -> dict:
@@ -93,14 +133,14 @@ def evaluate_artifact(path: Path) -> dict:
     return {
         "experiment": artifact["experiment"],
         "method": artifact["method"],
-        "error_R": float(np.mean(err_r)),
-        "error_R_std": float(np.std(err_r)),
-        "error_R_p90": float(np.percentile(err_r, 90)),
-        "error_R_max": float(np.max(err_r)),
-        "error_T": float(np.mean(err_t)),
-        "error_T_std": float(np.std(err_t)),
-        "error_T_p90": float(np.percentile(err_t, 90)),
-        "error_T_max": float(np.max(err_t)),
+        "error_R": mean(err_r),
+        "error_R_std": std(err_r),
+        "error_R_p90": percentile(err_r, 90),
+        "error_R_max": max(err_r),
+        "error_T": mean(err_t),
+        "error_T_std": std(err_t),
+        "error_T_p90": percentile(err_t, 90),
+        "error_T_max": max(err_t),
     }
 
 

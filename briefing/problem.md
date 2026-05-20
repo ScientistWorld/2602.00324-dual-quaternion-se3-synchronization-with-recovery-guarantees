@@ -21,5 +21,4 @@ global alignment before downstream registration or mapping steps.
 
 A successful method produces valid `SE(3)` poses for every node and, after
 global gauge alignment, has lower mean rotation and translation error than a
-spectral synchronization baseline under the same graph, noise, and trial
-settings.
+benchmark baseline under the same graph, noise, and trial settings.

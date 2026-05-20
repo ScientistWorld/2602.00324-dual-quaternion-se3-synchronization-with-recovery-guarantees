@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-05-20 06:44] - core_claim
+- Completed final verification for gym readiness.
+- Refreshed the reusable evaluator outputs, removed stale generated artifacts that could pollute default scoring, and confirmed `validate.py --compare --post-reproducer` passes.
+- Cleaned method-agnostic documentation and added a method-independent synthetic data interface for future from-scratch agents.
+
 ### [2026-05-20 06:38] - core_claim
 - Continued verifier audit of the packaged reproduction.
 - Corrected the `p005_noise005` paper reference translation error from Table 2 (`0.069 ± 0.043`) and updated target docs to include the declared p90/max stability metrics.

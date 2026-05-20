@@ -1,9 +1,6 @@
-# This iteration reviewed the completed split-evaluation job.
-# Once you set action to 'done', STOP immediately.
-# Do NOT sleep, poll, or wait. The system reads this file
-# only after your turn ends.
+# Final verification completed.
 action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Packaging audit complete: synthetic-only reproduction needs no external artifacts; download.sh, ignore rules, and shared-path checks validate."
+notes: "Final verification complete: method-agnostic docs, scoring outputs, data interface, and validation checks are ready for gym use with documented synthetic-only limitations."
