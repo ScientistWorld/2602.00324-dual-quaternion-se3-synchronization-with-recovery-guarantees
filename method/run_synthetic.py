@@ -25,7 +25,7 @@ EXPERIMENTS = {
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--experiment", default="p005_noise005", choices=EXPERIMENTS)
-    parser.add_argument("--method", default="dqgpm", choices=["dqgpm", "dq_spectral", "eig"])
+    parser.add_argument("--method", default="dqgpm", choices=["dqgpm", "dq_spectral"])
     parser.add_argument("--trials", type=int, default=5)
     parser.add_argument("--max-iter", type=int, default=50)
     parser.add_argument("--output", default="checkpoints/synthetic_results.json")

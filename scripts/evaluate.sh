@@ -5,7 +5,14 @@ set -euo pipefail
 cd /home/user
 
 if [ "$#" -eq 0 ]; then
-  set -- checkpoints/*_results.json
+  shopt -s nullglob
+  artifacts=(checkpoints/*_results.json)
+  shopt -u nullglob
+  if [ "${#artifacts[@]}" -eq 0 ]; then
+    echo "No result artifacts found. Run scripts/method.sh or pass artifact paths." >&2
+    exit 2
+  fi
+  set -- "${artifacts[@]}"
 fi
 
 python3 eval/evaluate.py --artifacts "$@" --output scoring/scores.json

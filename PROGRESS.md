@@ -102,6 +102,15 @@ implementation still follows the paper's computation and improves over its
 initializer, so the environment is usable at `core_claim`, but the Table 2 gap
 should be treated as an open reproduction issue rather than a solved result.
 
+The continuation review removed a misleading `eig` runner alias. The paper's
+external matrix-EIG baseline remains only as a reported reference value until a
+separate implementation is added.
+
+Continuation audit on 2026-05-20 reset the active milestone to `method_runs`
+pending a fresh compute-node validation. Lightweight checks passed for shell
+syntax and Python compilation, and the next CPU job reruns the retained
+100-trial sparse synthetic suite plus `validate.py --compare --post-reproducer`.
+
 Validation rejected the dense `p030_noise010` result because its primary
 translation metric was 2.75x the paper value. I re-read Table 2 and confirmed
 the reference transcription is correct, so that setting is excluded from the
