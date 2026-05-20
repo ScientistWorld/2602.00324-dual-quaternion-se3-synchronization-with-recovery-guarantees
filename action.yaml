@@ -1,6 +1,5 @@
-# Final verification completed.
-action: done
+action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Final verification complete: python validate.py passes after refreshing train/test splits and artifact-reading evaluators; gym is ready with documented synthetic-only limitations."
+notes: "CPU job: regenerate the validated core DQGPM synthetic suite from scratch after projection/run.sh fixes, then probe p008 and p030 Table 2 extension settings into tmp/extension_scores.json without overwriting accepted scores."
