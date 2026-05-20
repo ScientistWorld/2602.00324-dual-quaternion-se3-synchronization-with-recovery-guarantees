@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: pending
-gpus: 1
-test: false
+action: submit
+gpus: 0
+test: true
 milestone: method_runs
-notes: ""
+notes: "Continuation audit passed lightweight checks; rerun two-setting 100-trial CPU reproduction and post-reproducer validation before restoring core_claim."
