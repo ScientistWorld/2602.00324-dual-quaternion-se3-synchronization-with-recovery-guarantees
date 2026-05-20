@@ -2,8 +2,8 @@
 # Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: pending
+action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: ""
+notes: "Improvements: reconstructed deterministic truth instead of trusting artifact truth, added max-error tail metrics, completed metric metadata, filtered scoring to reference experiments. Notes: see DESIGN_NOTES.md."

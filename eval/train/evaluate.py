@@ -3,7 +3,8 @@
 
 This evaluator reads method result artifacts only. It does not import or run
 method code, and it scores the even-indexed half of each artifact's trials
-after sorting by trial seed.
+after sorting by trial seed. Ground truth poses are reconstructed from each
+trial seed instead of trusted from the artifact.
 """
 
 from __future__ import annotations
@@ -46,6 +47,37 @@ def q_norm(q: np.ndarray) -> np.ndarray:
 def rotate(q: np.ndarray, v: np.ndarray) -> np.ndarray:
     pure = np.array([0.0, v[0], v[1], v[2]])
     return q_mul(q_mul(q_norm(q), pure), q_conj(q_norm(q)))[1:4]
+
+
+def dual_quaternion_from_rt(axis: np.ndarray, angle: float, translation: np.ndarray) -> dict:
+    axis_norm = np.linalg.norm(axis)
+    if axis_norm < 1e-14:
+        axis = np.array([0.0, 0.0, 1.0], dtype=np.float64)
+    else:
+        axis = axis / axis_norm
+
+    half = 0.5 * float(angle)
+    q_st = q_norm(np.array([np.cos(half), *(np.sin(half) * axis)], dtype=np.float64))
+    t_quat = np.array([0.0, *np.asarray(translation, dtype=np.float64)])
+    q_dual = 0.5 * q_mul(t_quat, q_st)
+    return {"q_st": q_st.tolist(), "q_dual": q_dual.tolist()}
+
+
+def deterministic_truth(trial: dict, artifact: dict) -> list[dict]:
+    """Regenerate the seeded synthetic poses without trusting artifact truth."""
+    n = int(trial.get("n", artifact.get("n", 0)))
+    if n <= 0:
+        raise ValueError("trial artifact must include a positive n")
+
+    rng = np.random.default_rng(int(trial["seed"]))
+    poses = []
+    for _ in range(n):
+        axis = rng.normal(size=3)
+        axis = axis / np.linalg.norm(axis)
+        angle = rng.uniform(0.0, 2.0 * np.pi)
+        translation = rng.normal(size=3)
+        poses.append(dual_quaternion_from_rt(axis, angle, translation))
+    return poses
 
 
 def record_pose(record: dict) -> tuple[np.ndarray, np.ndarray]:
@@ -102,7 +134,7 @@ def evaluate_artifact(path: Path) -> dict:
     artifact = json.loads(path.read_text())
     err_r, err_t = [], []
     for trial in select_trials(artifact["trials"]):
-        r, t = aligned_errors(trial["truth"], trial["estimate"])
+        r, t = aligned_errors(deterministic_truth(trial, artifact), trial["estimate"])
         err_r.append(r)
         err_t.append(t)
 
@@ -112,22 +144,35 @@ def evaluate_artifact(path: Path) -> dict:
         "error_R": float(np.mean(err_r)),
         "error_R_std": float(np.std(err_r)),
         "error_R_p90": float(np.percentile(err_r, 90)),
+        "error_R_max": float(np.max(err_r)),
         "error_T": float(np.mean(err_t)),
         "error_T_std": float(np.std(err_t)),
         "error_T_p90": float(np.percentile(err_t, 90)),
+        "error_T_max": float(np.max(err_t)),
     }
+
+
+def reference_experiments(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    data = json.loads(path.read_text())
+    return set(data.get("experiments", {}))
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--artifacts", nargs="+", required=True)
     parser.add_argument("--output", default="scoring/scores_train.json")
+    parser.add_argument("--reference", default="scoring/reference.json")
     args = parser.parse_args()
 
+    allowed_experiments = reference_experiments(Path(args.reference))
     by_exp: dict[str, dict] = {}
     for artifact_path in args.artifacts:
         result = evaluate_artifact(Path(artifact_path))
         exp_name = result.pop("experiment")
+        if allowed_experiments and exp_name not in allowed_experiments:
+            continue
         method = result.pop("method")
         by_exp.setdefault(
             exp_name,
