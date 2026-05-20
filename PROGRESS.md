@@ -13,6 +13,12 @@ The spectral initializer now uses the standard and dual parts of the
 dual-quaternion vector norm, matching Algorithm 1 more closely than the
 previous standard-part-only normalization.
 
+Continuation audit on 2026-05-20 confirmed that `method/` implements the
+paper's actual computational steps rather than a surrogate, `eval/` remains
+artifact-based and independent from `method/`, and
+`python3 validate.py --compare --post-reproducer` passes for the existing
+scores.
+
 ## Results
 
 The first CPU smoke job completed with valid measured scores for five trials on
@@ -60,12 +66,18 @@ rounded DQ spectral initializer on both rotation and translation error under
 the same generated graph/noise protocol for the two sparse settings retained
 in `scores.json`.
 
+The next submitted job expands the scored synthetic suite with
+`p008_noise010`, the Table 2 setting with `p=0.08`,
+`sigma_t=0.10`, and `sigma_r=10 deg`. If it validates and DQGPM again improves
+over the rounded dual-quaternion spectral initializer, the reproduction should
+advance to `core_claim_plus`.
+
 ## Remaining
 
 Higher milestones would require broader reproduction work: implement the
 paper's external matrix-EIG and SDR baselines, add more Table 2 noise/density
-settings such as `p=0.08`, and diagnose why the dense `p030_noise010` run had
-`error_T=0.074253` versus the paper's `0.027`.
+settings beyond the submitted `p=0.08` run, and diagnose why the dense
+`p030_noise010` run had `error_T=0.074253` versus the paper's `0.027`.
 
 ## Issues
 

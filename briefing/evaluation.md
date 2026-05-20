@@ -21,11 +21,13 @@ measurement protocol. Paper reference targets are from synthetic Table 2 for
 
 - `p005_noise005`: `p=0.05`, `sigma_t=0.05`, `sigma_r=5 deg`.
 - `p005_noise010`: `p=0.05`, `sigma_t=0.10`, `sigma_r=10 deg`.
+- `p008_noise010`: `p=0.08`, `sigma_t=0.10`, `sigma_r=10 deg`.
 - `p030_noise010`: `p=0.30`, `sigma_t=0.10`, `sigma_r=10 deg`.
 
-Current reproduced scores cover the two sparse `p=0.05` settings. The dense
-`p030_noise010` reference remains documented as an unreproduced target because
-the measured translation error was outside the accepted reproduction range.
+Current reproduced scores cover sparse and moderately sparse settings. The
+dense `p030_noise010` reference remains documented as an unreproduced target
+because the measured translation error was outside the accepted reproduction
+range.
 
 ## Evaluation Protocol
 
