@@ -26,5 +26,10 @@
 - Corrected the baseline label from `eig` to `dq_spectral`; the external matrix-EIG baseline from the paper is not implemented.
 - Prepared a 100-trial CPU job to reduce variance and produce paper-scale averages before claiming `core_claim`.
 
+### [2026-05-20 00:00] - method_runs
+- The 100-trial run completed and validated; DQGPM consistently improved over `dq_spectral`.
+- Sparse-setting DQGPM histories hit the 50-iteration cap in almost every trial, so those results may be under-converged.
+- Increased the configurable GPM iteration budget to 200 and prepared one more 100-trial run.
+
 ## Stop Justification
 - Not stopped.

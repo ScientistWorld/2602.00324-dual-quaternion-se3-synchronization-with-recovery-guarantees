@@ -7,11 +7,12 @@ cd /home/user
 mkdir -p checkpoints scoring
 
 TRIALS="${TRIALS:-100}"
+MAX_ITER="${MAX_ITER:-200}"
 EXPERIMENTS=(p005_noise005 p005_noise010 p030_noise010)
 ARTIFACTS=()
 
 for exp in "${EXPERIMENTS[@]}"; do
-  bash scripts/method.sh "$exp" "$TRIALS"
+  bash scripts/method.sh "$exp" "$TRIALS" "$MAX_ITER"
   bash scripts/baseline.sh "$exp" "$TRIALS"
   ARTIFACTS+=("checkpoints/${exp}_dqgpm_results.json")
   ARTIFACTS+=("checkpoints/${exp}_dq_spectral_results.json")

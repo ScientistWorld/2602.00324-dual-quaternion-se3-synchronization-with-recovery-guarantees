@@ -33,12 +33,23 @@ the paper's data-generation specification against the implementation; the next
 run uses 100 trials and corrected artifact labels to get paper-scale averages
 before deciding the final milestone.
 
+The 100-trial run also completed and validated. DQGPM improved over
+`dq_spectral` in every scored setting:
+
+- `p005_noise005`: translation error `0.135` vs `0.140`
+- `p005_noise010`: translation error `0.239` vs `0.252`
+- `p030_noise010`: translation error `0.074` vs `0.075`
+
+Sparse-setting histories were capped by `max_iter=50` in nearly every trial.
+The next submitted run increases the GPM budget to 200 iterations while
+keeping the same 100-trial evaluation.
+
 ## Remaining
 
-Run the 100-trial synthetic evaluation, then update the final milestone and
-documentation from the paper-scale averages. The minimum target is to show
-DQGPM improves over `dq_spectral` on the synthetic settings while preserving
-the same generated graph/noise protocol.
+Run the 100-trial, 200-iteration synthetic evaluation, then update the final
+milestone and documentation from the paper-scale averages. The minimum target
+is to show DQGPM improves over `dq_spectral` on the synthetic settings while
+preserving the same generated graph/noise protocol.
 
 ## Issues
 

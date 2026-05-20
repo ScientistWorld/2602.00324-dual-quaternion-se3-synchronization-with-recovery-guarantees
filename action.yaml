@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: false
 milestone: method_runs
-notes: "Paper-scale CPU run with corrected dq_spectral baseline label: run 100 trials for p005_noise005, p005_noise010, and p030_noise010 with DQGPM and rounded DQ spectral, then score and validate."
+notes: "Run 100 trials with DQGPM max_iter=200 because sparse 100-trial histories hit the previous 50-iteration cap; compare against rounded DQ spectral and validate."
