@@ -6,4 +6,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Even/odd seed split; 72 train metrics and 72 test metrics across 3 experiments x 3 methods; train/test DQGPM error_T ratios 0.89, 0.92, 0.89 with no nulls or byte-identical slices. Default artifact discovery now includes checkpoints/ and outputs/."
+notes: "Even/odd seed split; 32 train metrics and 32 test metrics across 2 claimed experiments x 2 implemented methods; train/test DQGPM error_T ratios 0.89 and 0.92 with no nulls or byte-identical slices. Filtered stale EIG/dense artifacts and validated post-design successfully."

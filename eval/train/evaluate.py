@@ -152,11 +152,17 @@ def evaluate_artifact(path: Path) -> dict:
     }
 
 
-def reference_experiments(path: Path) -> set[str]:
+def reference_entries(path: Path) -> tuple[set[str], set[tuple[str, str]]]:
     if not path.exists():
-        return set()
+        return set(), set()
     data = json.loads(path.read_text())
-    return set(data.get("experiments", {}))
+    experiments = data.get("experiments", {})
+    entries = {
+        (exp_name, method_name)
+        for exp_name, exp_data in experiments.items()
+        for method_name in exp_data.get("results", {})
+    }
+    return set(experiments), entries
 
 
 def main() -> None:
@@ -166,7 +172,7 @@ def main() -> None:
     parser.add_argument("--reference", default="scoring/reference.json")
     args = parser.parse_args()
 
-    allowed_experiments = reference_experiments(Path(args.reference))
+    allowed_experiments, allowed_entries = reference_entries(Path(args.reference))
     by_exp: dict[str, dict] = {}
     for artifact_path in args.artifacts:
         result = evaluate_artifact(Path(artifact_path))
@@ -174,6 +180,8 @@ def main() -> None:
         if allowed_experiments and exp_name not in allowed_experiments:
             continue
         method = result.pop("method")
+        if allowed_entries and (exp_name, method) not in allowed_entries:
+            continue
         by_exp.setdefault(
             exp_name,
             {

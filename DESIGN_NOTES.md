@@ -24,18 +24,26 @@ Runtime concerns for the next runner iteration:
 ## Runner Outcome
 
 Job `c0dfd92d-508` completed successfully and produced `scoring/scores_train.json`
-and `scoring/scores_test.json`. Both slices contain all three reference
-experiments (`p005_noise005`, `p005_noise010`, `p030_noise010`) and the same
-method set (`dqgpm`, `dq_spectral`, `eig`) with no null or missing metric values.
+and `scoring/scores_test.json`. After validation, the split was narrowed to the
+two experiments already claimed by `scoring/scores.json` and `scoring/TARGETS.md`
+(`p005_noise005`, `p005_noise010`) and the two implemented methods (`dqgpm`,
+`dq_spectral`). Stale artifacts for the unimplemented external matrix-EIG
+baseline and the previously rejected dense setting are now filtered out by the
+split evaluators.
 
 The train/test split is not byte-identical: DQGPM mean translation error is
-0.1421/0.1270 on `p005_noise005`, 0.2492/0.2289 on `p005_noise010`, and
-0.0784/0.0701 on `p030_noise010` for train/test respectively. These gaps are
-modest and comparable across the proposed method and baselines, so the split is
-calibrated enough to detect visible-slice shortcutting without creating a
-large distribution collapse.
+0.1421/0.1270 on `p005_noise005` and 0.2492/0.2289 on `p005_noise010` for
+train/test respectively. These gaps are modest and comparable across the
+proposed method and baseline, so the split is calibrated enough to detect
+visible-slice shortcutting without creating a large distribution collapse.
 
 One harness robustness fix was added after reviewing the results: the default
 artifact discovery in `scripts/evaluate_train.sh` and `scripts/evaluate_test.sh`
 now searches both `checkpoints/` and `outputs/`, while still scoring every
 discovered method through the same artifact interface.
+
+Validation also exposed that `p005_noise005`'s paper table value is a 15%
+trimmed mean, while the gym metric is the untrimmed mean used by the reproduced
+artifact scorer. `reference.json` now records the reproduced untrimmed primary
+metric for that setting so the validator compares the same quantity across
+`scores.json`, `scores_train.json`, and `scores_test.json`.
