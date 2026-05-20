@@ -1,8 +1,6 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
-gpus: 0
-test: true
-milestone: method_runs
-notes: "Continuation audit passed lightweight checks; rerun two-setting 100-trial CPU reproduction and post-reproducer validation before restoring core_claim."
+action: done
+milestone: core_claim
+notes: "Job b6338986-caa reran the two retained 100-trial sparse synthetic experiments, regenerated scores.json, and passed validate.py --compare --post-reproducer. Stopping at core_claim with p008/p030 absolute-error gaps documented for future work."

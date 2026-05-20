@@ -1,8 +1,13 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
+
+### [2026-05-20 06:12] - core_claim
+- Reviewed compute job `b6338986-caa`: it regenerated the two retained 100-trial sparse synthetic experiments, scored method and baseline artifacts, and exited successfully.
+- `validate.py --compare --post-reproducer` passed inside the container, including score consistency, import separation, artifact-based evaluation, and shared-path checks.
+- Restored `core_claim`: DQGPM improves over the rounded dual-quaternion spectral initializer on both retained sparse Table 2 settings while preserving the paper's dual-quaternion measurement, initialization, and projection-refinement pipeline.
 
 ### [2026-05-20 06:10] - method_runs
 - Continuing from a prior `core_claim` claim with the milestone reset to `method_runs` as required.
@@ -15,4 +20,4 @@
 - DQGPM improves over the rounded dual-quaternion spectral initializer on rotation and translation errors in both retained settings, while absolute errors remain worse than the paper's reported values.
 
 ## Stop Justification
-- Not stopped; continuation validation is being submitted.
+- Completed at milestone `core_claim`.

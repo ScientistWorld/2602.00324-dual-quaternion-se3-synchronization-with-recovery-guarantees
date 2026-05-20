@@ -19,6 +19,10 @@ artifact-based and independent from `method/`, and
 `python3 validate.py --compare --post-reproducer` passes for the existing
 scores.
 
+Continuation validation job `b6338986-caa` reran the retained sparse suite
+inside the compute container and passed `validate.py --compare
+--post-reproducer` with the regenerated artifacts.
+
 ## Results
 
 The first CPU smoke job completed with valid measured scores for five trials on
@@ -65,6 +69,15 @@ These results support `core_claim`: the paper's DQGPM algorithm improves the
 rounded DQ spectral initializer on both rotation and translation error under
 the same generated graph/noise protocol for the two sparse settings retained
 in `scores.json`.
+
+The continuation validation job `b6338986-caa` reproduced the same final
+100-trial, 200-iteration scores and confirmed that the reusable scripts remain
+container-runnable:
+
+| Experiment | DQGPM error_T | DQ spectral error_T | DQGPM error_R | DQ spectral error_R |
+| --- | ---: | ---: | ---: | ---: |
+| `p005_noise005` | 0.134546 | 0.140277 | 0.110003 | 0.114100 |
+| `p005_noise010` | 0.239062 | 0.251540 | 0.183282 | 0.192591 |
 
 The follow-up CPU job `a5472b1a-918` expanded the scored suite with
 `p008_noise010`, the Table 2 setting with `p=0.08`, `sigma_t=0.10`, and
@@ -121,6 +134,11 @@ Validation also rejected the attempted `p008_noise010` extension from job
 primary translation metric was too far from the paper's reported value. The
 core sparse settings remain valid and are the only experiments in the final
 `scores.json`.
+
+The continuation validation job `b6338986-caa` produced no new errors. It
+confirms the retained core suite remains reproducible after the audit cleanup
+that removed the misleading `eig` runner alias and hardened
+`scripts/evaluate.sh` against empty artifact globs.
 
 ## Deviations from Paper
 
