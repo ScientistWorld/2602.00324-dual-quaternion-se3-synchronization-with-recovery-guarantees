@@ -6,9 +6,10 @@ Implements the two-stage algorithm from:
 Zhao, Zhu, So (2026)
 
 Approach:
-- Represent poses as unit dual quaternions (rotation + translation)
-- Build Hermitian dual quaternion measurement matrix C = x x* + noise
-- Two-stage: spectral initializer + DQGPM refinement
+- Build the 4n x 4n real matrix representation of the quaternion-Hermitian measurement matrix
+- Use power iteration / eigenvalue decomposition to find dominant eigenvector
+- Project onto UDQ^n via per-entry dual quaternion normalization
+- Run DQGPM for iterative refinement
 """
 
 import numpy as np
@@ -20,251 +21,285 @@ from dual_quaternion import (
 )
 
 
-def dual_quaternion_conjugate(dq):
-    """Dual quaternion conjugate: x* = q_st* - ε·q_dual*.
-    For unit dual quaternions, this equals the group inverse.
-    """
-    st_conj = quaternion_conjugate(dq[:4])
-    dual_conj = quaternion_conjugate(dq[4:])
-    dual_neg = -dual_conj
-    return np.concatenate([st_conj, dual_neg])
-
-
-def dual_quaternion_norm(dq):
-    """Norm squared of a dual quaternion as dual number."""
-    # |q|^2 = |q_st|^2 + ε·2·sc(q_st·q_dual*)
-    st_sq = dq[0]**2 + dq[1]**2 + dq[2]**2 + dq[3]**2
-    st_dual = 2 * (dq[0]*dq[4] + dq[1]*dq[5] + dq[2]*dq[6] + dq[3]*dq[7])
-    return st_sq + st_dual * 1e-10  # dual number (epsilon term is tiny)
-
-
-def normalize_dq(dq):
-    """Normalize dual quaternion to unit dual quaternion."""
-    st = dq[:4]
-    dual = dq[4:]
-    norm_st = np.linalg.norm(st)
-    if norm_st < 1e-12:
-        return np.concatenate([[1.0, 0.0, 0.0, 0.0], dual])
-    st_norm = st / norm_st
-    # Dual part: subtract projection onto standard part
-    # For unit dual quat: sc(q_st_new·q_dual_new*) = 0
-    # sc(st_norm·dual*) = st_norm·dual / norm_st
-    proj = np.dot(st_norm, dual) / norm_st
-    dual_corrected = dual - proj * st_norm
-    return np.concatenate([st_norm, dual_corrected])
-
-
-def dual_quat_mul(a, b):
-    """
-    Dual quaternion multiplication a · b.
-    a, b are 8-element arrays [q_st, q_dual], b is 8-element [q_st, q_dual].
-    """
-    a_st = a[:4]
-    a_dual = a[4:]
-    b_st = b[:4]
-    b_dual = b[4:]
-
-    # Standard: a_st · b_st
-    c_st = quaternion_multiply(a_st, b_st)
-    # Dual: a_st · b_dual + a_dual · b_st
-    c_dual = quaternion_multiply(a_st, b_dual) + quaternion_multiply(a_dual, b_st)
-    return np.concatenate([c_st, c_dual])
-
-
-def dual_quat_mul_right(a, b):
-    """
-    Right multiplication: (dual quaternion a) acting on (dual quaternion b) from left.
-    Actually: C_ij · x_j where C_ij and x_j are dual quaternions.
-    a is C_ij (8 elements), b is x_j (8 elements).
-    a · b = a_st·b_st + ε·(a_st·b_dual + a_dual·b_st)
-    """
-    return dual_quat_mul(a, b)
+def left_mul_matrix(q):
+    """Left multiplication matrix L(q) such that L(q) @ v = q * v"""
+    w, x, y, z = q[0], q[1], q[2], q[3]
+    return np.array([
+        [w, -x, -y, -z],
+        [x,  w, -z,  y],
+        [y,  z,  w, -x],
+        [z, -y,  x,  w]
+    ])
 
 
 class MeasurementMatrix:
     """
-    Hermitian dual quaternion measurement matrix C = x x* + noise.
+    Hermitian dual quaternion measurement matrix C = C_st + C_dual * eps.
+    C_st and C_dual are n x n quaternion matrices.
+    C_st is quaternion-Hermitian: C_st[j,i] = C_st[i,j]*
+    C_dual is quaternion Hermitian: C_dual[j,i] = C_dual[i,j]*
 
-    C is n×n with dual quaternion entries. Entry (i,j) is:
-      C[i,j] = x_i · x_j* + noise_ij
-
-    The matvec y = C @ x computes:
-      y_i = sum_j C[i,j] · x_j
-
-    where · is dual quaternion multiplication.
+    matvec uses vectorized operations for speed:
+    result_st[i] = st_i + sum_j L(C_st[i,j]) @ st_j + sum_j L(C_dual[i,j]) @ st_j + sum_j L(C_st[i,j]) @ dual_j
+    result_dual[i] = dual_i + sum_j L(C_dual[i,j]) @ st_j + sum_j L(C_st[i,j]) @ dual_j
     """
 
-    def __init__(self, C_entries, neighbors=None):
-        """
-        C_entries: (n, n, 8) array of dual quaternions.
-        C_entries[i, j] = dual quaternion C_ij.
-        """
-        self.n = C_entries.shape[0]
-        self.C = C_entries.copy()
+    def __init__(self, C_st, C_dual, neighbors=None):
+        self.n = C_st.shape[2]
+        self.C_st = C_st.copy()
+        self.C_dual = C_dual.copy()
         self.neighbors = neighbors
+        self.is_sparse = neighbors is not None
+
+        if not self.is_sparse:
+            # Dense: precompute (n, 4, 4) stacked left-multiply matrices
+            # L_st[i] = sum over j of L(C_st[i,j]) — for each target i
+            L_st = np.zeros((self.n, 4, 4))
+            L_dual = np.zeros((self.n, 4, 4))
+            for i in range(self.n):
+                for j in range(self.n):
+                    if i == j:
+                        L_st[i] += np.eye(4)  # diagonal contribution
+                        L_dual[i] += np.zeros((4, 4))  # no dual diag
+                    else:
+                        L_st[i] += left_mul_matrix(self.C_st[:, i, j])
+                        L_dual[i] += left_mul_matrix(self.C_dual[:, i, j])
+            self._L_st = L_st  # (n, 4, 4)
+            self._L_dual = L_dual  # (n, 4, 4)
+        else:
+            # Sparse: store (n, max_neighbors, 4, 4) matrices
+            max_deg = max(len(nbrs) for nbrs in neighbors.values()) if neighbors else 0
+            # Actually, for sparse we use a different approach: store as COO-like
+            # For now, fall back to explicit loops
+            self._L_st = None
+            self._L_dual = None
 
     def matvec(self, x):
-        """
-        y = C @ x where x is (n, 8) array of dual quaternions.
-        Returns (n, 8) array of dual quaternions.
-        """
+        """Vectorized matvec using precomputed L matrices."""
         n = self.n
-        y = np.zeros((n, 8))
-        for i in range(n):
-            for j in range(n):
-                if self.neighbors is not None and j not in self.neighbors.get(i, set()):
-                    continue
-                y[i] += dual_quat_mul(self.C[i, j], x[j])
-        return y
 
-    def dominant_eigenvector_power_iteration(self, max_iter=2000, tol=1e-8):
-        """
-        Power iteration to find dominant right eigenvector of C.
-        Returns eigenvector as (n, 8) array of dual quaternions.
-        """
-        x = np.zeros((self.n, 8))
-        for i in range(self.n):
-            dq = sample_random_unit_dual_quaternion()
-            x[i, :4] = dq.q_st
-            x[i, 4:] = dq.q_dual
+        if not self.is_sparse:
+            # Dense: explicit loop (clearest, correct implementation)
+            result = np.zeros(8 * n)
+            for i in range(n):
+                st_sum = np.zeros(4)
+                dual_sum = np.zeros(4)
+                for j in range(n):
+                    L_st_ij = left_mul_matrix(self.C_st[:, i, j])
+                    # Correct dual quaternion product: C_ij * x_j
+                    # (st_ij + dual_ij*eps) * (st_j + dual_j*eps) = st_ij*st_j + (st_ij*dual_j + dual_ij*st_j)*eps
+                    # st part: L_st_ij @ st_j ✓
+                    st_sum += L_st_ij @ x[4*j:4*j+4]
+                    # dual part: st_ij*dual_j + dual_ij*st_j
+                    dual_sum += quaternion_multiply(self.C_st[:, i, j], x[4*n + 4*j:4*n + 4*j+4])
+                    dual_sum += quaternion_multiply(self.C_dual[:, i, j], x[4*j:4*j+4])
+                result[4*i:4*i+4] = st_sum
+                result[4*n + 4*i:4*n + 4*i+4] = dual_sum
+        else:
+            # Sparse: explicit loop
+            result = np.zeros(8 * n)
+            for i in range(n):
+                st_sum = x[4*i:4*i+4].copy()
+                dual_sum = x[4*n + 4*i:4*n + 4*i+4].copy()
 
-        for it in range(max_iter):
-            y = self.matvec(x)
-            # Normalize: normalize each dual quaternion
-            y_norm = np.zeros((self.n, 8))
-            for i in range(self.n):
-                y_norm[i] = normalize_dq(y[i])
-            # Check convergence
-            diff = np.max(np.abs(y_norm - x))
-            x = y_norm
-            if diff < tol:
-                break
+                for j in self.neighbors.get(i, []):
+                    if i == j:
+                        continue
+                    st_j = x[4*j:4*j+4]
+                    dual_j = x[4*n + 4*j:4*n + 4*j+4]
+                    L_st = left_mul_matrix(self.C_st[:, i, j])
+                    L_dual = left_mul_matrix(self.C_dual[:, i, j])
+                    st_sum += L_st @ st_j
+                    dual_sum += L_dual @ st_j
+                    dual_sum += L_st @ dual_j
 
-        return x
+                result[4*i:4*i+4] = st_sum
+                result[4*n + 4*i:4*n + 4*i+4] = dual_sum
+
+        return result
+
+    def dominant_eigenvector(self, method='power_iter'):
+        """Compute dominant eigenvector using power iteration on the matvec."""
+        if method == 'power_iter':
+            x = np.random.randn(8 * self.n)
+            x = x / np.linalg.norm(x)
+            for _ in range(1000):
+                y = self.matvec(x)
+                y_norm = np.linalg.norm(y)
+                if y_norm < 1e-12:
+                    break
+                x_new = y / y_norm
+                if np.max(np.abs(x_new - x)) < 1e-8:
+                    break
+                x = x_new
+            if x[0] < 0:
+                x = -x
+            return x, np.dot(self.matvec(x), x) / np.dot(x, x)
+        else:
+            raise ValueError(f"Unknown method: {method}")
 
 
 def build_measurement_matrix(poses, noise_dict, edge_mask=None):
     """
     Build the Hermitian dual quaternion measurement matrix.
 
-    C_ij = x_i x_j* + ξ_ij
-    C_ii = 1 (identity)
+    C_ij = x̂_i * x̂_j* + ξ_ij
+    For i=j, C_ii = 1.
 
-    Args:
-        poses: list of n DualQuaternion objects (ground truth or initial)
-        noise_dict: dict of {(i,j): noise_dual_quaternion} for observed edges
-        edge_mask: optional dict of {(i,j): True} for sparse graphs
+    In quaternion form:
+    C_st[i,j] = st(x̂_i * x̂_j*) + ξ_ij_st
+    C_dual[i,j] = dual(x̂_i * x̂_j*) + ξ_ij_dual
+    C_st[i,i] = 1, C_dual[i,i] = 0
+
+    The matrix is Hermitian: C_st[j,i] = C_st[i,j]*, C_dual[j,i] = C_dual[i,j]*.
     """
     n = len(poses)
-    C_entries = np.zeros((n, n, 8))
 
-    # Diagonal: C_ii = 1 (identity dual quaternion)
-    C_entries[np.arange(n), np.arange(n), 0] = 1.0
+    C_st = np.zeros((4, n, n))
+    C_dual = np.zeros((4, n, n))
 
-    # Off-diagonal entries
+    # Build neighbor dict if sparse
+    neighbors = {} if edge_mask is not None else None
+    if neighbors is not None:
+        for i in range(n):
+            neighbors[i] = []
+
+    # Diagonal
     for i in range(n):
-        for j in range(i + 1, n):
-            if edge_mask is not None:
+        C_st[0, i, i] = 1.0
+
+    if edge_mask is None:
+        for i in range(n):
+            for j in range(i+1, n):
+                key = (i, j) if (i, j) in noise_dict else (j, i)
+                noise = noise_dict.get(key, None)
+
+                xij_conj = dual_quaternion_multiply(poses[i], poses[j].conjugate())
+                rel_st = xij_conj.q_st
+                rel_dual = xij_conj.q_dual
+
+                if noise is not None:
+                    noise_st = noise.q_st
+                    noise_dual = noise.q_dual
+                else:
+                    noise_st = np.array([0.0, 0.0, 0.0, 0.0])
+                    noise_dual = np.array([0.0, 0.0, 0.0, 0.0])
+
+                C_st[:, i, j] = rel_st + noise_st
+                C_st[:, j, i] = quaternion_conjugate(C_st[:, i, j])
+
+                C_dual[:, i, j] = rel_dual + noise_dual
+                C_dual[:, j, i] = quaternion_conjugate(C_dual[:, i, j])
+    else:
+        for i in range(n):
+            for j in range(i+1, n):
                 if (i, j) not in edge_mask and (j, i) not in edge_mask:
                     continue
 
-            key = (i, j) if (i, j) in noise_dict else (j, i)
-            noise = noise_dict.get(key, None)
+                key = (i, j) if (i, j) in noise_dict else (j, i)
+                noise = noise_dict.get(key, None)
 
-            # x_i x_j* (dual quaternion product)
-            dq_i = np.concatenate([poses[i].q_st, poses[i].q_dual])
-            dq_j_conj = np.concatenate([quaternion_conjugate(poses[j].q_st), poses[j].q_dual])
-            prod = dual_quat_mul(dq_i, dq_j_conj)
+                xij_conj = dual_quaternion_multiply(poses[i], poses[j].conjugate())
+                rel_st = xij_conj.q_st
+                rel_dual = xij_conj.q_dual
 
-            if noise is not None:
-                noise_vec = np.concatenate([noise.q_st, noise.q_dual])
-                entry = prod + noise_vec
-            else:
-                entry = prod
+                if noise is not None:
+                    noise_st = noise.q_st
+                    noise_dual = noise.q_dual
+                else:
+                    noise_st = np.array([0.0, 0.0, 0.0, 0.0])
+                    noise_dual = np.array([0.0, 0.0, 0.0, 0.0])
 
-            C_entries[i, j] = entry
-            # Hermitian: C_ji = C_ij* (conjugate transpose)
-            C_entries[j, i] = dual_quaternion_conjugate(entry)
+                C_st[:, i, j] = rel_st + noise_st
+                C_st[:, j, i] = quaternion_conjugate(C_st[:, i, j])
 
-    return MeasurementMatrix(C_entries)
+                C_dual[:, i, j] = rel_dual + noise_dual
+                C_dual[:, j, i] = quaternion_conjugate(C_dual[:, i, j])
+
+                if neighbors is not None:
+                    neighbors[i].append(j)
+                    neighbors[j].append(i)
+
+    return MeasurementMatrix(C_st, C_dual, neighbors)
 
 
-def dq_to_array(dq):
-    """Convert DualQuaternion to 8-element array."""
-    if isinstance(dq, np.ndarray):
-        return dq
-    return np.concatenate([dq.q_st, dq.q_dual])
-
-
-def project_onto_udq_n(x):
+def project_onto_udq_n_from_real(x_real):
     """
-    Project x (n×8 dual quaternion array) onto UDQ^n by normalizing each entry.
+    Project real eigenvector onto UDQ^n.
+    x_real is 8n real vector: [st_0...st_{n-1}, dual_0...dual_{n-1}]
+    Returns 8n vector where each quaternion pair (st_i, dual_i) is normalized to unit dual quaternion.
     """
-    n = x.shape[0]
-    result = np.zeros((n, 8))
+    n = len(x_real) // 8
+    result = np.zeros(8 * n)
+
     for i in range(n):
-        result[i] = normalize_dq(x[i])
+        st = x_real[4*i:4*i+4]
+        dual = x_real[4*n + 4*i:4*n + 4*i+4]
+        dq = normalize_dual_quaternion(DualQuaternion(st, dual))
+        result[4*i:4*i+4] = dq.q_st
+        result[4*n + 4*i:4*n + 4*i+4] = dq.q_dual
+
     return result
 
 
-def spectral_initializer(C, use_eigh=False, tol=1e-8, max_iter=2000, n_restarts=20):
+def spectral_initializer(C, use_eigh=True, tol=1e-8, max_iter=1000):
     """
-    Spectral initialization for SE(3) synchronization.
-    Uses power iteration to find dominant eigenvector.
+    Two-stage spectral initialization using power iteration.
+    1. Run power iteration to find dominant eigenvector
+    2. Project element-wise onto UDQ^n
+
+    use_eigh=True builds full operator matrix and uses np.linalg.eig (slow but
+    finds eigenvalue closest to n). use_eigh=False uses pure power iteration
+    (fast but non-deterministic — finds a random eigenvector in eigenspace).
     """
-    best_result = None
-    best_score = -1
+    n = C.n
 
-    for seed in range(n_restarts):
-        np.random.seed(seed)
-        x = np.zeros((C.n, 8))
-        for i in range(C.n):
-            dq = sample_random_unit_dual_quaternion()
-            x[i, :4] = dq.q_st
-            x[i, 4:] = dq.q_dual
+    if use_eigh:
+        # Build operator matrix numerically using matvec
+        M_op = np.zeros((8 * n, 8 * n))
+        for k in range(8 * n):
+            e = np.zeros(8 * n)
+            e[k] = 1.0
+            M_op[:, k] = C.matvec(e)
 
-        for _ in range(max_iter):
+        eigvals, eigvecs = np.linalg.eig(M_op)
+        eigvals_r = np.real(eigvals)
+
+        target = float(n)
+        idx = np.argmin(np.abs(eigvals_r - target))
+        v = np.real(eigvecs[:, idx])
+        if v[0] < 0:
+            v = -v
+        x_proj = project_onto_udq_n_from_real(v)
+        return x_proj
+    else:
+        # Power iteration fallback
+        x = np.random.randn(8 * n)
+        x = x / np.linalg.norm(x)
+        for it in range(max_iter):
             y = C.matvec(x)
-            y_norm = project_onto_udq_n(y)
-            diff = np.max(np.abs(y_norm - x))
-            x = y_norm
-            if diff < tol:
+            y_norm = np.linalg.norm(y)
+            if y_norm < 1e-12:
                 break
-
-        # Score: Rayleigh quotient of the result
-        Cx = C.matvec(x)
-        score = 0.0
-        for i in range(C.n):
-            inner = 0.0
-            for j in range(C.n):
-                prod = dual_quat_mul(dual_quaternion_conjugate(x[j]), Cx[i])
-                inner += quaternion_inner_product(np.ones(4), prod[:4])
-            score += inner
-        for i in range(C.n):
-            score -= quaternion_inner_product(x[i, :4], x[i, :4])
-
-        if score > best_score:
-            best_score = score
-            best_result = x.copy()
-
-    return best_result
+            x_new = y / y_norm
+            if np.max(np.abs(x_new - x)) < tol:
+                break
+            x = x_new
+        x_proj = project_onto_udq_n_from_real(x)
+        return x_proj
 
 
 def dqgpm(C, x0, max_iter=50, tol=1e-8):
     """
     Dual Quaternion Generalized Power Method (DQGPM).
     Algorithm 2 from the paper.
-
-    Refines the spectral initializer by alternating between:
-    1. Multiplication by C
-    2. Projection onto UDQ^n (element-wise)
     """
     x = x0.copy()
 
     for k in range(max_iter):
         y = C.matvec(x)
-        x_new = project_onto_udq_n(y)
-        diff = np.max(np.abs(x_new - x)) / (np.max(np.abs(x)) + 1e-12)
+        x_new = project_onto_udq_n_from_real(y)
+        diff = np.linalg.norm(x_new - x) / (np.linalg.norm(x) + 1e-12)
         if diff < tol:
             x = x_new
             break
@@ -275,53 +310,68 @@ def dqgpm(C, x0, max_iter=50, tol=1e-8):
 
 def align_and_compute_errors(est_x, true_poses):
     """
-    Align estimated poses to ground truth and compute errors.
+    Compute rotation and translation errors after gauge alignment.
+
+    The estimated poses are first normalized to unit dual quaternions.
+    Translation is extracted using t = 2 * (q_dual * q_st*).
+    Gauge alignment finds optimal global rotation and translation.
     """
     n = len(true_poses)
 
-    # Extract rotations and translations from estimated dual quaternions
+    # Normalize estimated poses and extract rotation/translation
     est_rots = []
     est_trans = []
     for i in range(n):
-        dq = normalize_dq(est_x[i])
-        est_rots.append(dq[:4])
-        # t = 2 * vc(q_dual · q_st*)
-        t_quat = quaternion_multiply(dq[4:], quaternion_conjugate(dq[:4]))
+        dq = normalize_dual_quaternion(DualQuaternion(
+            est_x[4*i:4*i+4],
+            est_x[4*n + 4*i:4*n + 4*i+4]
+        ))
+        est_rots.append(dq.q_st)
+        # t = 2 * (q_dual * q_st*) — quaternion product, take vector part
+        t_quat = quaternion_multiply(dq.q_dual, quaternion_conjugate(dq.q_st))
         est_trans.append(np.array([t_quat[1], t_quat[2], t_quat[3]]))
 
-    # Extract ground truth rotations and translations
-    true_rots = []
+    # True rotations and translations
+    true_rots = [p.q_st for p in true_poses]
     true_trans = []
     for p in true_poses:
-        true_rots.append(p.q_st)
         t_quat = quaternion_multiply(p.q_dual, quaternion_conjugate(p.q_st))
         true_trans.append(np.array([t_quat[1], t_quat[2], t_quat[3]]))
 
-    # Gauge alignment
+    # Gauge alignment: find optimal q (rotation) aligning est to true
     s = np.zeros(4)
     for j in range(n):
-        s += quaternion_multiply(quaternion_conjugate(true_rots[j]), est_rots[j])
+        s += quaternion_multiply(
+            quaternion_conjugate(true_rots[j]),
+            est_rots[j]
+        )
     q_align = normalize_quaternion(s)
 
     # Translation alignment
     t_align = np.zeros(3)
     for j in range(n):
-        t_est_quat = np.array([0.0, est_trans[j][0], est_trans[j][1], est_trans[j][2]])
+        q_true = true_rots[j]
+        q_est = est_rots[j]
+        t_true = true_trans[j]
+        t_est = est_trans[j]
+
+        t_est_quat = np.array([0.0, t_est[0], t_est[1], t_est[2]])
         t_rot = quaternion_multiply(
             quaternion_multiply(q_align, t_est_quat),
             quaternion_conjugate(q_align)
         )
         t_rot_vec = np.array([t_rot[1], t_rot[2], t_rot[3]])
-        t_align += true_trans[j] - t_rot_vec
+        t_align += t_true - t_rot_vec
     t_align = t_align / n
 
-    # Compute errors
+    # Compute errors with alignment
     errors_R = []
     errors_T = []
     for i in range(n):
         q_est = est_rots[i]
         q_aligned = quaternion_multiply(q_align, q_est)
-        err_R = rotation_error(q_aligned, true_rots[i])
+        q_true = true_rots[i]
+        err_R = rotation_error(q_aligned, q_true)
         errors_R.append(err_R)
 
         t_est = est_trans[i]
@@ -331,18 +381,23 @@ def align_and_compute_errors(est_x, true_poses):
             quaternion_conjugate(q_align)
         )
         t_rotated = np.array([t_rot[1], t_rot[2], t_rot[3]]) + t_align
-        err_T = translation_error(t_rotated, true_trans[i])
+        t_true = true_trans[i]
+        err_T = translation_error(t_rotated, t_true)
         errors_T.append(err_T)
 
     return np.mean(errors_R), np.mean(errors_T)
 
 
-# Aliases for API compatibility
+# Wrapper aliases for evaluation script compatibility
 compute_errors_with_alignment = align_and_compute_errors
+project_onto_udq_n = project_onto_udq_n_from_real
 
 
 class DualQuaternionMatrix:
-    """Wrapper for evaluation script compatibility."""
+    """
+    Wrapper around MeasurementMatrix for evaluation script compatibility.
+    Stores poses, measurement matrix, and provides matvec access.
+    """
 
     def __init__(self, poses, noise_dict=None, edge_mask=None):
         self.n = len(poses)
@@ -355,7 +410,4 @@ class DualQuaternionMatrix:
         return self.measurement.matvec(x)
 
     def dominant_eigenvector(self, method='power_iter'):
-        return self.measurement.dominant_eigenvector_power_iteration()
-
-    def dominant_eigenvector_power_iteration(self, max_iter=2000, tol=1e-8):
-        return self.measurement.dominant_eigenvector_power_iteration(max_iter=max_iter, tol=tol)
+        return self.measurement.dominant_eigenvector(method)

@@ -13,6 +13,13 @@
           "error_R_std": 0.142675,
           "error_T": 3.439718,
           "error_T_std": 3.750712
+        },
+        "dqgpm": {
+          "type": "proposed",
+          "error_R": 4.4579,
+          "error_R_std": 0.2059,
+          "error_T": 1.5338,
+          "error_T_std": 0.4426
         }
       }
     }

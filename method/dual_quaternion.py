@@ -87,7 +87,9 @@ class DualQuaternion:
         return DualQuaternion.from_rotation_translation(axis, angle, t)
     
     def conjugate(self):
-        """Dual quaternion conjugate: q* = q_st* + q_dual* * epsilon"""
+        """Dual quaternion conjugate: q* = q_st* + q_dual* * epsilon.
+        This is the standard dual quaternion conjugate used in the
+        Hermitian matrix formulation for SE(3) synchronization."""
         return DualQuaternion(quaternion_conjugate(self.q_st),
                               quaternion_conjugate(self.q_dual))
     
