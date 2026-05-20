@@ -88,7 +88,7 @@ Do NOT describe the paper's method or solution here — only the problem itself.
 
 # Reproduction Milestones
 
-**Current: method_runs** (cannot reach core_claim)
+**Current: none**
 
 ## Stop Justification
-- Completed at milestone `method_runs`.
+- Completed at milestone `none`.

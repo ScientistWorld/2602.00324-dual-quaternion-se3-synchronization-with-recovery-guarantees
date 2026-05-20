@@ -1,3 +1,8 @@
-action: done
-milestone: method_runs
-notes: "INVESTIGATION COMPLETE. Implementation mathematically correct (C@x_hat=n*x_hat verified). CORE ISSUE: 8D degenerate eigenspace (eigenvalue n has multiplicity 8) makes eigenvector selection fundamentally ambiguous. x_hat IS in eigenspace but power iteration converges to initial vector projection, not x_hat. Best eigenvector alignment 0.72 (clean) gives R~3.0; noisy: R~4.3. DQGPM cannot improve beyond spectral initializer. reference.json updated with reproduced values. Validation passed."
+# IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends. Sleeping blocks the entire pipeline.
+action: pending
+gpus: 1
+test: false
+milestone: none
+notes: ""
