@@ -4,5 +4,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: none
-notes: "CPU smoke test after initializer/evaluator fixes: run p005_noise005 for DQGPM and EIG, score artifacts, and validate reference/score structure."
+milestone: method_runs
+notes: "Core-claim CPU run after Algorithm 2 initializer fix: run 30 trials for p005_noise005, p005_noise010, and p030_noise010 with DQGPM and EIG, then score and validate."

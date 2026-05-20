@@ -221,7 +221,7 @@ def run_trial(
         estimate = x0_projected
         history = []
     elif method == "dqgpm":
-        estimate, history = dqgpm(c, x0, max_iter=max_iter, record_history=True)
+        estimate, history = dqgpm(c, x0_projected, max_iter=max_iter, record_history=True)
     else:
         raise ValueError(f"unknown method: {method}")
 

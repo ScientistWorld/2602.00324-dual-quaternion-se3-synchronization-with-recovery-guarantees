@@ -1,14 +1,21 @@
 #!/bin/bash
-# Compute-node entrypoint.  Runs a small core-claim reproduction and scores it.
+# Compute-node entrypoint. Runs the core synthetic reproduction and scores it.
 
 set -euo pipefail
 cd /home/user
 
 mkdir -p checkpoints scoring
 
-# Smoke-test scale: enough trials to verify the full DQGPM pipeline while
-# staying comfortably inside a test-node allocation.
-bash scripts/method.sh p005_noise005 5
-bash scripts/baseline.sh p005_noise005 5
-bash scripts/evaluate.sh checkpoints/p005_noise005_*_results.json
+TRIALS="${TRIALS:-30}"
+EXPERIMENTS=(p005_noise005 p005_noise010 p030_noise010)
+ARTIFACTS=()
+
+for exp in "${EXPERIMENTS[@]}"; do
+  bash scripts/method.sh "$exp" "$TRIALS"
+  bash scripts/baseline.sh "$exp" "$TRIALS"
+  ARTIFACTS+=("checkpoints/${exp}_dqgpm_results.json")
+  ARTIFACTS+=("checkpoints/${exp}_eig_results.json")
+done
+
+bash scripts/evaluate.sh "${ARTIFACTS[@]}"
 python3 validate.py --compare
