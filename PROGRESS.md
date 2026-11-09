@@ -231,3 +231,25 @@ reference and all baselines, seed controls, stronger/weaker methods, and every
 repaired attack. Matrix-baseline rank and paired confidence bounds are also
 checked explicitly. No new numerical success is claimed from the incomplete
 job; milestone stays core_claim pending verification.
+
+### Joint audit 00902d7f-40f: numerical checks completed; external comparison unresolved
+
+The complete final-code audit ran every solver and repaired attack on all four
+settings. Stronger hidden rank is +8.488435 (paired 95% interval
+[8.195607,8.990637]); weaker spectral rank is -1.342277
+([-1.697141,-0.884850]); three-seed reference rank range is 0.000076535.
+All repaired shortcuts failed and are unranked. Reference mean errors on train
+and test agree closely. The algorithm and protocol checks passed.
+
+The job's final assertion correctly exposed that uniform superiority over
+matrix EIG is not reproduced: EIG's candidate rank is +0.821314 with interval
+[-0.103495,1.333172]. A source audit found no justified corrective change;
+weights and the comparator are retained. The report now records this as an
+unresolved requirement and limits the claimed reproduction to synthetic
+recovery/refinement. Core scientific ordering and attack assertions stay fatal.
+
+Prepared final packaging from saved raw outputs only: regenerate canonical
+reference-only train/test scores, freeze measured gym-scale targets without
+changing paper numbers, assert artifact consistency, and run all validator
+modes. No method/evaluator changes require another inference run. After this
+job, scripts/run.sh will return to end-to-end reproduction.

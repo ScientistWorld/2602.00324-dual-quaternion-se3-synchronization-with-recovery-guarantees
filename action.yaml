@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Rerun the complete joint hardening audit after fixing temporary-filesystem exhaustion, fatal verification assertions, and the arbitrary reference/baseline translation origin. Includes final-code reference and fixed baselines, paired stronger/weaker and seed controls, matrix-baseline ordering, and every repaired shortcut."
+notes: "Finalize canonical reference and fixed-baseline scores from saved final-code raw outputs; verify paired headroom, shortcut rejection, artifact consistency, and package validation. Retain the unreproduced matrix-EIG superiority claim as an explicit unmet condition. No solver rerun or training."

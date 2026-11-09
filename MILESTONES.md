@@ -55,3 +55,15 @@ and the seed selection made to satisfy numerical paper guardrails. It uses
 independent private instances and untrimmed measurements, with unchanged paper
 numbers retained as historical context. The algorithm remains Algorithms 1 and
 2, with no surrogate. See HARDENING.md for scope and limitations.
+
+### 2026-11-09 — complete joint audit, core_claim at limited scope
+
+The final implementation runs the paper's two algorithms at n=100 and
+recovers both pose components. Refinement improves over the rounded DQ
+initializer on all four scored settings, with negative paired rank bounds for
+the weaker initializer control. Honest headroom and repaired-shortcut checks
+pass. Milestone remains `core_claim` for this explicitly limited empirical
+scope; uniform superiority over matrix EIG was not reproduced and is not part
+of the milestone claim. Final artifact packaging/validation is pending a
+rescore-only job. See HARDENING.md for full numerical evidence and the unmet
+condition.

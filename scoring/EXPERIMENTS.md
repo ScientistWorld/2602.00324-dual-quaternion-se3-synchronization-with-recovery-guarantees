@@ -30,3 +30,8 @@ Paper-reported trimmed statistics are historical context under `_paper_reported`
 in reference.json. The final gym's untrimmed reference measurements are stored
 separately as numeric results. Fixed baselines use the identical inputs and
 alignment. The hidden evaluator does not train any method.
+
+The reference improves both mean errors over the simple development baseline
+on all four settings. A separate matrix spectral comparison is competitive;
+uniform superiority over it is not an established reproduction result.
+HARDENING.md records this limitation and the independent headroom controls.

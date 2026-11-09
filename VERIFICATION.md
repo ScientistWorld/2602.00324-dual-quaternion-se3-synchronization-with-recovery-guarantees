@@ -1,17 +1,19 @@
-# Final verification
+# Verification status
 
-Static checks pass: Python compilation, shell syntax, import separation,
-independent train/test evaluators, and python3 validate.py. The first joint job
-817ad207-04c passed protocol and algorithm arithmetic checks but exhausted /tmp
-before the controls finished. Its zero exit code does not verify the gym.
+Job `00902d7f-40f` completed the full numerical audit from final solver code.
+Protocol validation, vectorized-algorithm equivalence, translation-origin
+invariance, honest stronger/weaker ordering, seed controls, and all repaired
+shortcuts passed. Stronger hidden rank was +8.488435, weaker spectral rank
+-1.342277, with paired intervals separated from zero and from seed variation.
 
-The corrected joint check reruns reference and comparisons with a common
-translation-origin output convention that preserves all relative poses. It
-also runs honest stronger/weaker methods, seed controls, and repaired attacks.
-Temporary inputs now stay within each evaluator's cache and are deleted per
-experiment. Incomplete controls or failed science assertions stop the job.
+The job exited 1 because the paper's uniform advantage over matrix EIG was
+not established. That negative result is retained in HARDENING.md and the
+aggregate audit report. No comparator, coefficient, or solver was changed to
+make the assertion pass. The supported reproduction scope is pose recovery
+and improvement over the rounded DQ initializer, not the complete paper.
 
-See HARDENING.md for numerical verification once the complete check succeeds.
-Synthetic recovery is the claimed scope; theoretical guarantees, real scans,
-SDR, and runtime comparisons remain unverified. Unrelated pre-existing changes
-to root system files and trajectory records are left untouched.
+A final packaging job will rescore saved raw poses into reference-only
+canonical files, verify consistency, and run python3 validate.py in default,
+post-design, and post-reproducer modes. Verification is pending that job.
+The first joint job's temporary-storage failure is not treated as evidence.
+Unrelated pre-existing root-system-file and trajectory changes remain untouched.

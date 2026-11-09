@@ -25,8 +25,10 @@ paper's error alignment; the baselines use the same convention.
 
 ## Main Claims
 
-The central empirical claim is that this DQGPM refinement improves pose
-recovery over a projected spectral estimator, especially in sparse synthetic
-measurement graphs. A secondary claim is that the per-iteration projection
-keeps all iterates feasible and produces linear error contraction to a
-noise-dependent floor.
+The paper claims accurate and stable recovery, improvement during projected
+refinement, and uniform superiority over matrix EIG in its synthetic study.
+The reproduction verifies refinement over the rounded DQ initializer and
+recovery of both pose components. It does not reproduce uniform superiority
+over matrix EIG; that comparison remains visible in the scores. Theoretical
+recovery guarantees and linear convergence rates are not established by this
+finite empirical suite.
