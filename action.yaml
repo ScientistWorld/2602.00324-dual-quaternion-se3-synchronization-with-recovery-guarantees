@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Retry the single joint hardening check after fixing setup's workspace-relative wheel path and fresh-clone fallback. Previous attempts failed before any scientific job ran."
+notes: "Rerun the complete joint hardening audit after fixing temporary-filesystem exhaustion, fatal verification assertions, and the arbitrary reference/baseline translation origin. Includes final-code reference and fixed baselines, paired stronger/weaker and seed controls, matrix-baseline ordering, and every repaired shortcut."
