@@ -1,4 +1,8 @@
-action: submit
+# Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends.
+action: pending
 gpus: 0
 test: false
-notes: "Final short audit checks: visible-input scalar forgery, full-trial and trimmed paper metrics, and diagnosis of stored artifact differences at isolated nodes."
+milestone: core_claim
+notes: ""

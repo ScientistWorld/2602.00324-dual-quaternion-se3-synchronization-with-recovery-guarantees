@@ -1,0 +1,23 @@
+[
+  {
+    "job_id": "936aaff8-dd6",
+    "gpus": 0,
+    "exit_code": 0,
+    "duration_seconds": 180.11203622817993,
+    "status": "completed"
+  },
+  {
+    "job_id": "22252f42-73f",
+    "gpus": 0,
+    "exit_code": 0,
+    "duration_seconds": 545.7527441978455,
+    "status": "completed"
+  },
+  {
+    "job_id": "1d49ff41-09a",
+    "gpus": 0,
+    "exit_code": 0,
+    "duration_seconds": 21.14268922805786,
+    "status": "completed"
+  }
+]

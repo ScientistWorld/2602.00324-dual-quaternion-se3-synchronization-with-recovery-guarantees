@@ -375,8 +375,12 @@ def summarize():
             values = [valid[f'reference_seed{i}'][exp]['results']['dqgpm'][metric] for i in range(3)]
             seed_spreads[exp][metric] = {'values': values, 'max_minus_min': max(values)-min(values)}
     summary['reference_seed_spread'] = seed_spreads
-    summary['reference_metrics_at_lower_bound_zero'] = [f'{exp}/{metric}' for exp, row in reference_scores.items()
-                                                       for metric, value in row['results']['dqgpm'].items() if value == 0]
+    summary['reference_scored_metric_count'] = sum(
+        len(spec[exp]['metrics']) * len(row['results']) for exp, row in reference_scores.items())
+    summary['reference_metrics_at_lower_bound_zero'] = [
+        f'{exp}/{method}/{metric}' for exp, row in reference_scores.items()
+        for method, values in row['results'].items()
+        for metric in spec[exp]['metrics'] if values[metric] == 0]
     summary['regenerated_reference_max_score_difference'] = max(
         abs(valid['reference_seed0'][exp]['results'][method][metric]-reference_scores[exp]['results'][method][metric])
         for exp in spec for method in reference_scores[exp]['results'] for metric in spec[exp]['metrics'])

@@ -634,5 +634,6 @@
     }
   },
   "reference_metrics_at_lower_bound_zero": [],
-  "regenerated_reference_max_score_difference": 0.06898191344576798
+  "regenerated_reference_max_score_difference": 0.06898191344576798,
+  "reference_scored_metric_count": 32
 }
