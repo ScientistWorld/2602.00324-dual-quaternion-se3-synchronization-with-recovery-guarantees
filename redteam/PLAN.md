@@ -21,3 +21,10 @@ the large preexisting reference histories. Candidate processes terminate before
 test evaluation. Ranking uses absolute coefficients and correct metric
 directions, normalized over explicitly named audit cohorts; future-population
 normalizers cannot be known in advance.
+
+Follow-up batch: discard the accelerated pilot for scientific comparisons;
+rerun the unmodified original solver for all three seeds. Hold the spectral
+comparison fixed across those seed checks. Score the preexisting artifacts
+verbatim as a reference control. Compare original/stored/vectorized estimates
+to diagnose any discrepancy. Add a shortcut combining failed constant pose
+predictions with an oracle baseline to test compensation by other metrics.

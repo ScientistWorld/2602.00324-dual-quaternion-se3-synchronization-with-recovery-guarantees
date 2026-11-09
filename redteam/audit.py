@@ -19,12 +19,12 @@ EXPERIMENTS = ('p005_noise005', 'p005_noise010')
 BASE_SEED = 260200324
 TRIALS = 100
 CASES = (
-    'reference_seed0', 'reference_seed1', 'reference_seed2',
+    'reference_stored_artifacts', 'reference_seed0', 'reference_seed1', 'reference_seed2',
     'better_noise_aware', 'weaker_spectral', 'weaker_one_iteration',
     'shortcut_rebuild_answers', 'shortcut_rewrite_truth',
     'shortcut_bruteforce_seed_bank', 'shortcut_one_pose',
     'shortcut_select_trials', 'shortcut_easier_inputs',
-    'shortcut_replace_baseline', 'shortcut_forged_scalars',
+    'shortcut_replace_baseline', 'shortcut_compensate_failure', 'shortcut_forged_scalars',
     'shortcut_constant', 'shortcut_empty', 'shortcut_null', 'shortcut_nan',
 )
 
@@ -50,37 +50,10 @@ def reference(index=0):
     import numpy as np
     from method import sync
     from method.run_synthetic import EXPERIMENTS as SETTINGS
-    from redteam.fast_reference import install
-
-    folder = CACHE / f'reference_seed{index}'
+    folder = CACHE / f'original_reference_seed{index}'
     if all((folder / f'{exp}_dqgpm_results.json').exists() for exp in EXPERIMENTS):
         return folder
-    original = install()
-    if not (RT / 'algorithm_equivalence.json').exists():
-        c, _, _ = sync.build_synthetic_measurement(100, .05, .05, 5., BASE_SEED)
-        x = np.random.default_rng(57).normal(size=800)
-        slow, fast = original(c, x), c.matvec(x)
-        difference = float(np.max(np.abs(slow-fast)))
-        assert np.allclose(slow, fast, atol=1e-12, rtol=1e-12)
-        # A full unmodified original trial is also checked, including stopping.
-        fast_matvec = sync.MeasurementMatrix.matvec
-        sync.MeasurementMatrix.matvec = original
-        start = time.monotonic()
-        slow_trial = sync.run_trial(100, .05, .05, 5., BASE_SEED, 'dqgpm', max_iter=200)
-        slow_seconds = time.monotonic()-start
-        sync.MeasurementMatrix.matvec = fast_matvec
-        fast_trial = sync.run_trial(100, .05, .05, 5., BASE_SEED, 'dqgpm', max_iter=200)
-        difference_pose = max(abs(a-b) for p, q in zip(slow_trial['estimate'], fast_trial['estimate'])
-                              for key in ('q_st', 'q_dual') for a, b in zip(p[key], q[key]))
-        assert difference_pose < 1e-7, difference_pose
-        write(RT / 'algorithm_equivalence.json', {
-            'matrix_product_max_abs_difference': difference,
-            'full_trial_estimate_max_abs_difference': difference_pose,
-            'original_init_iters': slow_trial['init_iters'],
-            'accelerated_init_iters': fast_trial['init_iters'],
-            'original_trial_seconds': slow_seconds,
-            'equations_changed': False,
-        })
+    assert sync.MeasurementMatrix.matvec.__module__ == 'method.sync'
     for exp in EXPERIMENTS:
         path = folder / f'{exp}_dqgpm_results.json'
         if path.exists():
@@ -121,11 +94,21 @@ def load_visible_metrics():
 
 def build_case(name, destination):
     """All shortcut inputs are available to a future improve-mode agent."""
+    if name == 'reference_stored_artifacts':
+        # Audit control: reuse the preexisting reference artifacts verbatim.
+        for path in artifacts(CACHE / 'active_case_backup' / 'checkpoints'):
+            if any(path.name.startswith(exp + '_') for exp in EXPERIMENTS):
+                (destination / path.name).symlink_to(path)
+        return {'source': 'preexisting reference artifacts, unchanged'}
     if name.startswith('reference_seed'):
         source = reference(int(name[-1]))
         for path in artifacts(source):
-            shutil.copy2(path, destination / path.name)
-        return {}
+            # Baselines are the common fixed comparison, not an additional
+            # randomized method in the reference-seed spread.
+            fixed = reference(0) / path.name if '_dq_spectral_' in path.name else path
+            shutil.copy2(fixed, destination / path.name)
+        return {'implementation': 'unmodified method.sync', 'fixed_baseline_seed': BASE_SEED}
+
     source = reference(0)
     details = {}
     for path in artifacts(source):
@@ -135,7 +118,7 @@ def build_case(name, destination):
         if name == 'better_noise_aware' and is_proposed:
             from data.synthetic import generate_instance
             from redteam.stronger_solver import solve
-            target = CACHE / name / path.name
+            target = CACHE / ('original_' + name) / path.name
             if target.exists():
                 artifact = read(target)
             else:
@@ -206,16 +189,20 @@ def build_case(name, destination):
             artifact['trials'] = choices
         elif name == 'shortcut_easier_inputs' and is_proposed:
             from method import sync
+            # This shortcut only needs a solved noiseless distribution. The
+            # algebraically equivalent acceleration is confined to this case.
+            from redteam.fast_reference import install
+            install()
             for j, trial in enumerate(artifact['trials']):
                 # Shortcut: real algorithm, easier graph/noise, original label.
                 easier = sync.run_trial(100, .30, 0., 0., trial['seed'], 'dqgpm', max_iter=200)
                 easier.update(p=.05, sigma_t=artifact['sigma_t'], sigma_r_deg=artifact['sigma_r_deg'])
                 artifact['trials'][j] = easier
-        elif name == 'shortcut_replace_baseline' and not is_proposed:
+        elif name in ('shortcut_replace_baseline', 'shortcut_compensate_failure') and not is_proposed:
             for trial in artifact['trials']:
                 # Shortcut: rewrite an artifact used as the fixed comparison.
                 trial['estimate'] = copy.deepcopy(trial['truth'])
-        elif name in ('shortcut_forged_scalars', 'shortcut_constant') and is_proposed:
+        elif name in ('shortcut_forged_scalars', 'shortcut_constant', 'shortcut_compensate_failure') and is_proposed:
             for trial in artifact['trials']:
                 trial['estimate'] = [identity() for _ in trial['truth']]
                 if name == 'shortcut_forged_scalars':
@@ -288,8 +275,6 @@ def prepare_case(name):
     folder = RT / name
     start_isolation(name)
     try:
-        from redteam.fast_reference import install
-        install()
         result = {'case': name, 'started_at': time.time()}
         result['details'] = build_case(name, ROOT / 'checkpoints')
         score_path = ROOT / 'scoring/scores_train.json'
@@ -374,7 +359,8 @@ def summarize():
         seed_ranks = [rank_proposed[n] for n in names if n.startswith('reference_seed')]
         summary['cohorts'][cohort_name] = dict(members=names, rank_proposed=rank_proposed,
                                              rank_all_results=rank_all,
-                                             reference_seed_rank_range=max(seed_ranks)-min(seed_ranks))
+                                             reference_seed_rank_range=max(seed_ranks)-min(seed_ranks),
+                                             reference_seed_all_results_rank_range=max(rank_all[n] for n in names if n.startswith('reference_seed'))-min(rank_all[n] for n in names if n.startswith('reference_seed')))
     for name, experiments in valid.items():
         summary['raw_scores'][name] = {exp: row['results']['dqgpm'] for exp, row in experiments.items()}
     for name in CASES:
