@@ -203,3 +203,11 @@ check. Switched to Docker Hub python:3.11-slim-bookworm. The scheduler setup
 wrapper supplies uv from its host mount, so package installation remains in
 setup.sh and container.def contains only OS package installation. No numerical
 experiment has run; the same joint verification is being resubmitted.
+
+### Setup path correction
+
+The second submission built its container but failed setup: the host-mounted
+workspace is not /home/user during dependency installation. Setup now resolves
+the local wheel relative to BASH_SOURCE and falls back to the pinned public
+package during the internet-enabled setup phase when a fresh clone has no
+wheel. Runtime compute remains offline. No scientific job has run yet.
