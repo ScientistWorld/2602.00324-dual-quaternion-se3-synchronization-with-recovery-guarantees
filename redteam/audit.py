@@ -291,7 +291,9 @@ def prepare_case(name):
         score_path = ROOT / 'scoring/scores_test.json'
         score_path.unlink(missing_ok=True)
         if name == 'shortcut_forged_scalars':
-            forged = copy.deepcopy(read(RT / 'reference_scores_test.json'))
+            # Shortcut: fabricate a score file using only the visible train
+            # output's schema. Hidden reference files supply no candidate data.
+            forged = copy.deepcopy(read(folder / 'scores_train.json'))
             for exp in forged['experiments'].values():
                 exp['results']['dqgpm'] = {k: -1e200 for k in exp['results']['dqgpm']}
             write(score_path, forged)
