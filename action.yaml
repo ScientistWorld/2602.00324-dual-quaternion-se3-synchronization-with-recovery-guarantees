@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Retry the unchanged joint hardening verification after replacing the rejected GHCR base with Docker Hub python:3.11-slim-bookworm; no experiment ran on the rejected submission."
+notes: "Retry the single joint hardening check after fixing setup's workspace-relative wheel path and fresh-clone fallback. Previous attempts failed before any scientific job ran."
