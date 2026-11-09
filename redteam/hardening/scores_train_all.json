@@ -1,0 +1,639 @@
+{
+  "_metadata": {
+    "slice": "train",
+    "evaluator": "eval/train/evaluate.py",
+    "trials": {
+      "p005_noise005": 100,
+      "p005_noise010": 100,
+      "p008_noise010": 100,
+      "p030_noise010": 100
+    },
+    "methods": {
+      "dq_spectral": {
+        "status": "ok",
+        "evaluator_owned": true,
+        "source": "eval/train/comparators.py",
+        "constraints": {
+          "complete_valid_outputs": true,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {
+            "p005_noise005": {
+              "rotation": 0.03536232964166488,
+              "translation": 0.08778827387803752
+            },
+            "p005_noise010": {
+              "rotation": 0.06023039483480367,
+              "translation": 0.15464312175615064
+            },
+            "p008_noise010": {
+              "rotation": 0.036831328866286955,
+              "translation": 0.09735141318281841
+            },
+            "p030_noise010": {
+              "rotation": 0.016709650101654403,
+              "translation": 0.04365751132653025
+            }
+          }
+        },
+        "rank": null
+      },
+      "matrix_eig": {
+        "status": "ok",
+        "evaluator_owned": true,
+        "source": "eval/train/comparators.py",
+        "constraints": {
+          "complete_valid_outputs": true,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {
+            "p005_noise005": {
+              "rotation": 0.035486358769268984,
+              "translation": 0.04608110648835974
+            },
+            "p005_noise010": {
+              "rotation": 0.05809321497425215,
+              "translation": 0.08297934973162543
+            },
+            "p008_noise010": {
+              "rotation": 0.03504692894678093,
+              "translation": 0.054777947350698616
+            },
+            "p030_noise010": {
+              "rotation": 0.016460019788776266,
+              "translation": 0.02573902112269547
+            }
+          }
+        },
+        "rank": null
+      },
+      "dqgpm": {
+        "status": "ok",
+        "evaluator_owned": false,
+        "source": "/home/user/method/solver.json",
+        "constraints": {
+          "complete_valid_outputs": true,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {
+            "p005_noise005": {
+              "rotation": 0.03399694416717659,
+              "translation": 0.0838527443134739
+            },
+            "p005_noise010": {
+              "rotation": 0.057239877673847785,
+              "translation": 0.14657513494205102
+            },
+            "p008_noise010": {
+              "rotation": 0.03510564342039416,
+              "translation": 0.0925368287367564
+            },
+            "p030_noise010": {
+              "rotation": 0.01654589139161003,
+              "translation": 0.04319970525069332
+            }
+          }
+        },
+        "rank": 0.0
+      },
+      "better_noise_aware": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_better_noise_aware/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {
+            "p005_noise005": {
+              "rotation": 0.023824148626903116,
+              "translation": 0.03579502649639312
+            },
+            "p005_noise010": {
+              "rotation": 0.03923137995307837,
+              "translation": 0.06264048119593463
+            }
+          }
+        },
+        "reason": "p008_noise010: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "reference_seed1": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_reference_seed1/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "reference_seed2": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_reference_seed2/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_bruteforce_seed_bank": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_bruteforce_seed_bank/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_compensate_failure": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_compensate_failure/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_easier_inputs": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_easier_inputs/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_nan": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_nan/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_negative_scalar": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_negative_scalar/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_one_pose": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_one_pose/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_rebuild_answers": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_rebuild_answers/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_replace_baseline": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_replace_baseline/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_rewrite_truth": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_rewrite_truth/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "shortcut_select_trials": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_shortcut_select_trials/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "weaker_one_iteration": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_weaker_one_iteration/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      },
+      "weaker_spectral": {
+        "status": "failed",
+        "evaluator_owned": false,
+        "source": "/home/user/methods/hardening_weaker_spectral/solver.json",
+        "constraints": {
+          "complete_valid_outputs": false,
+          "recovery_fraction_threshold": 0.5,
+          "recovery_fractions": {}
+        },
+        "reason": "p005_noise005: OSError: [Errno 28] No space left on device",
+        "rank": null
+      }
+    },
+    "rejected_manifests": [],
+    "no_information": {
+      "p005_noise005": {
+        "error_R": 3.1572812512028605,
+        "error_R_std": 0.18252627178996716,
+        "error_R_p90": 3.423771056922812,
+        "error_R_max": 3.587733377110033,
+        "error_T": 1.5818098716795534,
+        "error_T_std": 0.0714067247270804,
+        "error_T_p90": 1.6641633790713481,
+        "error_T_max": 1.7596805658023467
+      },
+      "p005_noise010": {
+        "error_R": 3.1572812512028605,
+        "error_R_std": 0.18252627178996716,
+        "error_R_p90": 3.423771056922812,
+        "error_R_max": 3.587733377110033,
+        "error_T": 1.5818098716795534,
+        "error_T_std": 0.0714067247270804,
+        "error_T_p90": 1.6641633790713481,
+        "error_T_max": 1.7596805658023467
+      },
+      "p008_noise010": {
+        "error_R": 3.1572812512028605,
+        "error_R_std": 0.18252627178996716,
+        "error_R_p90": 3.423771056922812,
+        "error_R_max": 3.587733377110033,
+        "error_T": 1.5818098716795534,
+        "error_T_std": 0.0714067247270804,
+        "error_T_p90": 1.6641633790713481,
+        "error_T_max": 1.7596805658023467
+      },
+      "p030_noise010": {
+        "error_R": 3.1572812512028605,
+        "error_R_std": 0.18252627178996716,
+        "error_R_p90": 3.423771056922812,
+        "error_R_max": 3.587733377110033,
+        "error_T": 1.5818098716795534,
+        "error_T_std": 0.0714067247270804,
+        "error_T_p90": 1.6641633790713481,
+        "error_T_max": 1.7596805658023467
+      }
+    },
+    "reference": {
+      "p005_noise005": {
+        "error_R": 0.1073379144172171,
+        "error_R_std": 0.04164983607148021,
+        "error_R_p90": 0.1448028333942147,
+        "error_R_max": 0.3305278466280812,
+        "error_T": 0.13263909872247456,
+        "error_T_std": 0.05786935062621831,
+        "error_T_p90": 0.2163290452491889,
+        "error_T_max": 0.38763988858584997
+      },
+      "p005_noise010": {
+        "error_R": 0.18072239260078482,
+        "error_R_std": 0.040449619513705376,
+        "error_R_p90": 0.22029964243975464,
+        "error_R_max": 0.3906195699374144,
+        "error_T": 0.23185399539409896,
+        "error_T_std": 0.08350968864220265,
+        "error_T_p90": 0.35633040690739226,
+        "error_T_max": 0.48622842655431
+      },
+      "p008_noise010": {
+        "error_R": 0.11083838978262356,
+        "error_R_std": 0.012046788419333517,
+        "error_R_p90": 0.12021042939964206,
+        "error_R_max": 0.16449037131463906,
+        "error_T": 0.14637566918972145,
+        "error_T_std": 0.049014988830042204,
+        "error_T_p90": 0.22010945309778912,
+        "error_T_max": 0.31022781006733463
+      },
+      "p030_noise010": {
+        "error_R": 0.05224003267516915,
+        "error_R_std": 0.0029087636143756814,
+        "error_R_p90": 0.056033618230707787,
+        "error_R_max": 0.05971265462679946,
+        "error_T": 0.06833372021919373,
+        "error_T_std": 0.024941564500457952,
+        "error_T_p90": 0.10093289374627344,
+        "error_T_max": 0.15697643497183297
+      }
+    },
+    "rank_scales": {
+      "p005_noise005": {
+        "error_R": 0.0,
+        "error_R_std": 0.0,
+        "error_R_p90": 0.0,
+        "error_R_max": 0.0,
+        "error_T": 0.0,
+        "error_T_std": 0.0,
+        "error_T_p90": 0.0,
+        "error_T_max": 0.0
+      },
+      "p005_noise010": {
+        "error_R": 0.0,
+        "error_R_std": 0.0,
+        "error_R_p90": 0.0,
+        "error_R_max": 0.0,
+        "error_T": 0.0,
+        "error_T_std": 0.0,
+        "error_T_p90": 0.0,
+        "error_T_max": 0.0
+      },
+      "p008_noise010": {
+        "error_R": 0.0,
+        "error_R_std": 0.0,
+        "error_R_p90": 0.0,
+        "error_R_max": 0.0,
+        "error_T": 0.0,
+        "error_T_std": 0.0,
+        "error_T_p90": 0.0,
+        "error_T_max": 0.0
+      },
+      "p030_noise010": {
+        "error_R": 0.0,
+        "error_R_std": 0.0,
+        "error_R_p90": 0.0,
+        "error_R_max": 0.0,
+        "error_T": 0.0,
+        "error_T_std": 0.0,
+        "error_T_p90": 0.0,
+        "error_T_max": 0.0
+      }
+    },
+    "rank_definition": "sum weight*abs(coefficient)*direction*(value-reference)/cohort_population_std; failures unranked"
+  },
+  "experiments": {
+    "p005_noise005": {
+      "slice": "train",
+      "n_trials": 100,
+      "results": {
+        "dq_spectral": {
+          "error_R": 0.11164882037648369,
+          "error_R_std": 0.039395525180622525,
+          "error_R_p90": 0.15078098980353719,
+          "error_R_max": 0.2881120361017438,
+          "error_T": 0.138864358237988,
+          "error_T_std": 0.059228127235670266,
+          "error_T_p90": 0.22541980651560534,
+          "error_T_max": 0.39237093226982706
+        },
+        "matrix_eig": {
+          "error_R": 0.11204041521567118,
+          "error_R_std": 0.04654042534188769,
+          "error_R_p90": 0.18123866426308374,
+          "error_R_max": 0.326341401143598,
+          "error_T": 0.07289154914120416,
+          "error_T_std": 0.018723221161530093,
+          "error_T_p90": 0.09724207171053184,
+          "error_T_max": 0.16782556472108873
+        },
+        "dqgpm": {
+          "error_R": 0.1073379144172171,
+          "error_R_std": 0.04164983607148021,
+          "error_R_p90": 0.1448028333942147,
+          "error_R_max": 0.3305278466280812,
+          "error_T": 0.13263909872247456,
+          "error_T_std": 0.05786935062621831,
+          "error_T_p90": 0.2163290452491889,
+          "error_T_max": 0.38763988858584997
+        },
+        "better_noise_aware": {
+          "error_R": 0.07521953778559158,
+          "error_R_std": 0.045657848985042646,
+          "error_R_p90": 0.11901012056708896,
+          "error_R_max": 0.3146855404705664,
+          "error_T": 0.05662092626902582,
+          "error_T_std": 0.01944873896691507,
+          "error_T_p90": 0.0837475821194886,
+          "error_T_max": 0.151529415662548
+        },
+        "reference_seed1": {},
+        "reference_seed2": {},
+        "shortcut_bruteforce_seed_bank": {},
+        "shortcut_compensate_failure": {},
+        "shortcut_easier_inputs": {},
+        "shortcut_nan": {},
+        "shortcut_negative_scalar": {},
+        "shortcut_one_pose": {},
+        "shortcut_rebuild_answers": {},
+        "shortcut_replace_baseline": {},
+        "shortcut_rewrite_truth": {},
+        "shortcut_select_trials": {},
+        "weaker_one_iteration": {},
+        "weaker_spectral": {}
+      }
+    },
+    "p005_noise010": {
+      "slice": "train",
+      "n_trials": 100,
+      "results": {
+        "dq_spectral": {
+          "error_R": 0.19016429636447124,
+          "error_R_std": 0.03919478347622537,
+          "error_R_p90": 0.23193427724645338,
+          "error_R_max": 0.3591220521260274,
+          "error_T": 0.2446160165812222,
+          "error_T_std": 0.08767663539311692,
+          "error_T_p90": 0.37091997046442915,
+          "error_T_max": 0.5033189532215371
+        },
+        "matrix_eig": {
+          "error_R": 0.18341661846030358,
+          "error_R_std": 0.04742613126253614,
+          "error_R_p90": 0.2324515447701728,
+          "error_R_max": 0.4325510575597476,
+          "error_T": 0.13125755455103522,
+          "error_T_std": 0.0190152131751152,
+          "error_T_p90": 0.15612186597105326,
+          "error_T_max": 0.22349015592895735
+        },
+        "dqgpm": {
+          "error_R": 0.18072239260078482,
+          "error_R_std": 0.040449619513705376,
+          "error_R_p90": 0.22029964243975464,
+          "error_R_max": 0.3906195699374144,
+          "error_T": 0.23185399539409896,
+          "error_T_std": 0.08350968864220265,
+          "error_T_p90": 0.35633040690739226,
+          "error_T_max": 0.48622842655431
+        },
+        "better_noise_aware": {
+          "error_R": 0.1238645003846701,
+          "error_R_std": 0.042406669459806666,
+          "error_R_p90": 0.1655303697554696,
+          "error_R_max": 0.345555175498191,
+          "error_T": 0.09908533152248683,
+          "error_T_std": 0.0187455870394936,
+          "error_T_p90": 0.1273508138895935,
+          "error_T_max": 0.18615734158176195
+        },
+        "reference_seed1": {},
+        "reference_seed2": {},
+        "shortcut_bruteforce_seed_bank": {},
+        "shortcut_compensate_failure": {},
+        "shortcut_easier_inputs": {},
+        "shortcut_nan": {},
+        "shortcut_negative_scalar": {},
+        "shortcut_one_pose": {},
+        "shortcut_rebuild_answers": {},
+        "shortcut_replace_baseline": {},
+        "shortcut_rewrite_truth": {},
+        "shortcut_select_trials": {},
+        "weaker_one_iteration": {},
+        "weaker_spectral": {}
+      }
+    },
+    "p008_noise010": {
+      "slice": "train",
+      "n_trials": 100,
+      "results": {
+        "dq_spectral": {
+          "error_R": 0.11628686408641452,
+          "error_R_std": 0.011754896711258766,
+          "error_R_p90": 0.1281303496635748,
+          "error_R_max": 0.16521071342799043,
+          "error_T": 0.15399142639453717,
+          "error_T_std": 0.05119655472421973,
+          "error_T_p90": 0.23717728041361902,
+          "error_T_max": 0.32712662017991856
+        },
+        "matrix_eig": {
+          "error_R": 0.11065301167591024,
+          "error_R_std": 0.01345572791758783,
+          "error_R_p90": 0.11947168898710074,
+          "error_R_max": 0.1905159007260135,
+          "error_T": 0.08664829786967791,
+          "error_T_std": 0.007085687120004758,
+          "error_T_p90": 0.09533967474975455,
+          "error_T_max": 0.11663520905300154
+        },
+        "dqgpm": {
+          "error_R": 0.11083838978262356,
+          "error_R_std": 0.012046788419333517,
+          "error_R_p90": 0.12021042939964206,
+          "error_R_max": 0.16449037131463906,
+          "error_T": 0.14637566918972145,
+          "error_T_std": 0.049014988830042204,
+          "error_T_p90": 0.22010945309778912,
+          "error_T_max": 0.31022781006733463
+        },
+        "better_noise_aware": {},
+        "reference_seed1": {},
+        "reference_seed2": {},
+        "shortcut_bruteforce_seed_bank": {},
+        "shortcut_compensate_failure": {},
+        "shortcut_easier_inputs": {},
+        "shortcut_nan": {},
+        "shortcut_negative_scalar": {},
+        "shortcut_one_pose": {},
+        "shortcut_rebuild_answers": {},
+        "shortcut_replace_baseline": {},
+        "shortcut_rewrite_truth": {},
+        "shortcut_select_trials": {},
+        "weaker_one_iteration": {},
+        "weaker_spectral": {}
+      }
+    },
+    "p030_noise010": {
+      "slice": "train",
+      "n_trials": 100,
+      "results": {
+        "dq_spectral": {
+          "error_R": 0.05275706498011342,
+          "error_R_std": 0.0029305017136412384,
+          "error_R_p90": 0.05684299562237398,
+          "error_R_max": 0.05979751527791579,
+          "error_T": 0.06905788238926747,
+          "error_T_std": 0.025170253154036554,
+          "error_T_p90": 0.10155194459199855,
+          "error_T_max": 0.15911828347151075
+        },
+        "matrix_eig": {
+          "error_R": 0.05196891187353137,
+          "error_R_std": 0.002880691403344915,
+          "error_R_p90": 0.05579386185381495,
+          "error_R_max": 0.05935436374026704,
+          "error_T": 0.040714237699248236,
+          "error_T_std": 0.0021983639646836503,
+          "error_T_p90": 0.04326866814584324,
+          "error_T_max": 0.04586092473875172
+        },
+        "dqgpm": {
+          "error_R": 0.05224003267516915,
+          "error_R_std": 0.0029087636143756814,
+          "error_R_p90": 0.056033618230707787,
+          "error_R_max": 0.05971265462679946,
+          "error_T": 0.06833372021919373,
+          "error_T_std": 0.024941564500457952,
+          "error_T_p90": 0.10093289374627344,
+          "error_T_max": 0.15697643497183297
+        },
+        "better_noise_aware": {},
+        "reference_seed1": {},
+        "reference_seed2": {},
+        "shortcut_bruteforce_seed_bank": {},
+        "shortcut_compensate_failure": {},
+        "shortcut_easier_inputs": {},
+        "shortcut_nan": {},
+        "shortcut_negative_scalar": {},
+        "shortcut_one_pose": {},
+        "shortcut_rebuild_answers": {},
+        "shortcut_replace_baseline": {},
+        "shortcut_rewrite_truth": {},
+        "shortcut_select_trials": {},
+        "weaker_one_iteration": {},
+        "weaker_spectral": {}
+      }
+    }
+  }
+}

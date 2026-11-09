@@ -1,0 +1,14 @@
+[
+  {
+    "noise": 0.0,
+    "matvec_max_difference": 1.7763568394002505e-15,
+    "spectral_max_difference": 8.881784197001252e-16,
+    "refined_max_difference": 8.881784197001252e-16
+  },
+  {
+    "noise": 0.1,
+    "matvec_max_difference": 1.7763568394002505e-15,
+    "spectral_max_difference": 8.881784197001252e-16,
+    "refined_max_difference": 1.2212453270876722e-15
+  }
+]

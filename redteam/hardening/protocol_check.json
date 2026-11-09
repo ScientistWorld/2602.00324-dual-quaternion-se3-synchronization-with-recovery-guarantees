@@ -1,0 +1,42 @@
+{
+  "train": {
+    "invalid_cases_rejected": [
+      "one_pose",
+      "missing_id",
+      "extra_id",
+      "nan",
+      "infinity",
+      "overflow",
+      "null",
+      "bool",
+      "nonunit",
+      "nonorthogonal",
+      "huge_translation",
+      "truth_forgery",
+      "baseline_forgery"
+    ],
+    "strict_json": true,
+    "failed_rank": null,
+    "direction_sign_and_units_invariant": true
+  },
+  "test": {
+    "invalid_cases_rejected": [
+      "one_pose",
+      "missing_id",
+      "extra_id",
+      "nan",
+      "infinity",
+      "overflow",
+      "null",
+      "bool",
+      "nonunit",
+      "nonorthogonal",
+      "huge_translation",
+      "truth_forgery",
+      "baseline_forgery"
+    ],
+    "strict_json": true,
+    "failed_rank": null,
+    "direction_sign_and_units_invariant": true
+  }
+}
