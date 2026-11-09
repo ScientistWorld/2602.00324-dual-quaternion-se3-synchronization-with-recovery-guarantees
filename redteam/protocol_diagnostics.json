@@ -1,0 +1,1410 @@
+{
+  "p005_noise005": {
+    "test_trial_count": 57,
+    "full_original_100_trials": {
+      "error_R": {
+        "mean": 0.1072037631670089,
+        "std": 0.040759037292400074,
+        "trim15_each_tail_mean": 0.10127704523920426
+      },
+      "error_T": {
+        "mean": 0.14404420847775357,
+        "std": 0.08412743836978942,
+        "trim15_each_tail_mean": 0.12923042462595644
+      }
+    },
+    "full_fixed_spectral_100_trials": {
+      "error_R": {
+        "mean": 0.1114623479982228,
+        "std": 0.03832758193717004,
+        "trim15_each_tail_mean": 0.10619795101683295
+      },
+      "error_T": {
+        "mean": 0.1499736883870798,
+        "std": 0.08502262724935786,
+        "trim15_each_tail_mean": 0.13540221794758503
+      }
+    },
+    "full_stored_100_trials": {
+      "error_R": {
+        "mean": 0.11000301625187837,
+        "std": 0.0478654413563226,
+        "trim15_each_tail_mean": 0.10019348943824428
+      },
+      "error_T": {
+        "mean": 0.13454574967594002,
+        "std": 0.07122810597135458,
+        "trim15_each_tail_mean": 0.12224074141267037
+      }
+    },
+    "stored_original_node_changes": [
+      {
+        "seed": 260208243,
+        "isolated_nodes": [
+          1,
+          24
+        ],
+        "changed_estimate_nodes": [
+          1,
+          24
+        ],
+        "changed_spectral_nodes": [
+          1,
+          24
+        ]
+      },
+      {
+        "seed": 260216162,
+        "isolated_nodes": [
+          47,
+          63
+        ],
+        "changed_estimate_nodes": [
+          47,
+          63
+        ],
+        "changed_spectral_nodes": [
+          47,
+          63
+        ]
+      },
+      {
+        "seed": 260232000,
+        "isolated_nodes": [
+          46
+        ],
+        "changed_estimate_nodes": [
+          46
+        ],
+        "changed_spectral_nodes": [
+          46
+        ]
+      },
+      {
+        "seed": 260279514,
+        "isolated_nodes": [
+          72
+        ],
+        "changed_estimate_nodes": [
+          72
+        ],
+        "changed_spectral_nodes": [
+          72
+        ]
+      },
+      {
+        "seed": 260295352,
+        "isolated_nodes": [
+          3
+        ],
+        "changed_estimate_nodes": [
+          3
+        ],
+        "changed_spectral_nodes": [
+          3
+        ]
+      },
+      {
+        "seed": 260303271,
+        "isolated_nodes": [
+          0,
+          35
+        ],
+        "changed_estimate_nodes": [
+          0,
+          35
+        ],
+        "changed_spectral_nodes": [
+          0,
+          35
+        ]
+      },
+      {
+        "seed": 260311190,
+        "isolated_nodes": [
+          60,
+          84
+        ],
+        "changed_estimate_nodes": [
+          60,
+          84
+        ],
+        "changed_spectral_nodes": [
+          60,
+          84
+        ]
+      },
+      {
+        "seed": 260319109,
+        "isolated_nodes": [
+          83
+        ],
+        "changed_estimate_nodes": [
+          83
+        ],
+        "changed_spectral_nodes": [
+          83
+        ]
+      },
+      {
+        "seed": 260334947,
+        "isolated_nodes": [
+          29
+        ],
+        "changed_estimate_nodes": [
+          29
+        ],
+        "changed_spectral_nodes": [
+          29
+        ]
+      },
+      {
+        "seed": 260342866,
+        "isolated_nodes": [
+          14,
+          25,
+          29
+        ],
+        "changed_estimate_nodes": [
+          9,
+          14,
+          25,
+          29,
+          56
+        ],
+        "changed_spectral_nodes": [
+          9,
+          14,
+          25,
+          29,
+          56
+        ]
+      },
+      {
+        "seed": 260366623,
+        "isolated_nodes": [
+          79
+        ],
+        "changed_estimate_nodes": [
+          79
+        ],
+        "changed_spectral_nodes": [
+          79
+        ]
+      },
+      {
+        "seed": 260382461,
+        "isolated_nodes": [
+          25,
+          42,
+          54
+        ],
+        "changed_estimate_nodes": [
+          25,
+          42,
+          54
+        ],
+        "changed_spectral_nodes": [
+          25,
+          42,
+          54
+        ]
+      },
+      {
+        "seed": 260414137,
+        "isolated_nodes": [
+          4
+        ],
+        "changed_estimate_nodes": [
+          4
+        ],
+        "changed_spectral_nodes": [
+          4
+        ]
+      },
+      {
+        "seed": 260445813,
+        "isolated_nodes": [
+          77
+        ],
+        "changed_estimate_nodes": [
+          77
+        ],
+        "changed_spectral_nodes": [
+          77
+        ]
+      },
+      {
+        "seed": 260453732,
+        "isolated_nodes": [
+          5,
+          22
+        ],
+        "changed_estimate_nodes": [
+          5,
+          22
+        ],
+        "changed_spectral_nodes": [
+          5,
+          22
+        ]
+      },
+      {
+        "seed": 260509165,
+        "isolated_nodes": [
+          21,
+          46
+        ],
+        "changed_estimate_nodes": [
+          21,
+          46
+        ],
+        "changed_spectral_nodes": [
+          21,
+          46
+        ]
+      },
+      {
+        "seed": 260517084,
+        "isolated_nodes": [
+          23,
+          84
+        ],
+        "changed_estimate_nodes": [
+          23,
+          84
+        ],
+        "changed_spectral_nodes": [
+          23,
+          84
+        ]
+      },
+      {
+        "seed": 260525003,
+        "isolated_nodes": [
+          79
+        ],
+        "changed_estimate_nodes": [
+          79
+        ],
+        "changed_spectral_nodes": [
+          79
+        ]
+      },
+      {
+        "seed": 260540841,
+        "isolated_nodes": [
+          63
+        ],
+        "changed_estimate_nodes": [
+          63
+        ],
+        "changed_spectral_nodes": [
+          63
+        ]
+      },
+      {
+        "seed": 260548760,
+        "isolated_nodes": [
+          0
+        ],
+        "changed_estimate_nodes": [
+          0
+        ],
+        "changed_spectral_nodes": [
+          0
+        ]
+      },
+      {
+        "seed": 260556679,
+        "isolated_nodes": [
+          13,
+          42
+        ],
+        "changed_estimate_nodes": [
+          13,
+          42
+        ],
+        "changed_spectral_nodes": [
+          13,
+          42
+        ]
+      },
+      {
+        "seed": 260604193,
+        "isolated_nodes": [
+          18
+        ],
+        "changed_estimate_nodes": [
+          18
+        ],
+        "changed_spectral_nodes": [
+          18
+        ]
+      },
+      {
+        "seed": 260612112,
+        "isolated_nodes": [
+          86
+        ],
+        "changed_estimate_nodes": [
+          86
+        ],
+        "changed_spectral_nodes": [
+          86
+        ]
+      },
+      {
+        "seed": 260620031,
+        "isolated_nodes": [
+          78
+        ],
+        "changed_estimate_nodes": [
+          78
+        ],
+        "changed_spectral_nodes": [
+          78
+        ]
+      },
+      {
+        "seed": 260627950,
+        "isolated_nodes": [
+          76
+        ],
+        "changed_estimate_nodes": [
+          76
+        ],
+        "changed_spectral_nodes": [
+          76
+        ]
+      },
+      {
+        "seed": 260651707,
+        "isolated_nodes": [
+          86
+        ],
+        "changed_estimate_nodes": [
+          86
+        ],
+        "changed_spectral_nodes": [
+          86
+        ]
+      },
+      {
+        "seed": 260675464,
+        "isolated_nodes": [
+          30,
+          33
+        ],
+        "changed_estimate_nodes": [
+          30,
+          33
+        ],
+        "changed_spectral_nodes": [
+          30,
+          33
+        ]
+      },
+      {
+        "seed": 260683383,
+        "isolated_nodes": [
+          36
+        ],
+        "changed_estimate_nodes": [
+          36
+        ],
+        "changed_spectral_nodes": [
+          36
+        ]
+      },
+      {
+        "seed": 260691302,
+        "isolated_nodes": [
+          61,
+          74
+        ],
+        "changed_estimate_nodes": [
+          61,
+          74
+        ],
+        "changed_spectral_nodes": [
+          61,
+          74
+        ]
+      },
+      {
+        "seed": 260707140,
+        "isolated_nodes": [
+          62
+        ],
+        "changed_estimate_nodes": [
+          62
+        ],
+        "changed_spectral_nodes": [
+          62
+        ]
+      },
+      {
+        "seed": 260715059,
+        "isolated_nodes": [
+          95
+        ],
+        "changed_estimate_nodes": [
+          95
+        ],
+        "changed_spectral_nodes": [
+          95
+        ]
+      },
+      {
+        "seed": 260722978,
+        "isolated_nodes": [
+          59,
+          70
+        ],
+        "changed_estimate_nodes": [
+          59,
+          70
+        ],
+        "changed_spectral_nodes": [
+          59,
+          70
+        ]
+      },
+      {
+        "seed": 260738816,
+        "isolated_nodes": [
+          73
+        ],
+        "changed_estimate_nodes": [
+          73
+        ],
+        "changed_spectral_nodes": [
+          73
+        ]
+      },
+      {
+        "seed": 260746735,
+        "isolated_nodes": [
+          85
+        ],
+        "changed_estimate_nodes": [
+          85
+        ],
+        "changed_spectral_nodes": [
+          85
+        ]
+      },
+      {
+        "seed": 260770492,
+        "isolated_nodes": [
+          16,
+          18,
+          38
+        ],
+        "changed_estimate_nodes": [
+          16,
+          18,
+          38
+        ],
+        "changed_spectral_nodes": [
+          16,
+          18,
+          38
+        ]
+      },
+      {
+        "seed": 260778411,
+        "isolated_nodes": [
+          55
+        ],
+        "changed_estimate_nodes": [
+          55
+        ],
+        "changed_spectral_nodes": [
+          55
+        ]
+      },
+      {
+        "seed": 260786330,
+        "isolated_nodes": [
+          26,
+          92
+        ],
+        "changed_estimate_nodes": [
+          26,
+          92
+        ],
+        "changed_spectral_nodes": [
+          26,
+          92
+        ]
+      },
+      {
+        "seed": 260802168,
+        "isolated_nodes": [
+          66
+        ],
+        "changed_estimate_nodes": [
+          66
+        ],
+        "changed_spectral_nodes": [
+          66
+        ]
+      },
+      {
+        "seed": 260810087,
+        "isolated_nodes": [
+          64
+        ],
+        "changed_estimate_nodes": [
+          64
+        ],
+        "changed_spectral_nodes": [
+          64
+        ]
+      },
+      {
+        "seed": 260841763,
+        "isolated_nodes": [
+          28
+        ],
+        "changed_estimate_nodes": [
+          28
+        ],
+        "changed_spectral_nodes": [
+          28
+        ]
+      },
+      {
+        "seed": 260849682,
+        "isolated_nodes": [
+          31
+        ],
+        "changed_estimate_nodes": [
+          31
+        ],
+        "changed_spectral_nodes": [
+          31
+        ]
+      },
+      {
+        "seed": 260865520,
+        "isolated_nodes": [
+          36
+        ],
+        "changed_estimate_nodes": [
+          36
+        ],
+        "changed_spectral_nodes": [
+          36
+        ]
+      },
+      {
+        "seed": 260873439,
+        "isolated_nodes": [
+          37
+        ],
+        "changed_estimate_nodes": [
+          37
+        ],
+        "changed_spectral_nodes": [
+          37
+        ]
+      },
+      {
+        "seed": 260881358,
+        "isolated_nodes": [
+          79
+        ],
+        "changed_estimate_nodes": [
+          79
+        ],
+        "changed_spectral_nodes": [
+          79
+        ]
+      },
+      {
+        "seed": 260897196,
+        "isolated_nodes": [
+          0
+        ],
+        "changed_estimate_nodes": [
+          0
+        ],
+        "changed_spectral_nodes": [
+          0
+        ]
+      },
+      {
+        "seed": 260913034,
+        "isolated_nodes": [
+          32,
+          52
+        ],
+        "changed_estimate_nodes": [
+          32,
+          52
+        ],
+        "changed_spectral_nodes": [
+          32,
+          52
+        ]
+      },
+      {
+        "seed": 260936791,
+        "isolated_nodes": [
+          38
+        ],
+        "changed_estimate_nodes": [
+          38
+        ],
+        "changed_spectral_nodes": [
+          38
+        ]
+      },
+      {
+        "seed": 260952629,
+        "isolated_nodes": [
+          6
+        ],
+        "changed_estimate_nodes": [
+          6
+        ],
+        "changed_spectral_nodes": [
+          6
+        ]
+      },
+      {
+        "seed": 260960548,
+        "isolated_nodes": [
+          97
+        ],
+        "changed_estimate_nodes": [
+          97
+        ],
+        "changed_spectral_nodes": [
+          97
+        ]
+      },
+      {
+        "seed": 260976386,
+        "isolated_nodes": [
+          54
+        ],
+        "changed_estimate_nodes": [
+          54
+        ],
+        "changed_spectral_nodes": [
+          54
+        ]
+      }
+    ],
+    "all_changed_nodes_are_isolated": false,
+    "all_spectral_changed_nodes_are_isolated": false
+  },
+  "p005_noise010": {
+    "test_trial_count": 57,
+    "full_original_100_trials": {
+      "error_R": {
+        "mean": 0.18079388106766728,
+        "std": 0.04008631405933673,
+        "trim15_each_tail_mean": 0.17576803082911813
+      },
+      "error_T": {
+        "mean": 0.2478652324722299,
+        "std": 0.12382339698938724,
+        "trim15_each_tail_mean": 0.22674096263672713
+      }
+    },
+    "full_fixed_spectral_100_trials": {
+      "error_R": {
+        "mean": 0.1902134518697804,
+        "std": 0.03878511826397217,
+        "trim15_each_tail_mean": 0.18586508327639276
+      },
+      "error_T": {
+        "mean": 0.2604469875443536,
+        "std": 0.12698070600662503,
+        "trim15_each_tail_mean": 0.23961993230554873
+      }
+    },
+    "full_stored_100_trials": {
+      "error_R": {
+        "mean": 0.18328229424098944,
+        "std": 0.045875517890891206,
+        "trim15_each_tail_mean": 0.1755872533667741
+      },
+      "error_T": {
+        "mean": 0.23906249192126972,
+        "std": 0.11250020617492905,
+        "trim15_each_tail_mean": 0.22013965694550156
+      }
+    },
+    "stored_original_node_changes": [
+      {
+        "seed": 260208243,
+        "isolated_nodes": [
+          1,
+          24
+        ],
+        "changed_estimate_nodes": [
+          1,
+          24
+        ],
+        "changed_spectral_nodes": [
+          1,
+          24
+        ]
+      },
+      {
+        "seed": 260216162,
+        "isolated_nodes": [
+          47,
+          63
+        ],
+        "changed_estimate_nodes": [
+          47,
+          63
+        ],
+        "changed_spectral_nodes": [
+          47,
+          63
+        ]
+      },
+      {
+        "seed": 260232000,
+        "isolated_nodes": [
+          46
+        ],
+        "changed_estimate_nodes": [
+          46
+        ],
+        "changed_spectral_nodes": [
+          46
+        ]
+      },
+      {
+        "seed": 260279514,
+        "isolated_nodes": [
+          72
+        ],
+        "changed_estimate_nodes": [
+          72
+        ],
+        "changed_spectral_nodes": [
+          72
+        ]
+      },
+      {
+        "seed": 260295352,
+        "isolated_nodes": [
+          3
+        ],
+        "changed_estimate_nodes": [
+          3
+        ],
+        "changed_spectral_nodes": [
+          3
+        ]
+      },
+      {
+        "seed": 260303271,
+        "isolated_nodes": [
+          0,
+          35
+        ],
+        "changed_estimate_nodes": [
+          0,
+          35
+        ],
+        "changed_spectral_nodes": [
+          0,
+          35
+        ]
+      },
+      {
+        "seed": 260311190,
+        "isolated_nodes": [
+          60,
+          84
+        ],
+        "changed_estimate_nodes": [
+          60,
+          84
+        ],
+        "changed_spectral_nodes": [
+          60,
+          84
+        ]
+      },
+      {
+        "seed": 260319109,
+        "isolated_nodes": [
+          83
+        ],
+        "changed_estimate_nodes": [
+          83
+        ],
+        "changed_spectral_nodes": [
+          83
+        ]
+      },
+      {
+        "seed": 260334947,
+        "isolated_nodes": [
+          29
+        ],
+        "changed_estimate_nodes": [
+          29
+        ],
+        "changed_spectral_nodes": [
+          29
+        ]
+      },
+      {
+        "seed": 260342866,
+        "isolated_nodes": [
+          14,
+          25,
+          29
+        ],
+        "changed_estimate_nodes": [
+          9,
+          14,
+          25,
+          29,
+          56
+        ],
+        "changed_spectral_nodes": [
+          9,
+          14,
+          25,
+          29,
+          56
+        ]
+      },
+      {
+        "seed": 260366623,
+        "isolated_nodes": [
+          79
+        ],
+        "changed_estimate_nodes": [
+          79
+        ],
+        "changed_spectral_nodes": [
+          79
+        ]
+      },
+      {
+        "seed": 260382461,
+        "isolated_nodes": [
+          25,
+          42,
+          54
+        ],
+        "changed_estimate_nodes": [
+          25,
+          42,
+          54
+        ],
+        "changed_spectral_nodes": [
+          25,
+          42,
+          54
+        ]
+      },
+      {
+        "seed": 260414137,
+        "isolated_nodes": [
+          4
+        ],
+        "changed_estimate_nodes": [
+          4
+        ],
+        "changed_spectral_nodes": [
+          4
+        ]
+      },
+      {
+        "seed": 260445813,
+        "isolated_nodes": [
+          77
+        ],
+        "changed_estimate_nodes": [
+          77
+        ],
+        "changed_spectral_nodes": [
+          77
+        ]
+      },
+      {
+        "seed": 260453732,
+        "isolated_nodes": [
+          5,
+          22
+        ],
+        "changed_estimate_nodes": [
+          5,
+          22
+        ],
+        "changed_spectral_nodes": [
+          5,
+          22
+        ]
+      },
+      {
+        "seed": 260509165,
+        "isolated_nodes": [
+          21,
+          46
+        ],
+        "changed_estimate_nodes": [
+          21,
+          46
+        ],
+        "changed_spectral_nodes": [
+          21,
+          46
+        ]
+      },
+      {
+        "seed": 260517084,
+        "isolated_nodes": [
+          23,
+          84
+        ],
+        "changed_estimate_nodes": [
+          23,
+          84
+        ],
+        "changed_spectral_nodes": [
+          23,
+          84
+        ]
+      },
+      {
+        "seed": 260525003,
+        "isolated_nodes": [
+          79
+        ],
+        "changed_estimate_nodes": [
+          79
+        ],
+        "changed_spectral_nodes": [
+          79
+        ]
+      },
+      {
+        "seed": 260540841,
+        "isolated_nodes": [
+          63
+        ],
+        "changed_estimate_nodes": [
+          63
+        ],
+        "changed_spectral_nodes": [
+          63
+        ]
+      },
+      {
+        "seed": 260548760,
+        "isolated_nodes": [
+          0
+        ],
+        "changed_estimate_nodes": [
+          0
+        ],
+        "changed_spectral_nodes": [
+          0
+        ]
+      },
+      {
+        "seed": 260556679,
+        "isolated_nodes": [
+          13,
+          42
+        ],
+        "changed_estimate_nodes": [
+          13,
+          42
+        ],
+        "changed_spectral_nodes": [
+          13,
+          42
+        ]
+      },
+      {
+        "seed": 260604193,
+        "isolated_nodes": [
+          18
+        ],
+        "changed_estimate_nodes": [
+          18
+        ],
+        "changed_spectral_nodes": [
+          18
+        ]
+      },
+      {
+        "seed": 260612112,
+        "isolated_nodes": [
+          86
+        ],
+        "changed_estimate_nodes": [
+          86
+        ],
+        "changed_spectral_nodes": [
+          86
+        ]
+      },
+      {
+        "seed": 260620031,
+        "isolated_nodes": [
+          78
+        ],
+        "changed_estimate_nodes": [
+          78
+        ],
+        "changed_spectral_nodes": [
+          78
+        ]
+      },
+      {
+        "seed": 260627950,
+        "isolated_nodes": [
+          76
+        ],
+        "changed_estimate_nodes": [
+          76
+        ],
+        "changed_spectral_nodes": [
+          76
+        ]
+      },
+      {
+        "seed": 260651707,
+        "isolated_nodes": [
+          86
+        ],
+        "changed_estimate_nodes": [
+          86
+        ],
+        "changed_spectral_nodes": [
+          86
+        ]
+      },
+      {
+        "seed": 260675464,
+        "isolated_nodes": [
+          30,
+          33
+        ],
+        "changed_estimate_nodes": [
+          30,
+          33
+        ],
+        "changed_spectral_nodes": [
+          30,
+          33
+        ]
+      },
+      {
+        "seed": 260683383,
+        "isolated_nodes": [
+          36
+        ],
+        "changed_estimate_nodes": [
+          36
+        ],
+        "changed_spectral_nodes": [
+          36
+        ]
+      },
+      {
+        "seed": 260691302,
+        "isolated_nodes": [
+          61,
+          74
+        ],
+        "changed_estimate_nodes": [
+          61,
+          74
+        ],
+        "changed_spectral_nodes": [
+          61,
+          74
+        ]
+      },
+      {
+        "seed": 260707140,
+        "isolated_nodes": [
+          62
+        ],
+        "changed_estimate_nodes": [
+          62
+        ],
+        "changed_spectral_nodes": [
+          62
+        ]
+      },
+      {
+        "seed": 260715059,
+        "isolated_nodes": [
+          95
+        ],
+        "changed_estimate_nodes": [
+          95
+        ],
+        "changed_spectral_nodes": [
+          95
+        ]
+      },
+      {
+        "seed": 260722978,
+        "isolated_nodes": [
+          59,
+          70
+        ],
+        "changed_estimate_nodes": [
+          59,
+          70
+        ],
+        "changed_spectral_nodes": [
+          59,
+          70
+        ]
+      },
+      {
+        "seed": 260738816,
+        "isolated_nodes": [
+          73
+        ],
+        "changed_estimate_nodes": [
+          73
+        ],
+        "changed_spectral_nodes": [
+          73
+        ]
+      },
+      {
+        "seed": 260746735,
+        "isolated_nodes": [
+          85
+        ],
+        "changed_estimate_nodes": [
+          85
+        ],
+        "changed_spectral_nodes": [
+          85
+        ]
+      },
+      {
+        "seed": 260770492,
+        "isolated_nodes": [
+          16,
+          18,
+          38
+        ],
+        "changed_estimate_nodes": [
+          16,
+          18,
+          38
+        ],
+        "changed_spectral_nodes": [
+          16,
+          18,
+          38
+        ]
+      },
+      {
+        "seed": 260778411,
+        "isolated_nodes": [
+          55
+        ],
+        "changed_estimate_nodes": [
+          55
+        ],
+        "changed_spectral_nodes": [
+          55
+        ]
+      },
+      {
+        "seed": 260786330,
+        "isolated_nodes": [
+          26,
+          92
+        ],
+        "changed_estimate_nodes": [
+          26,
+          92
+        ],
+        "changed_spectral_nodes": [
+          26,
+          92
+        ]
+      },
+      {
+        "seed": 260802168,
+        "isolated_nodes": [
+          66
+        ],
+        "changed_estimate_nodes": [
+          66
+        ],
+        "changed_spectral_nodes": [
+          66
+        ]
+      },
+      {
+        "seed": 260810087,
+        "isolated_nodes": [
+          64
+        ],
+        "changed_estimate_nodes": [
+          64
+        ],
+        "changed_spectral_nodes": [
+          64
+        ]
+      },
+      {
+        "seed": 260841763,
+        "isolated_nodes": [
+          28
+        ],
+        "changed_estimate_nodes": [
+          28
+        ],
+        "changed_spectral_nodes": [
+          28
+        ]
+      },
+      {
+        "seed": 260849682,
+        "isolated_nodes": [
+          31
+        ],
+        "changed_estimate_nodes": [
+          31
+        ],
+        "changed_spectral_nodes": [
+          31
+        ]
+      },
+      {
+        "seed": 260865520,
+        "isolated_nodes": [
+          36
+        ],
+        "changed_estimate_nodes": [
+          36
+        ],
+        "changed_spectral_nodes": [
+          36
+        ]
+      },
+      {
+        "seed": 260873439,
+        "isolated_nodes": [
+          37
+        ],
+        "changed_estimate_nodes": [
+          37
+        ],
+        "changed_spectral_nodes": [
+          37
+        ]
+      },
+      {
+        "seed": 260881358,
+        "isolated_nodes": [
+          79
+        ],
+        "changed_estimate_nodes": [
+          79
+        ],
+        "changed_spectral_nodes": [
+          79
+        ]
+      },
+      {
+        "seed": 260897196,
+        "isolated_nodes": [
+          0
+        ],
+        "changed_estimate_nodes": [
+          0
+        ],
+        "changed_spectral_nodes": [
+          0
+        ]
+      },
+      {
+        "seed": 260913034,
+        "isolated_nodes": [
+          32,
+          52
+        ],
+        "changed_estimate_nodes": [
+          32,
+          52
+        ],
+        "changed_spectral_nodes": [
+          32,
+          52
+        ]
+      },
+      {
+        "seed": 260936791,
+        "isolated_nodes": [
+          38
+        ],
+        "changed_estimate_nodes": [
+          38
+        ],
+        "changed_spectral_nodes": [
+          38
+        ]
+      },
+      {
+        "seed": 260952629,
+        "isolated_nodes": [
+          6
+        ],
+        "changed_estimate_nodes": [
+          6
+        ],
+        "changed_spectral_nodes": [
+          6
+        ]
+      },
+      {
+        "seed": 260960548,
+        "isolated_nodes": [
+          97
+        ],
+        "changed_estimate_nodes": [
+          97
+        ],
+        "changed_spectral_nodes": [
+          97
+        ]
+      },
+      {
+        "seed": 260976386,
+        "isolated_nodes": [
+          54
+        ],
+        "changed_estimate_nodes": [
+          54
+        ],
+        "changed_spectral_nodes": [
+          54
+        ]
+      }
+    ],
+    "all_changed_nodes_are_isolated": false,
+    "all_spectral_changed_nodes_are_isolated": false
+  }
+}
