@@ -289,3 +289,24 @@ reference, baselines, stronger/weaker/seed controls and affected shortcuts,
 check paired uncertainty, regenerate canonical scores and measured targets,
 and run protocol and package validators. No new training or inference is
 needed. The unresolved matrix-EIG comparison remains disclosed.
+
+### Final joint check 79663ce3-a6a: passed
+
+The one combined CPU rescore job exited 0 in 120 seconds. Stronger hidden rank
+is +0.156129 (paired 95% interval [0.154125,0.159224]); weaker spectral rank is
+−0.025081 ([-0.026678,−0.022918]); reference seed range is 0.0000003154.
+All ten repaired shortcut controls and the one-iteration failure score
+−7.364029 and receive finite penalties in every metric of every experiment.
+End-to-end protocol fixtures also confirm complete penalties for rejected or
+missing manifests. Coefficient-sign, direction, unit and gauge invariance
+checks passed independently on both slices.
+
+Canonical scores contain only the reference and fixed baselines and match
+the rescored raw outputs. Reference metrics changed at most 2.8e-17; the
+paper's reported numbers remain unchanged. Both package validator modes
+passed. Matrix EIG has rank +0.008799 with a positive paired interval, so the
+external superiority claim remains unmet and explicitly reported. The simple
+DQ spectral baseline remains clearly below the reference, and the stronger
+control establishes independent headroom. Restored scripts/run.sh to full
+reference reproduction, finalized HARDENING.md, and retained the limited
+`core_claim` milestone for recovery/refinement.

@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-11-09] - core_claim
+- Final evaluator hardening passed joint CPU job 79663ce3-a6a: complete finite failure penalties, all-attempt normalization, gauge invariance, paired headroom and artifact consistency.
+- Stronger/weaker hidden ranks are +0.156129/−0.025081, versus a reference seed range of 0.0000003154; all repaired shortcuts score −7.364029.
+- Milestone remains limited to synthetic recovery/refinement over the DQ initializer. Uniform superiority over matrix EIG remains unreproduced and is disclosed in HARDENING.md.
+
 ### [2026-05-20 07:05] - core_claim
 - Completed final verification for the packaged research gym.
 - Confirmed `python3 validate.py --compare --post-reproducer` passes and that scoring/evaluation remain artifact-based and method-independent.

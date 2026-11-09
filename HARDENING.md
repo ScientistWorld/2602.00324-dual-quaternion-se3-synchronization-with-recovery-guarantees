@@ -1,23 +1,29 @@
 # Final hardening
 
 The hidden test separates the honest stronger and weaker controls by much
-more than seed variation. A final evaluator-only check is pending: failures
-now receive finite worst-case values in all scored fields, rejected manifests
-are included as failed candidates, and ranking uses all attempts on disk.
-The numerical tables below describe the previous joint audit and will be
-refreshed from its saved raw outputs in one combined rescore job.
+more than seed variation. Every repaired shortcut scores below every successful
+attempt, with finite worst-case values in all 32 scored fields. Rejected and
+missing manifests are failed candidates, and ranking normalizes over all
+candidate attempts on disk. The final joint check passed.
 One requested scientific condition remains unresolved: the reproduction does
 **not** establish the paper's uniform superiority over matrix EIG. That
 comparison is retained, rather than weakened or hidden. The supported scope is
 synthetic pose recovery and improvement over the rounded DQ initializer.
 
-The complete joint audit was job `00902d7f-40f`. It regenerated the reference,
+The complete inference audit was job `00902d7f-40f`. It regenerated the reference,
 all fixed baselines, seed controls, stronger/weaker methods, and repaired
 shortcuts from final solver code. Its final assertion rejected the
-matrix-comparison claim after saving all numerical results. Final packaging
-uses those saved raw outputs; no solver changes or retraining are involved.
-Packaging job `40fcc388-e69` exited 0, regenerated the canonical files from
-those raw poses, and passed artifact consistency and package validation.
+matrix-comparison claim after saving all numerical results. The final
+evaluator-only fixes were applied together and checked in job `79663ce3-a6a`
+(exit 0, 120 seconds), using those saved raw outputs. No solver, comparator,
+or data change required new inference. This job rescored the reference,
+baselines, seed controls, stronger/weaker controls and repaired shortcuts on
+both slices, checked paired uncertainty and the failure protocol, regenerated
+canonical reference/baseline scores, and passed package validation.
+The validator emits three heuristic warnings about random-number generation
+in the test-input generator and frozen comparison solvers. Submitted methods
+are scored from their raw poses; the hidden interface runs inference and
+performs no training. Artifact-consistency and protocol checks passed.
 `redteam/hardening/packaging_check.json` explicitly records
 `all_requested_conditions_met: false` for the unresolved EIG comparison.
 `scripts/run.sh` is restored to end-to-end reference reproduction.
@@ -27,7 +33,7 @@ inputs, and per-trial errors stay inside `eval/test/.cache/`.
 ## Does better science score higher?
 
 The old ranks below are the REDTEAM all-finite-attempt cohort. The new ranks
-use the previous successful-attempt cohort and a frozen reference. Since each
+use all final candidate attempts, including failures, and a frozen reference. Since each
 metric is divided by its variation across that cohort, magnitudes across the
 two columns are not directly comparable. Their ordering and paired intervals
 are the relevant checks.
@@ -36,21 +42,30 @@ are the relevant checks.
 |---|---:|---:|---:|
 | Stored / final reference | 0 | 0 | fixed anchor |
 | Reference seed 0, fresh | −0.081313 | 0 | same as anchor |
-| Reference seed 1 | −0.033993 | +0.000077 | [−0.000051, +0.000121] |
-| Reference seed 2 | −0.264303 | +0.000024 | [−0.000086, +0.000051] |
-| Stronger noise-aware refinement | +0.496262 | **+8.488435** | **[+8.195607, +8.990637]** |
-| Weaker rounded DQ spectral estimator | −0.122511 | **−1.342277** | **[−1.697141, −0.884850]** |
-| One power iteration | −9.475122 | failed, unranked | failed recovery threshold |
-| Matrix EIG, registered as an honest candidate | not run | +0.821314 | [−0.103495, +1.333172] |
+| Reference seed 1 | −0.033993 | +0.0000003154 | [−0.0000001155, +0.0000005167] |
+| Reference seed 2 | −0.264303 | +0.0000001082 | [−0.0000003279, +0.0000003198] |
+| Stronger noise-aware refinement | +0.496262 | **+0.156129** | **[+0.154125, +0.159224]** |
+| Weaker rounded DQ spectral estimator | −0.122511 | **−0.025081** | **[−0.026678, −0.022918]** |
+| One power iteration | −9.475122 | −7.364029, failed | failed recovery threshold |
+| Matrix EIG, registered as an honest candidate | not run | +0.008799 | [+0.004819, +0.011829] |
 
 The old weaker-versus-fresh-reference gap was only 0.041198, smaller than the
 0.230310 range across reference seeds. After fixing the translation origin and
 freezing the default initializer seed, the three-seed hidden rank range is
-0.000076535. The stronger gain and weaker loss exceed that range by orders of
+0.0000003154. The stronger gain and weaker loss exceed that range by orders of
 magnitude. Every method sees the same instances. Mean-error uncertainty uses
 1,000 paired bootstrap resamples; complete weighted-rank uncertainty uses 500,
 recomputing mean, standard deviation, p90, and maximum with common resampled
 indices and the audit cohort's fixed metric scales.
+
+Immediately before this final evaluator patch, the same raw-output cohort
+gave stronger/weaker ranks +8.488435/−1.342277 and failed attempts null ranks
+with empty or partial metric entries. Those magnitudes used only successful
+candidates for normalization. The final all-attempt normalization changes the
+units of rank; it preserves the strong ordering and now makes every failed
+attempt costly to consumers of the numeric metrics as well as status flags.
+Reference rank remains exactly zero before and after. Re-aligning its saved
+poses changed no scientific metric by more than 2.8e-17.
 
 The reference and honest controls also behave alike on development and test.
 For example, reference development R/T means are 0.107338/0.077709 and
@@ -101,30 +116,34 @@ The penalties are failure sentinels; actual errors remain separate diagnostics.
 
 ## Major shortcuts
 
-“Failed” below means status `failed` and rank `null`, below every successful
-method. Every row was rerun through the hidden interface after the fixes.
+“Failed” below means status `failed`, rank −7.364029 in the final audit cohort,
+and worst-case penalties in every metric of every experiment. Every row's raw
+output was rescored through the hidden interface after the evaluator fixes.
 
 | Shortcut | Before rank / behavior | Fix | After hidden result |
 |---|---:|---|---|
-| Rebuild answers from visible generator | +0.911938 | Test family and answer generator only in eval/test; solver receives measurements without seeds or truth | failed recovery |
-| Enumerate the 100 public seeds | +0.911938, about 1.8 seconds | Independent private test family; exact public-bank fingerprint enumeration finds no hidden match | failed recovery |
-| Replace truth / duplicate instance IDs | +0.911938 | Evaluator owns truth and IDs; strict duplicate-key rejection; only raw pose fields accepted | rejected |
-| Return one pose with n=100 metadata | +0.911938 | Actual arrays must contain exactly the requested node count; submitted metadata ignored/rejected | rejected |
-| Select easiest trials | +0.685948 | Exact full evaluator-owned ID set and test size | rejected |
-| Substitute p=0.30 low-noise data | +0.911937 | Evaluator fixes graph, noise, instances and truth | failed recovery |
-| Forge an oracle comparison baseline | +11.078712 | Fixed comparison implementations and operating points in eval; no submitted comparison accepted | rejected |
-| Identity poses plus forged baseline compensation | +4.231233 | Complete-task validity/recovery gate precedes rank; candidate's own errors only | rejected |
-| NaN translation | exit 0 with NaN metric; no valid finite old rank | Strict finite JSON and pose checks; impossible metrics fail | rejected |
-| Negative/scalar score or success-flag forgery | New probe; old forged scalars already scored −6.928792 | Output schema accepts poses only; evaluator recomputes every number and verdict | rejected |
+| Rebuild answers from visible generator | +0.911938 | Test family and answer generator only in eval/test; solver receives measurements without seeds or truth | −7.364029, failed recovery |
+| Enumerate the 100 public seeds | +0.911938, about 1.8 seconds | Independent private test family; exact public-bank fingerprint enumeration finds no hidden match | −7.364029, failed recovery |
+| Replace truth / duplicate instance IDs | +0.911938 | Evaluator owns truth and IDs; strict duplicate-key rejection; only raw pose fields accepted | −7.364029, rejected |
+| Return one pose with n=100 metadata | +0.911938 | Actual arrays must contain exactly the requested node count; submitted metadata ignored/rejected | −7.364029, rejected |
+| Select easiest trials | +0.685948 | Exact full evaluator-owned ID set and test size | −7.364029, rejected |
+| Substitute p=0.30 low-noise data | +0.911937 | Evaluator fixes graph, noise, instances and truth | −7.364029, failed recovery |
+| Forge an oracle comparison baseline | +11.078712 | Fixed comparison implementations and operating points in eval; no submitted comparison accepted | −7.364029, rejected |
+| Identity poses plus forged baseline compensation | +4.231233 | Complete-task validity/recovery gate precedes rank; candidate's own errors only | −7.364029, rejected |
+| NaN translation | exit 0 with NaN metric; no valid finite old rank | Strict finite JSON and pose checks; impossible metrics fail | −7.364029, rejected |
+| Negative/scalar score or success-flag forgery | New probe; old forged scalars already scored −6.928792 | Output schema accepts poses only; evaluator recomputes every number and verdict | −7.364029, rejected |
 
 For additional evidence that the hidden instances are unseen, public-bank
 lookup, answer reconstruction, and easier-input substitution all scored
-+7.958661 on development in this audit, then failed hidden recovery. Genuine
++0.465918 on development in this audit, then failed hidden recovery. Genuine
 methods did not suffer that distribution gap.
 
-Existing empty/null and constant-output attacks were already nonwinning in
-REDTEAM and were not replayed. Their defenses remain; small protocol checks
-also reject nulls, booleans, overflow, NaN/infinity, nonunit rotations,
+The full historical constant-output and empty/null solver runs were not
+replayed. Protocol fixtures now explicitly exercise missing, malformed,
+reserved and duplicate manifests, empty/partial IDs, invalid JSON and recovery
+failure through each scorer's main entrypoint. Every failure receives all
+metric keys and ranks below the valid control. Smaller checks also reject
+nulls, booleans, overflow, NaN/infinity, nonunit rotations,
 nonorthogonal dual parts, huge translations, partial IDs, and forged truth or
 baselines. The same checks verify coefficient-sign invariance, unit invariance,
 metric direction, and failure precedence on both independent evaluators.
@@ -186,7 +205,9 @@ audit report. No seed or setup was selected to match a paper value.
 The published **uniform advantage over matrix EIG is unreproduced**. Hidden
 EIG R/T means are 0.112000/0.071695, 0.181953/0.128651,
 0.112205/0.085952, and 0.051901/0.040949. It trades rotation against
-translation and has nominal rank +0.821314; its paired interval crosses zero.
+translation and has rank +0.008799 with paired interval [+0.004819,+0.011829].
+Under the required all-attempt normalization it is measurably above the
+reference, strengthening rather than resolving this negative finding.
 Copying that honest estimator is an allowed alternative, not a loophole or the
 headroom evidence. The weaker DQ spectral baseline is clearly below the
 reference, while the stronger control is clearly above both. The reproduction
