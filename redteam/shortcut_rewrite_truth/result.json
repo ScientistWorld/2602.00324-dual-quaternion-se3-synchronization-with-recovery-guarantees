@@ -1,0 +1,8 @@
+{
+  "case": "shortcut_rewrite_truth",
+  "details": {},
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 4.047543525695801,
+  "finite_scores": true
+}

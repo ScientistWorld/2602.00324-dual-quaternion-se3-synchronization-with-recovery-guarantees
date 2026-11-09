@@ -1,0 +1,19 @@
+{
+  "case": "shortcut_bruteforce_seed_bank",
+  "details": {
+    "p005_noise005": {
+      "candidates_enumerated": 100,
+      "lookups_matched": 100,
+      "seconds": 1.769607397960499
+    },
+    "p005_noise010": {
+      "candidates_enumerated": 100,
+      "lookups_matched": 100,
+      "seconds": 1.8159081598278135
+    }
+  },
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 7.082823276519775,
+  "finite_scores": true
+}

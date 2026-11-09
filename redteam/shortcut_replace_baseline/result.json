@@ -1,0 +1,8 @@
+{
+  "case": "shortcut_replace_baseline",
+  "details": {},
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 3.46854829788208,
+  "finite_scores": true
+}

@@ -1,0 +1,8 @@
+{
+  "case": "weaker_spectral",
+  "details": {},
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 3.5957303047180176,
+  "finite_scores": true
+}

@@ -1,0 +1,8 @@
+{
+  "matrix_product_max_abs_difference": 3.552713678800501e-15,
+  "full_trial_estimate_max_abs_difference": 8.881784197001252e-16,
+  "original_init_iters": 33,
+  "accelerated_init_iters": 33,
+  "original_trial_seconds": 0.6820967618841678,
+  "equations_changed": false
+}

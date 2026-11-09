@@ -1,0 +1,8 @@
+{
+  "case": "better_noise_aware",
+  "details": {},
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 13.228798389434814,
+  "finite_scores": true
+}

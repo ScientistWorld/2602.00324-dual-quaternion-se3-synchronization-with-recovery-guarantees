@@ -1,0 +1,59 @@
+{
+  "_metadata": {
+    "slice": "test"
+  },
+  "experiments": {
+    "p005_noise005": {
+      "slice": "test",
+      "trial_selector": "seed_mod_7_gte_3",
+      "results": {
+        "dq_spectral": {
+          "error_R": 1.077501716951975e-09,
+          "error_R_std": 7.759815189021667e-10,
+          "error_R_p90": 2.035029865725693e-09,
+          "error_R_max": 3.2271227612335056e-09,
+          "error_T": 0.0,
+          "error_T_std": 0.0,
+          "error_T_p90": 0.0,
+          "error_T_max": 0.0
+        },
+        "dqgpm": {
+          "error_R": 0.10624691837047937,
+          "error_R_std": 0.035950133598575656,
+          "error_R_p90": 0.14678980970542738,
+          "error_R_max": 0.19879542290916652,
+          "error_T": 0.14149892300606845,
+          "error_T_std": 0.0599265761526643,
+          "error_T_p90": 0.22075165720294115,
+          "error_T_max": 0.3564875760440277
+        }
+      }
+    },
+    "p005_noise010": {
+      "slice": "test",
+      "trial_selector": "seed_mod_7_gte_3",
+      "results": {
+        "dq_spectral": {
+          "error_R": 1.077501716951975e-09,
+          "error_R_std": 7.759815189021667e-10,
+          "error_R_p90": 2.035029865725693e-09,
+          "error_R_max": 3.2271227612335056e-09,
+          "error_T": 0.0,
+          "error_T_std": 0.0,
+          "error_T_p90": 0.0,
+          "error_T_max": 0.0
+        },
+        "dqgpm": {
+          "error_R": 0.18073387611731198,
+          "error_R_std": 0.03600399648887289,
+          "error_R_p90": 0.22271586536634616,
+          "error_R_max": 0.2824430608485059,
+          "error_T": 0.24783373059728894,
+          "error_T_std": 0.09016388256741854,
+          "error_T_p90": 0.3729694867742759,
+          "error_T_max": 0.5577401754410605
+        }
+      }
+    }
+  }
+}

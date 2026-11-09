@@ -1,0 +1,23 @@
+{
+  "case": "shortcut_select_trials",
+  "details": {
+    "p005_noise005": {
+      "selected_seeds": [
+        260572517,
+        260754654
+      ],
+      "trials": 2
+    },
+    "p005_noise010": {
+      "selected_seeds": [
+        260572517,
+        260754654
+      ],
+      "trials": 2
+    }
+  },
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 2.418902635574341,
+  "finite_scores": true
+}
