@@ -46,3 +46,12 @@
 
 ## Stop Justification
 - Completed at milestone `core_claim`.
+
+### 2026-11-09 — final hardening verification prepared
+
+Current milestone remains `core_claim` from the prior reproduction; new results
+await one joint job. The final protocol supersedes the old public modulo split
+and the seed selection made to satisfy numerical paper guardrails. It uses
+independent private instances and untrimmed measurements, with unchanged paper
+numbers retained as historical context. The algorithm remains Algorithms 1 and
+2, with no surrogate. See HARDENING.md for scope and limitations.

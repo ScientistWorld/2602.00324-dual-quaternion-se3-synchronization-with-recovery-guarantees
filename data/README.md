@@ -1,14 +1,12 @@
-# Data Interface
+# Public synthetic data
 
-The scored benchmark is synthetic and does not require external downloads.
+`synthetic.py` independently implements the paper's 100-pose observation
+model. Its public 100-trial family supports development and optional training;
+it is not the hidden test family. Run `python3 -m data.synthetic --help` for
+measurement-only export and optional public truth export.
 
-`data/synthetic.py` provides a method-independent generator for the fixed
-`SE(3)` synchronization instances used by the gym. It exposes the experiment
-settings, ground-truth poses, and noisy relative-pose measurements without
-importing from `method/`, so from-scratch agents can build their own solvers
-against the same problem inputs.
-
-Evaluation expects method artifacts to contain one estimated pose per node for
-each trial, using records with `q_st` and `q_dual` arrays for the pose
-representation. The evaluator only uses these records to recover rotations and
-translations for gauge-aligned scoring.
+No external dataset or pretrained model is needed. `scripts/download.sh`
+fetches the pinned NumPy wheel from public PyPI with its published checksum
+for offline package installation. Fetched packages live in data/downloads/.
+All authored data-generation source is tracked here. No code here imports
+method/, eval/test/, or a machine-specific data path.

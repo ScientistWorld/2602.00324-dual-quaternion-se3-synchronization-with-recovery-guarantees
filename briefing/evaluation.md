@@ -1,37 +1,58 @@
-# Evaluation
+# Interface and measurement
 
-## Metrics
+Run `bash scripts/evaluate_train.sh` for public development and
+`bash scripts/evaluate_test.sh` for hidden evaluation. Both take no arguments
+and discover `method/solver.json` plus every `methods/*/solver.json`. A manifest
+has a unique `name` and a `command` array, such as
+`{"name":"candidate","command":["python3","-m","method.solve"]}`.
+The names `dq_spectral`, `matrix_eig`, and `_reference` are reserved.
 
-Evaluation first aligns the estimated poses to the ground truth by a single
-global right action. Rotation error is
-`2 arccos(2 <q1, q2>^2 - 1)` for unit quaternions. Translation error is the
-Euclidean norm between aligned translations. `error_R` and `error_T` are means
-over all poses and are lower-is-better. Standard deviations are reported over
-independent trials.
+Each command receives `--input PATH --output PATH`. Input JSON has `format`
+(`se3-sync-measurements/v1`), `experiment`, `setting`, and `instances`. Each
+instance has an opaque `id`, `n`, `edges` (observed pairs i<j), `q_st`, and
+`q_dual` (one scalar-first four-vector per edge). Reverse observations are
+conjugates; diagonal entries are identities. No hidden seed or answer is
+provided. Return only
+`{"estimates":{"ID":{"q_st":[[...],...],"q_dual":[[...],...]},...}}`.
+Every input ID must occur exactly once, with exactly n poses. Metadata,
+submitted scores, baselines, alternate truth, partial trials, and duplicate JSON
+keys are not accepted. Non-finite values, nonnumeric values, and nonunit poses
+fail the attempt. Unit tolerances are 1e-6 for rotation norm and the standard/
+dual inner product; dual norm must not exceed 1e6.
 
-## Targets
+All settings have n=100. The two p=0.05 settings have translation/rotation noise
+standard deviations (0.05,5 degrees) and (0.10,10 degrees). The p=0.08 and p=0.30
+settings use (0.10,10 degrees). Public evaluation has 100 trials per setting;
+hidden evaluation has 200, 200, 150, and 100. Instances are shared by all methods
+in an evaluation. Public and hidden random families are independent.
 
-The benchmark target is low gauge-aligned rotation and translation error on
-synthetic pose synchronization instances with fixed graph density, noise level,
-problem size, and trial seeds. The currently scored paper reference targets are
-from the synthetic `n=100` results table:
+Each trial first fits one global right gauge. Quaternion double-cover signs
+are treated consistently. Rotation error is
+`2 acos(2 <q1,q2>^2 - 1)` (range 0 to 2 pi, the paper's convention).
+Translation error is Euclidean distance after alignment. Each trial averages
+all 100 nodes. Metrics are the untrimmed mean, population standard deviation,
+90th percentile (linear interpolation), and maximum of those trial averages,
+separately for rotation and translation. Lower is better for all eight.
 
-- `p005_noise005`: `p=0.05`, `sigma_t=0.05`, `sigma_r=5 deg`.
-- `p005_noise010`: `p=0.05`, `sigma_t=0.10`, `sigma_r=10 deg`.
+The evaluator fixes the inputs, true poses, comparison solvers, reference,
+and task thresholds. If either mean error in any setting reaches half that of
+the fixed identity-pose estimate on the same instances, the attempt fails.
+Invalid or failed attempts have no rank and sort below every successful one;
+there is no compensating reward from other metrics. Measurable raw errors may
+still be retained for diagnosis.
 
-Current reproduced scores cover the two sparse `p=0.05` settings. Additional
-settings, including denser graphs such as `p=0.08` and `p=0.30`, are possible
-extensions but are not part of the current scored suite.
+For successful attempts, rank is the sum over experiments and metrics of
+`weight * abs(coefficient) * direction * (value-reference) / population_std`.
+Direction is +1 for higher-is-better metrics and -1 otherwise. The scale is
+computed across successful candidate attempts on disk and the frozen reference;
+evaluator-owned baselines do not enter this population. An exactly constant
+metric contributes zero. Adding attempts changes numerical rank scales, so
+ranks from different cohorts are not numerically comparable. Failure always
+precedes this arithmetic. `scoring/reference.json` defines coefficients, with
+identical fixed evaluator snapshots.
 
-## Evaluation Protocol
-
-Generate an Erdos-Renyi measurement graph with observation probability `p`.
-Ground-truth rotations use random axes and angles uniform in `[0, 2pi)`;
-translations have iid `N(0,1)` coordinates. Noise rotations use random axes
-and Gaussian angles with standard deviation `sigma_r` degrees; noise
-translations have iid `N(0, sigma_t^2)` coordinates. Each observed edge stores
-a noisy relative rigid transformation from one node to another; missing
-off-diagonal edges are unobserved. Results are averaged across trials.
-
-The method-independent generator in `data/synthetic.py` exposes these fixed
-settings and measurement records for future solvers.
+The evaluator saves raw outputs in its own slice cache. `--reuse-outputs`
+recomputes every metric from those poses, checking the exact input fingerprint;
+it never imports a method's score or verdict. Default evaluation always runs
+all discovered solvers. Hidden raw poses, inputs, and per-trial errors remain
+inside eval/test/. Neither evaluation slice imports the other or method/.

@@ -1,23 +1,16 @@
 # Targets
 
-Optimize mean aligned pose-recovery error on the synthetic `SE(3)`
-synchronization tasks.
+The scored experiments are exactly p005_noise005, p005_noise010,
+p008_noise010, and p030_noise010. Every experiment reports error_R, error_T,
+and each quantity's _std, _p90, and _max over per-trial mean errors. Reduce
+these scientific recovery errors; matching paper numbers earns no reward.
 
-Primary metrics:
-- `error_T`: mean translation error after gauge alignment.
-- `error_R`: mean rotation error after gauge alignment.
+Mean accuracy has coefficient magnitude 1 per pose component. Reliability
+coefficients are 0.25 for standard deviation, 0.35 for the 90th percentile,
+and 0.20 for the maximum. Weights are 0.30, 0.30, 0.25, and 0.15 respectively.
+Successful attempts are ranked by direction-correct, variance-normalized
+improvements over the frozen reference. See briefing/evaluation.md.
 
-Constraint metrics:
-- `error_T_std`: trial-to-trial translation stability.
-- `error_R_std`: trial-to-trial rotation stability.
-- `error_T_p90` and `error_R_p90`: high-percentile recovery error.
-- `error_T_max` and `error_R_max`: worst-trial recovery error.
-
-Experiments:
-- `p005_noise005`
-- `p005_noise010`
-
-A successful submission should reduce aligned pose error and preserve trial
-stability under the same generated graph/noise settings and trial seeds. The
-less sparse `p008_noise010` and dense `p030_noise010` settings were attempted
-during reproduction but are not part of the current scored suite.
+Constraint targets are complete valid SE(3) poses and simultaneous recovery of
+both components on every experiment. Score metadata records success/failure
+and recomputed no-information comparisons; failures have no finite rank.

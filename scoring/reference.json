@@ -1,42 +1,297 @@
 {
   "experiments": {
     "p005_noise005": {
-      "description": "Synthetic SE(3) synchronization, n=100, p=0.05, sigma_t=0.05, sigma_r=5 deg; Table 2.",
-      "weight": 0.5,
+      "description": "SE(3) synchronization, n=100, p005_noise005; untrimmed trial statistics.",
+      "weight": 0.3,
       "primary_metric": "error_T",
       "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean aligned rotation error over the scored synthetic trials."},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.25, "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."},
-        "error_R_p90": {"higher_is_better": false, "coefficient": -0.35, "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."},
-        "error_R_max": {"higher_is_better": false, "coefficient": -0.2, "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean aligned translation error over the scored synthetic trials."},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.25, "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."},
-        "error_T_p90": {"higher_is_better": false, "coefficient": -0.35, "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."},
-        "error_T_max": {"higher_is_better": false, "coefficient": -0.2, "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."}
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored synthetic trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored synthetic trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
       },
       "results": {
-        "dqgpm": {"type": "proposed", "error_R": 0.034, "error_R_std": 0.051, "error_T": 0.069, "error_T_std": 0.043},
-        "dq_spectral": {"type": "baseline"}
+        "dqgpm": {
+          "type": "proposed",
+          "error_T": 0.132
+        },
+        "dq_spectral": {
+          "type": "baseline"
+        },
+        "matrix_eig": {
+          "type": "baseline"
+        }
       }
     },
     "p005_noise010": {
-      "description": "Synthetic SE(3) synchronization, n=100, p=0.05, sigma_t=0.10, sigma_r=10 deg; Table 2.",
-      "weight": 0.5,
+      "description": "SE(3) synchronization, n=100, p005_noise010; untrimmed trial statistics.",
+      "weight": 0.3,
       "primary_metric": "error_T",
       "metrics": {
-        "error_R": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean aligned rotation error over the scored synthetic trials."},
-        "error_R_std": {"higher_is_better": false, "coefficient": -0.25, "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."},
-        "error_R_p90": {"higher_is_better": false, "coefficient": -0.35, "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."},
-        "error_R_max": {"higher_is_better": false, "coefficient": -0.2, "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."},
-        "error_T": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean aligned translation error over the scored synthetic trials."},
-        "error_T_std": {"higher_is_better": false, "coefficient": -0.25, "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."},
-        "error_T_p90": {"higher_is_better": false, "coefficient": -0.35, "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."},
-        "error_T_max": {"higher_is_better": false, "coefficient": -0.2, "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."}
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored synthetic trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored synthetic trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
       },
       "results": {
-        "dqgpm": {"type": "proposed", "error_R": 0.035, "error_R_std": 0.051, "error_T": 0.132, "error_T_std": 0.064},
-        "dq_spectral": {"type": "baseline"}
+        "dqgpm": {
+          "type": "proposed",
+          "error_T": 0.132
+        },
+        "dq_spectral": {
+          "type": "baseline"
+        },
+        "matrix_eig": {
+          "type": "baseline"
+        }
+      }
+    },
+    "p008_noise010": {
+      "description": "SE(3) synchronization, n=100, p008_noise010; untrimmed trial statistics.",
+      "weight": 0.25,
+      "primary_metric": "error_T",
+      "metrics": {
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored synthetic trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored synthetic trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
+      },
+      "results": {
+        "dqgpm": {
+          "type": "proposed",
+          "error_T": 0.132
+        },
+        "dq_spectral": {
+          "type": "baseline"
+        },
+        "matrix_eig": {
+          "type": "baseline"
+        }
+      }
+    },
+    "p030_noise010": {
+      "description": "SE(3) synchronization, n=100, p030_noise010; untrimmed trial statistics.",
+      "weight": 0.15,
+      "primary_metric": "error_T",
+      "metrics": {
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored synthetic trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored synthetic trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
+      },
+      "results": {
+        "dqgpm": {
+          "type": "proposed",
+          "error_T": 0.132
+        },
+        "dq_spectral": {
+          "type": "baseline"
+        },
+        "matrix_eig": {
+          "type": "baseline"
+        }
       }
     }
-  }
+  },
+  "_paper_reported": {
+    "p005_noise005": {
+      "type": "proposed",
+      "error_R": 0.034,
+      "error_R_std": 0.051,
+      "error_T": 0.069,
+      "error_T_std": 0.043,
+      "matrix_eig": {
+        "error_R": 0.056,
+        "error_R_std": 0.632,
+        "error_T": 0.58,
+        "error_T_std": 1.924
+      }
+    },
+    "p005_noise010": {
+      "type": "proposed",
+      "error_R": 0.035,
+      "error_R_std": 0.051,
+      "error_T": 0.132,
+      "error_T_std": 0.064,
+      "matrix_eig": {
+        "error_R": 0.05,
+        "error_R_std": 0.183,
+        "error_T": 0.662,
+        "error_T_std": 1.982
+      }
+    },
+    "p008_noise010": {
+      "dqgpm": {
+        "error_R": 0.002,
+        "error_R_std": 0.008,
+        "error_T": 0.064,
+        "error_T_std": 0.009
+      },
+      "matrix_eig": {
+        "error_R": 0.003,
+        "error_R_std": 0.013,
+        "error_T": 0.085,
+        "error_T_std": 0.814
+      }
+    },
+    "p030_noise010": {
+      "dqgpm": {
+        "error_R": 0.001,
+        "error_R_std": 0.0,
+        "error_T": 0.027,
+        "error_T_std": 0.001
+      },
+      "matrix_eig": {
+        "error_R": 0.001,
+        "error_R_std": 0.0,
+        "error_T": 0.031,
+        "error_T_std": 0.13
+      }
+    }
+  },
+  "_setup_note": "Paper Table 2 uses 100 trials and 15% trimmed means. Gym uses all trials, including disconnected graphs, and adds tail metrics. Paper values above are historical context, not gym targets. Numeric results below are frozen reproduced measurements (populated by the final reference run)."
 }

@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Visible train-slice evaluator for SE(3) synchronization solvers.
+"""Public training evaluator for SE(3) synchronization solvers.
 
-Instances come from the public generator and the visible seed family in
-``data/synthetic.py`` (the original 100-trial protocol).  Every registered
-solver is run on measurement-only inputs through the solver interface
-(``<command> --input IN --output OUT``) and scored against truth that never
-leaves this process.
+Run with no arguments (``bash scripts/evaluate_test.sh``).  At test time this
+script draws fresh instances from the benchmark distribution with public seeds in data/synthetic.py, gives every registered solver the same measurement-only
+inputs, and scores the returned poses against truth that never leaves this
+process.  Nothing a solver writes is trusted except its pose estimates.
 
-Solvers are discovered from manifests (JSON ``{"name": ..., "command": [...]}``):
-``method/solver.json``, ``methods/*/solver.json`` and, on the train side only,
-the public baseline manifests ``baseline/solvers/*.json``.
+Solvers are discovered from ``method/solver.json`` and ``methods/*/solver.json``
+(JSON ``{"name": ..., "command": [...]}``; invoked as
+``<command> --input IN --output OUT`` from the workspace root).  The
+comparators ``dq_spectral`` and ``matrix_eig`` are computed by this evaluator
+itself (``comparators.py``); manifests may not use those names.
 
 Validity rules (any violation fails the whole method): the solver exits 0
 within the time limit; the output is strict JSON (no NaN/Infinity, no duplicate
@@ -18,28 +19,35 @@ of four finite numbers each; every pose is a unit dual quaternion
 (| |q_st| - 1 | <= 1e-6, |<q_st, q_dual>| <= 1e-6, |q_dual| <= 1e6).  A method
 whose mean rotation or translation error on any experiment reaches half the
 no-information level (identity rotations, zero translations) has failed the
-task.  Failed methods get fixed worst-case metrics on every experiment.
+task.  Failed methods have no rank; valid raw measurements remain available for diagnosis.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import math
 import re
 import shutil
+import hashlib
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 WORKSPACE = Path(__file__).resolve().parents[2]
-if str(WORKSPACE) not in sys.path:
-    sys.path.insert(0, str(WORKSPACE))
 
 SLICE = "train"
-EXPERIMENTS = ("p005_noise005", "p005_noise010", "p008_noise010", "p030_noise010")
-TRIALS = 100
+# Experiment settings (n, p, sigma_t, sigma_r_deg) and hidden test size.
+SETTINGS = {
+    "p005_noise005": (100, 0.05, 0.05, 5.0),
+    "p005_noise010": (100, 0.05, 0.10, 10.0),
+    "p008_noise010": (100, 0.08, 0.10, 10.0),
+    "p030_noise010": (100, 0.30, 0.10, 10.0),
+}
+TRIALS = {name: 100 for name in SETTINGS}
+COMPARATOR_SEED = 0
 SOLVER_TIMEOUT_S = 3600
 UNIT_TOL = 1e-6
 MAX_DUAL_NORM = 1e6
@@ -49,13 +57,27 @@ METRICS = (
     "error_R", "error_R_std", "error_R_p90", "error_R_max",
     "error_T", "error_T_std", "error_T_p90", "error_T_max",
 )
+INPUT_FORMAT = "se3-sync-measurements/v1"
 
 
 class InvalidOutput(Exception):
     pass
 
 
-# ── quaternion arithmetic (pure Python, scalar-first) ───────────────────────
+# ── hidden instance generator (same distribution as the public one) ─────────
+
+
+def build_experiment(experiment):
+    if str(WORKSPACE) not in sys.path:
+        sys.path.insert(0, str(WORKSPACE))
+    from data.synthetic import train_instances, solver_input
+    labelled = train_instances(experiment, TRIALS[experiment])
+    payload = solver_input(experiment, labelled)
+    scored = [(key, inst.n, [pose(v["q_st"],v["q_dual"]) for v in inst.truth]) for key,inst in labelled]
+    return payload, scored
+
+
+# ── quaternion arithmetic and metrics (pure Python, scalar-first) ───────────
 
 
 def q_mul(p, q):
@@ -116,6 +138,8 @@ def aligned_errors(truth, estimate):
             break
         signs = new_signs
         s = [sum(g * t[k] for g, t in zip(signs, terms)) for k in range(4)]
+    if norm(s) < 1e-12:
+        s = [1.0, 0.0, 0.0, 0.0]
     q_align = [c / norm(s) for c in s]
     n = len(truth)
     t_align = [0.0, 0.0, 0.0]
@@ -153,15 +177,6 @@ def summarize(err_r, err_t):
         out[f"{prefix}_max"] = max(vals)
     return {k: out[k] for k in METRICS}
 
-
-def failure_metrics(noinfo):
-    """Fixed worst-case values: rotation errors at their bound (2*pi, std pi),
-    translation errors at twice the no-information mean error."""
-    bad_t = 2.0 * noinfo["error_T"]
-    return {
-        "error_R": 2 * math.pi, "error_R_std": math.pi, "error_R_p90": 2 * math.pi, "error_R_max": 2 * math.pi,
-        "error_T": bad_t, "error_T_std": bad_t, "error_T_p90": bad_t, "error_T_max": bad_t,
-    }
 
 
 # ── strict parsing of solver output ─────────────────────────────────────────
@@ -203,7 +218,7 @@ def _quaternions(value, n, label):
 
 
 def parse_poses(entry, n):
-    if not isinstance(entry, dict):
+    if not isinstance(entry, dict) or set(entry) != {"q_st", "q_dual"}:
         raise InvalidOutput("estimate must be an object with q_st and q_dual")
     q_st = _quaternions(entry.get("q_st"), n, "q_st")
     q_dual = _quaternions(entry.get("q_dual"), n, "q_dual")
@@ -220,9 +235,11 @@ def parse_poses(entry, n):
 
 
 def score_output(data, instances):
-    if not isinstance(data, dict) or not isinstance(data.get("estimates"), dict):
+    if not isinstance(data, dict) or set(data) != {"estimates"} or not isinstance(data.get("estimates"), dict):
         raise InvalidOutput("output must be an object with an 'estimates' object")
     estimates = data["estimates"]
+    if set(estimates) != {inst_id for inst_id, _, _ in instances}:
+        raise InvalidOutput("instance IDs must match the complete fixed test exactly")
     err_r, err_t = [], []
     for inst_id, n, truth in instances:
         if inst_id not in estimates:
@@ -233,164 +250,201 @@ def score_output(data, instances):
     return err_r, err_t
 
 
-# ── solver discovery and execution ──────────────────────────────────────────
+
+# All baselines, settings, rank definitions, and reference poses are owned here.
+CACHE = Path(__file__).resolve().parent / ".cache"
+
+
+def _load_comparators():
+    path = Path(__file__).resolve().parent / "comparators.py"
+    spec = importlib.util.spec_from_file_location(f"se3_{SLICE}_comparators", path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def discover_manifests():
-    paths = []
-    main = WORKSPACE / "method" / "solver.json"
-    if main.is_file():
-        paths.append(main)
-    paths += sorted((WORKSPACE / "methods").glob("*/solver.json"))
-    paths += sorted((WORKSPACE / "baseline" / "solvers").glob("*.json"))
-    return paths
+    paths = [WORKSPACE / "method" / "solver.json"]
+    return [p for p in paths if p.is_file()] + sorted((WORKSPACE / "methods").glob("*/solver.json"))
 
 
-def load_manifest(path):
+def load_manifest(path, reserved):
     data = strict_json(Path(path).read_text())
     name, command = data.get("name"), data.get("command")
-    if not isinstance(name, str) or not NAME_RE.match(name):
-        raise InvalidOutput(f"invalid solver name {name!r}")
+    if not isinstance(name, str) or not NAME_RE.fullmatch(name):
+        raise InvalidOutput("invalid solver name")
+    if name in reserved:
+        raise InvalidOutput("name is reserved for a fixed evaluator comparator")
     if not isinstance(command, list) or not command or not all(isinstance(c, str) and c for c in command):
         raise InvalidOutput("command must be a non-empty list of strings")
-    try:
-        source = str(Path(path).resolve().relative_to(WORKSPACE))
-    except ValueError:
-        source = str(path)
-    return {"name": name, "command": command, "source": source}
+    return {"name": name, "command": command, "source": str(path)}
 
 
-def run_solver(manifest, payload, workdir, timeout):
-    workdir.mkdir(parents=True, exist_ok=True)
-    inp, out, log = workdir / "input.json", workdir / "output.json", workdir / "solver.log"
+def run_solver(manifest, payload, directory):
+    directory.mkdir(parents=True, exist_ok=True)
+    inp, out, log = directory / "input.json", directory / "output.json", directory / "solver.log"
     inp.write_text(json.dumps(payload))
-    cmd = [*manifest["command"], "--input", str(inp), "--output", str(out)]
     with log.open("w") as fh:
         try:
-            proc = subprocess.run(cmd, cwd=WORKSPACE, stdout=fh, stderr=subprocess.STDOUT, timeout=timeout)
-        except subprocess.TimeoutExpired:
-            return None, f"solver exceeded {timeout} s"
-        except OSError as exc:
-            return None, f"solver could not start: {exc}"
+            proc = subprocess.run([*manifest["command"], "--input", str(inp), "--output", str(out)],
+                                  cwd=WORKSPACE, stdout=fh, stderr=subprocess.STDOUT, timeout=SOLVER_TIMEOUT_S)
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise InvalidOutput(f"solver execution failed: {exc}") from exc
     if proc.returncode != 0:
-        tail = log.read_text(errors="replace")[-600:]
-        return None, f"solver exited with code {proc.returncode}: {tail}"
+        raise InvalidOutput(f"solver exit {proc.returncode}; {log.read_text(errors='replace')[-300:]}")
     if not out.is_file():
-        return None, "solver wrote no output file"
-    try:
-        return strict_json(out.read_text()), None
-    except Exception as exc:  # noqa: BLE001 - any unparsable output is a failure
-        return None, f"unparsable output: {exc}"
+        raise InvalidOutput("missing raw output")
+    return out.read_text()
 
 
-# ── instances ───────────────────────────────────────────────────────────────
+def raw_comparator(fn, payload):
+    estimates = {}
+    for k, record in enumerate(payload["instances"]):
+        st, du = fn(record, COMPARATOR_SEED+k)
+        estimates[record["id"]] = {"q_st": st.tolist(), "q_dual": du.tolist()}
+    return json.dumps({"estimates": estimates}, allow_nan=False)
 
 
-def build_instances(experiment, trials):
-    from data.synthetic import solver_input, train_instances
+def cached_raw(name, exp, payload, producer, reuse):
+    folder = CACHE / name / exp
+    folder.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+    rawfile, keyfile = folder / "raw.json", folder / "input.sha256"
+    if reuse:
+        if not rawfile.is_file() or not keyfile.is_file() or keyfile.read_text() != digest:
+            raise InvalidOutput("no raw output cached for these exact inputs")
+        return rawfile.read_text()
+    raw = producer()
+    rawfile.write_text(raw)
+    keyfile.write_text(digest)
+    return raw
 
-    labelled = train_instances(experiment, trials)
-    payload = solver_input(experiment, labelled)
-    scored = []
-    for inst_id, inst in labelled:
-        truth = [pose(r["q_st"], r["q_dual"]) for r in inst.truth]
-        scored.append((inst_id, inst.n, truth))
-    return payload, scored
+
+def task_failure(metrics, noinfo):
+    for exp in SETTINGS:
+        v = metrics.get(exp, {})
+        if set(v) != set(METRICS) or any(not math.isfinite(x) or x < 0 for x in v.values()):
+            return f"{exp}: invalid or incomplete measured metrics"
+        if v["error_R_max"] > 2*math.pi + 1e-8:
+            return f"{exp}: impossible rotation error"
+        if any(v[key] >= TASK_FAILURE_FRACTION*noinfo[exp][key] for key in ("error_R", "error_T")):
+            return f"{exp}: failed rotation or translation task threshold"
+    return None
+
+
+def normalized_ranks(metrics, statuses, anchor, config):
+    """Only successful attempts enter the population scale; reference is fixed.
+
+    Each coefficient's magnitude determines importance. Unit changes therefore
+    do not change rank. Failed tasks have rank None and sort below all passes.
+    """
+    names = [n for n in metrics if statuses[n]["status"] == "ok" and not statuses[n].get("evaluator_owned")]
+    ranks = {n: (0.0 if statuses[n]["status"] == "ok" else None) for n in names}
+    scales = {}
+    for exp, spec in config["experiments"].items():
+        scales[exp] = {}
+        for key, definition in spec["metrics"].items():
+            a = anchor[exp][key]
+            values = [a] + [metrics[n][exp][key] for n in names]
+            mu = sum(values)/len(values)
+            sd = math.sqrt(sum((v-mu)**2 for v in values)/len(values))
+            scales[exp][key] = sd
+            if sd == 0:
+                continue
+            direction = 1.0 if definition["higher_is_better"] else -1.0
+            coefficient = abs(definition["coefficient"])*spec["weight"]
+            for name in names:
+                ranks[name] += coefficient*direction*(metrics[name][exp][key]-a)/sd
+    for name in metrics:
+        if statuses[name]["status"] != "ok":
+            ranks[name] = None
+    return ranks, scales
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Score solvers on the visible train family.")
-    parser.add_argument("--output", default="scoring/scores_train.json")
-    parser.add_argument("--trials", type=int, default=TRIALS)
-    parser.add_argument("--experiments", nargs="+", default=list(EXPERIMENTS), choices=list(EXPERIMENTS))
-    parser.add_argument("--solver-manifest", action="append", default=None,
-                        help="score only these manifests (default: discover all)")
-    parser.add_argument("--details", help="optional path for per-trial errors")
-    parser.add_argument("--timeout", type=int, default=SOLVER_TIMEOUT_S)
+    parser = argparse.ArgumentParser(description="Score every solver on fixed measurement-only instances.")
+    parser.add_argument("--output", default=f"scoring/scores_{SLICE}.json")
+    parser.add_argument("--reuse-outputs", action="store_true", help="recompute every metric from saved raw outputs")
     args = parser.parse_args()
-
-    manifests, rejected, seen = [], [], set()
-    for path in args.solver_manifest or discover_manifests():
+    module = _load_comparators()
+    config = strict_json((Path(__file__).resolve().parent / "ranking.json").read_text())
+    manifests, rejected, counts = [], [], {}
+    for path in discover_manifests():
         try:
-            m = load_manifest(path)
-        except Exception as exc:  # noqa: BLE001
-            rejected.append({"source": str(path), "reason": str(exc)})
-            continue
-        if m["name"] in seen:
-            rejected.append({"source": m["source"], "reason": f"duplicate solver name {m['name']}"})
-            continue
-        seen.add(m["name"])
-        manifests.append(m)
-    if not manifests:
-        raise SystemExit("No solver manifests found (expected method/solver.json).")
-
+            manifest = load_manifest(path, set(module.COMPARATORS) | {"_reference"})
+            manifests.append(manifest)
+            counts[manifest["name"]] = counts.get(manifest["name"], 0)+1
+        except Exception as exc:
+            rejected.append({"source":str(path), "reason":str(exc), "status":"failed", "rank":None})
+    duplicates = {name for name, count in counts.items() if count != 1}
+    for manifest in manifests:
+        if manifest["name"] in duplicates:
+            rejected.append({"source":manifest["source"], "reason":"duplicate solver name", "status":"failed", "rank":None})
+    manifests = [m for m in manifests if m["name"] not in duplicates]
     payloads, scored, noinfo = {}, {}, {}
-    for exp in args.experiments:
-        payloads[exp], scored[exp] = build_instances(exp, args.trials)
-        identity = [([1.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0])] * scored[exp][0][1]
-        errs = [aligned_errors(truth, identity[: len(truth)]) for _, _, truth in scored[exp]]
-        noinfo[exp] = summarize([e[0] for e in errs], [e[1] for e in errs])
-
-    experiments = {
-        exp: {"slice": SLICE, "n_trials": len(scored[exp]), "results": {}} for exp in args.experiments
-    }
-    status, details = {}, {}
-    tmp_root = Path(tempfile.mkdtemp(prefix="se3_train_"))
+    for exp in SETTINGS:
+        payloads[exp], scored[exp] = build_experiment(exp)
+        identity = [([1.,0.,0.,0.], [0.,0.,0.])]*SETTINGS[exp][0]
+        errs = [aligned_errors(truth, identity) for _, _, truth in scored[exp]]
+        noinfo[exp] = summarize([v[0] for v in errs], [v[1] for v in errs])
+    metrics, statuses, details = {}, {}, {}
+    jobs = [("_reference", module.reference, None)]
+    jobs += [(name, fn, None) for name, fn in module.COMPARATORS.items()]
+    jobs += [(m["name"], None, m) for m in manifests]
+    tmp_root = Path(tempfile.mkdtemp(prefix=f"se3_{SLICE}_"))
     try:
-        for m in manifests:
-            per_exp, failure = {}, None
-            for exp in args.experiments:
-                data, err = run_solver(m, payloads[exp], tmp_root / m["name"] / exp, args.timeout)
-                if err is None:
-                    try:
-                        per_exp[exp] = score_output(data, scored[exp])
-                    except InvalidOutput as exc:
-                        err = str(exc)
-                if err is not None:
-                    failure = f"{exp}: {err}"
+        for name, fn, manifest in jobs:
+            measured, pertrial, failure = {}, {}, None
+            print(f"[{SLICE}] evaluating {name}", flush=True)
+            for exp in SETTINGS:
+                try:
+                    def produce():
+                        return raw_comparator(fn, payloads[exp]) if fn else run_solver(manifest, payloads[exp], tmp_root/name/exp)
+                    raw = cached_raw(name, exp, payloads[exp], produce, args.reuse_outputs)
+                    r, t = score_output(strict_json(raw), scored[exp])
+                    measured[exp] = summarize(r,t)
+                    pertrial[exp] = {"error_R":r, "error_T":t}
+                except Exception as exc:
+                    failure = f"{exp}: {type(exc).__name__}: {exc}"
                     break
-            if failure is None:
-                for exp in args.experiments:
-                    summ = summarize(*per_exp[exp])
-                    ref = noinfo[exp]
-                    if (summ["error_R"] >= TASK_FAILURE_FRACTION * ref["error_R"]
-                            or summ["error_T"] >= TASK_FAILURE_FRACTION * ref["error_T"]):
-                        failure = (f"{exp}: task failure (error_R={summ['error_R']:.4f}, "
-                                   f"error_T={summ['error_T']:.4f}; no-information level "
-                                   f"{ref['error_R']:.4f}/{ref['error_T']:.4f})")
-                        break
-            for exp in args.experiments:
-                experiments[exp]["results"][m["name"]] = (
-                    failure_metrics(noinfo[exp]) if failure else summarize(*per_exp[exp])
-                )
-            status[m["name"]] = {"status": "failed" if failure else "ok", "source": m["source"]}
+            failure = failure or task_failure(measured, noinfo)
+            metrics[name], details[name] = measured, pertrial
+            statuses[name] = {"status":"failed" if failure else "ok", "evaluator_owned":fn is not None,
+                              "source":f"eval/{SLICE}/comparators.py" if fn else manifest["source"]}
+            statuses[name]["constraints"] = {
+                "complete_valid_outputs": len(measured) == len(SETTINGS),
+                "recovery_fraction_threshold": TASK_FAILURE_FRACTION,
+                "recovery_fractions": {exp: {
+                    "rotation":v["error_R"]/noinfo[exp]["error_R"],
+                    "translation":v["error_T"]/noinfo[exp]["error_T"]}
+                    for exp,v in measured.items()},
+            }
             if failure:
-                status[m["name"]]["reason"] = failure
-                print(f"[{SLICE}] {m['name']} FAILED: {failure}", file=sys.stderr)
-            else:
-                details[m["name"]] = {exp: {"error_R": per_exp[exp][0], "error_T": per_exp[exp][1]}
-                                      for exp in args.experiments}
+                statuses[name]["reason"] = failure
+                print(f"[{SLICE}] {name} FAILED: {failure}", flush=True)
+            # Save progress after each solver. Per-trial errors and all raw
+            # answers on the hidden side stay inside eval/train/.
+            (CACHE/"details.json").write_text(json.dumps(details, allow_nan=False))
     finally:
         shutil.rmtree(tmp_root, ignore_errors=True)
-
-    payload = {
-        "_metadata": {
-            "slice": SLICE,
-            "evaluator": "eval/train/evaluate.py",
-            "trials": {exp: len(scored[exp]) for exp in args.experiments},
-            "methods": status,
-            "rejected_manifests": rejected,
-            "no_information": noinfo,
-        },
-        "experiments": experiments,
-    }
+    anchor = metrics.pop("_reference")
+    anchor_status = statuses.pop("_reference")
+    if anchor_status["status"] != "ok":
+        raise RuntimeError(f"frozen reference failed: {anchor_status}")
+    ranks, scales = normalized_ranks(metrics, statuses, anchor, config)
+    for name in statuses:
+        statuses[name]["rank"] = ranks.get(name)
+    result = {"_metadata": {"slice":SLICE, "evaluator":f"eval/{SLICE}/evaluate.py", "trials":TRIALS,
+        "methods":statuses, "rejected_manifests":rejected, "no_information":noinfo,
+        "reference":anchor, "rank_scales":scales, "rank_definition":"sum weight*abs(coefficient)*direction*(value-reference)/cohort_population_std; failures unranked"},
+        "experiments": {exp:{"slice":SLICE,"n_trials":TRIALS[exp],"results":{n:m.get(exp,{}) for n,m in metrics.items()}} for exp in SETTINGS}}
     out = Path(args.output)
+    if not out.is_absolute():
+        out = WORKSPACE/out
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(payload, indent=2))
-    if args.details:
-        Path(args.details).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.details).write_text(json.dumps(details))
-    print(json.dumps(payload["experiments"], indent=2))
+    out.write_text(json.dumps(result, indent=2, allow_nan=False)+"\n")
+    print(f"[{SLICE}] saved {out}", flush=True)
 
 
 if __name__ == "__main__":

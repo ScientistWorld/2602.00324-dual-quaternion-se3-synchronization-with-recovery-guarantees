@@ -1,113 +1,14 @@
-# Overview
+# Current package
 
-This paper studies synchronization over `SE(3)`: recovering absolute 3D poses
-from noisy relative transformations. The reproduction implements the paper's
-unit-dual-quaternion pipeline: spectral power initialization followed by
-DQGPM refinement with elementwise projection onto valid poses.
+The gym implements the paper's two-stage dual-quaternion synchronization
+procedure on four n=100 synthetic settings. Public and hidden evaluation use
+measurement-only inference with independent instance families. Fixed reference
+and comparison implementations live in each evaluator, which recomputes all
+errors from raw poses and enforces validity and joint pose-recovery constraints.
 
-The packaged benchmark focuses on the sparse synthetic experiments from Table
-2. It scores DQGPM against the rounded dual-quaternion spectral initializer on
-the same generated measurement artifacts. The paper's external matrix-EIG/SDR
-baselines, less sparse and dense synthetic settings, and real point-cloud
-registration experiments remain documented targets for extending the gym.
-
----
-
-# Problem Definition
-
-Recover absolute 3D rigid poses from noisy pairwise relative pose measurements.
-The unknowns are `n` elements of `SE(3)`, each with a rotation and translation.
-The observations are an incomplete graph of relative transformations between
-pairs of nodes, corrupted by rotation and translation noise.
-
-## Research Question
-
-Can a synchronization method recover globally consistent absolute poses with
-low rotation and translation error when many pairwise measurements are missing
-and the available measurements are noisy?
-
-## Why It Matters
-
-This is a core primitive for pose-graph optimization, SLAM, structure from
-motion, and multi-scan point-set registration. Better synchronization improves
-global alignment before downstream registration or mapping steps.
-
-## Success Criteria
-
-A successful method produces valid `SE(3)` poses for every node and, after
-global gauge alignment, has lower mean rotation and translation error than a
-benchmark baseline under the same graph, noise, and trial settings.
-
----
-
-# Paper's Method
-
-## Key Contribution
-
-The paper formulates `SE(3)` synchronization directly over unit dual
-quaternions and uses a two-stage solver with recovery guarantees.
-
-## Approach
-
-Each pose is represented as a unit dual quaternion
-`x = (1 + eps * t / 2) q`. Pairwise relative measurements form a Hermitian
-dual-quaternion matrix `C`. The objective maximizes `x* C x` over one unit
-dual quaternion per node.
-
-The solver first runs power iteration on the Hermitian dual-quaternion
-measurement matrix to obtain a spectral initializer. It then applies the dual
-quaternion generalized power method: repeatedly compute `y = C x` and project
-each entry of `y` onto the unit dual-quaternion set.
-
-## Main Claims
-
-The central empirical claim is that this DQGPM refinement improves pose
-recovery over a projected spectral estimator, especially in sparse synthetic
-measurement graphs. A secondary claim is that the per-iteration projection
-keeps all iterates feasible and produces linear error contraction to a
-noise-dependent floor.
-
----
-
-# Evaluation
-
-## Metrics
-
-Evaluation first aligns the estimated poses to the ground truth by a single
-global right action. Rotation error is
-`2 arccos(2 <q1, q2>^2 - 1)` for unit quaternions. Translation error is the
-Euclidean norm between aligned translations. `error_R` and `error_T` are means
-over all poses and are lower-is-better. Standard deviations are reported over
-independent trials.
-
-## Targets
-
-The benchmark target is low gauge-aligned rotation and translation error on
-synthetic pose synchronization instances with fixed graph density, noise level,
-problem size, and trial seeds. The currently scored paper reference targets are
-from the synthetic `n=100` results table:
-
-- `p005_noise005`: `p=0.05`, `sigma_t=0.05`, `sigma_r=5 deg`.
-- `p005_noise010`: `p=0.05`, `sigma_t=0.10`, `sigma_r=10 deg`.
-
-Current reproduced scores cover the two sparse `p=0.05` settings. Additional
-settings, including denser graphs such as `p=0.08` and `p=0.30`, are possible
-extensions but are not part of the current scored suite.
-
-## Evaluation Protocol
-
-Generate an Erdos-Renyi measurement graph with observation probability `p`.
-Ground-truth rotations use random axes and angles uniform in `[0, 2pi)`;
-translations have iid `N(0,1)` coordinates. Noise rotations use random axes
-and Gaussian angles with standard deviation `sigma_r` degrees; noise
-translations have iid `N(0, sigma_t^2)` coordinates. Each observed edge stores
-a noisy relative rigid transformation from one node to another; missing
-off-diagonal edges are unobserved. Results are averaged across trials.
-
-The method-independent generator in `data/synthetic.py` exposes these fixed
-settings and measurement records for future solvers.
-
----
+Current protocol: briefing/evaluation.md. Final hardening evidence:
+HARDENING.md. The historical log below records earlier iterations, including
+superseded protocols and failed implementations; it does not define the gym.
 
 # Reproduction Log
 

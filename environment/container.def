@@ -1,8 +1,7 @@
 Bootstrap: docker
-From: python:3.11-slim
+From: ghcr.io/astral-sh/uv:python3.11-bookworm-slim
 
 %post
     apt-get update
     apt-get install -y --no-install-recommends git curl ca-certificates
     rm -rf /var/lib/apt/lists/*
-    python -m pip install uv

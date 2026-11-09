@@ -1,12 +1,11 @@
-# Overview
+# SE(3) synchronization
 
-This paper studies synchronization over `SE(3)`: recovering absolute 3D poses
-from noisy relative transformations. The reproduction implements the paper's
-unit-dual-quaternion pipeline: spectral power initialization followed by
-DQGPM refinement with elementwise projection onto valid poses.
+Recover 100 absolute rigid poses from an incomplete graph of noisy relative
+observations. Both rotation and translation must be recovered, up to one global
+right gauge. Sparse graphs, noisy measurements, and poorly observed poses make
+accuracy and reliability competing goals.
 
-The packaged benchmark focuses on the sparse synthetic experiments from Table
-2. It scores DQGPM against the rounded dual-quaternion spectral initializer on
-the same generated measurement artifacts. The paper's external matrix-EIG/SDR
-baselines, less sparse and dense synthetic settings, and real point-cloud
-registration experiments remain documented targets for extending the gym.
+The gym has four synthetic settings, independent public and hidden instances,
+and fixed evaluator-owned comparisons. See evaluation.md for the submission
+interface and scoring rules. The hidden job performs inference and scoring;
+it does not train models.

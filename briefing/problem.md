@@ -1,24 +1,17 @@
-# Problem Definition
+# Recover rigid poses from noisy pairwise measurements
 
-Recover absolute 3D rigid poses from noisy pairwise relative pose measurements.
-The unknowns are `n` elements of `SE(3)`, each with a rotation and translation.
-The observations are an incomplete graph of relative transformations between
-pairs of nodes, corrupted by rotation and translation noise.
+Estimate one rotation and translation for each of 100 nodes. An observed edge
+represents the relative pose of its two endpoints, with additive noise in the
+provided scalar-first dual-quaternion coordinates. Unobserved edges contain no
+information. The input specifies the noise distribution and graph density.
 
-## Research Question
+Every returned pose must be a valid element of SE(3). The evaluation removes
+one global right gauge and measures errors against unavailable true poses.
+Disconnected components receive no additional gauge freedom: their relative
+placement is unidentifiable and remains a source of error. Methods should
+handle uncertainty rather than remove difficult nodes or trials.
 
-Can a synchronization method recover globally consistent absolute poses with
-low rotation and translation error when many pairwise measurements are missing
-and the available measurements are noisy?
-
-## Why It Matters
-
-This is a core primitive for pose-graph optimization, SLAM, structure from
-motion, and multi-scan point-set registration. Better synchronization improves
-global alignment before downstream registration or mapping steps.
-
-## Success Criteria
-
-A successful method produces valid `SE(3)` poses for every node and, after
-global gauge alignment, has lower mean rotation and translation error than a
-benchmark baseline under the same graph, noise, and trial settings.
+Public development instances and hidden instances follow the same distribution
+and have the same problem size. Success means improving both mean recovery
+accuracy and reliability while preserving valid poses and recovering both
+rotation and translation on every setting.

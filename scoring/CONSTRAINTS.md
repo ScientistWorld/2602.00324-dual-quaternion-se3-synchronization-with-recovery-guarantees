@@ -1,12 +1,17 @@
 # Constraints
 
-Future methods must use the same synthetic data protocol, trial seeds, graph
-probabilities, noise levels, and `n=100` problem size when comparing scores.
+Use only the supplied observations and public distribution information. Do not
+alter inputs, true poses, graph density, noise level, node count, trial count,
+reference, operating points, evaluator code, or baselines. No hidden-answer
+lookup or public-seed enumeration is a valid synchronization method.
 
-Methods must output one valid `SE(3)` pose per node in the JSON artifact format
-accepted by `scripts/evaluate.sh`. Evaluation must remain gauge-aligned and
-must not use ground truth except for scoring.
+Return every requested ID and exactly 100 finite unit dual-quaternion poses
+per instance, through the common measurement-only solver interface. Use no
+submitted metrics or verdicts. Rotation norms and standard/dual orthogonality
+must satisfy tolerance 1e-6, with dual norm at most 1e6.
 
-Changing the observation rate, reducing the noise, increasing the number of
-measurements, or evaluating on easier synthetic data is not a valid
-improvement.
+Recover both rotation and translation: each mean error in each experiment
+must be strictly below half the evaluator's identity-pose error on the same
+instances. A failed constraint gives a failed run, regardless of other metrics.
+Comparisons and thresholds are fixed by eval/. Test inputs and answers are
+private; development and test have matching distributions and conventions.

@@ -184,3 +184,14 @@ scores to the displayed precision.
 Diagnostic DQGPM histories are no longer stored by default. The method still
 uses the same iterates, but artifacts now keep only final estimates unless
 `--record-history` is requested for plotting or convergence analysis.
+
+## 2026-11-09: final hardening, joint verification pending
+
+Read the paper and REDTEAM.md. Finished the incomplete measurement-only
+transition; fixed evaluator ownership, strict validation and failure gating,
+variance-normalized ranking, independent private test generation, matrix-EIG
+rounding, and runnable scripts. Expanded the original n=100 study to four paper
+settings. All changes precede one joint compute job, including reference,
+seed controls, stronger/weaker methods, fixed comparisons, and repaired attacks.
+No heavy computation was run on the login node. Static compilation and
+`python3 validate.py` pass; numerical claims await the job.
