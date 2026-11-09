@@ -1,0 +1,7 @@
+.cache/
+**/artifacts/
+**/run.log
+**/test.log
+**/train.log
+__pycache__/
+*.pyc
