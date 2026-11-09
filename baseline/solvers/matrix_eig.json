@@ -1,0 +1,4 @@
+{
+  "name": "matrix_eig",
+  "command": ["python3", "-m", "baseline.matrix_eig"]
+}

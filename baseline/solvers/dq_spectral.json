@@ -1,0 +1,4 @@
+{
+  "name": "dq_spectral",
+  "command": ["python3", "-m", "baseline.dq_spectral"]
+}

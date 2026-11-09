@@ -1,0 +1,4 @@
+{
+  "name": "dqgpm",
+  "command": ["python3", "-m", "method.solve"]
+}

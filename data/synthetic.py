@@ -1,12 +1,27 @@
-"""Method-independent synthetic SE(3) synchronization benchmark generator."""
+"""Method-independent synthetic SE(3) synchronization benchmark generator.
+
+This is the public (train) side of the benchmark: the generator, the fixed
+experiment settings, and the visible trial-seed family.  The hidden test draws
+its instances from the same distribution with seeds that only ``eval/test/``
+holds.
+
+Command line (writes a measurement-only solver input and, separately, truth):
+
+    python3 -m data.synthetic --experiment p005_noise005 --trials 100 \
+        --inputs tmp/p005_noise005_inputs.json --truth tmp/p005_noise005_truth.json
+"""
 
 from __future__ import annotations
 
+import argparse
+import json
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 
 
+# (n, p, sigma_t, sigma_r_deg) for the synthetic settings of Table 2.
 EXPERIMENTS = {
     "p005_noise005": (100, 0.05, 0.05, 5.0),
     "p005_noise010": (100, 0.05, 0.10, 10.0),
@@ -14,6 +29,16 @@ EXPERIMENTS = {
     "p030_noise010": (100, 0.30, 0.10, 10.0),
     "p030_noise005": (100, 0.30, 0.05, 5.0),
 }
+
+# Visible train family: the original 100-trial protocol seeds.
+TRAIN_SEED_BASE = 260200324
+TRAIN_SEED_STRIDE = 7919
+TRAIN_TRIALS = 100
+INPUT_FORMAT = "se3-sync-measurements/v1"
+
+
+def train_seeds(trials: int = TRAIN_TRIALS) -> list[int]:
+    return [TRAIN_SEED_BASE + TRAIN_SEED_STRIDE * k for k in range(trials)]
 
 
 @dataclass(frozen=True)
@@ -133,3 +158,62 @@ def generate_instance(experiment: str, seed: int) -> BenchmarkInstance:
         truth=[as_record(pose) for pose in poses],
         measurements=measurements,
     )
+
+
+def solver_record(instance: BenchmarkInstance, instance_id: str) -> dict:
+    """Measurement-only record for one instance (no truth, no seed).
+
+    Only observed off-diagonal pairs i < j are listed; C_ii = 1 and
+    C_ji = C_ij^* are implied by the measurement model.
+    """
+    edges, q_st, q_dual = [], [], []
+    for m in instance.measurements:
+        if m["i"] == m["j"]:
+            continue
+        edges.append([m["i"], m["j"]])
+        q_st.append(m["q_st"])
+        q_dual.append(m["q_dual"])
+    return {"id": instance_id, "n": instance.n, "edges": edges, "q_st": q_st, "q_dual": q_dual}
+
+
+def setting(experiment: str) -> dict:
+    n, p, sigma_t, sigma_r_deg = EXPERIMENTS[experiment]
+    return {"n": n, "p": p, "sigma_t": sigma_t, "sigma_r_deg": sigma_r_deg}
+
+
+def train_instances(experiment: str, trials: int = TRAIN_TRIALS) -> list[tuple[str, BenchmarkInstance]]:
+    return [
+        (f"t{k:03d}", generate_instance(experiment, seed))
+        for k, seed in enumerate(train_seeds(trials))
+    ]
+
+
+def solver_input(experiment: str, labelled: list[tuple[str, BenchmarkInstance]]) -> dict:
+    return {
+        "format": INPUT_FORMAT,
+        "experiment": experiment,
+        "setting": setting(experiment),
+        "instances": [solver_record(inst, inst_id) for inst_id, inst in labelled],
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    parser.add_argument("--experiment", required=True, choices=sorted(EXPERIMENTS))
+    parser.add_argument("--trials", type=int, default=TRAIN_TRIALS)
+    parser.add_argument("--inputs", required=True, help="measurement-only solver input JSON")
+    parser.add_argument("--truth", help="optional ground-truth JSON (train family only)")
+    args = parser.parse_args()
+
+    labelled = train_instances(args.experiment, args.trials)
+    out = Path(args.inputs)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(solver_input(args.experiment, labelled)))
+    if args.truth:
+        truth = {inst_id: {"seed": inst.seed, "truth": inst.truth} for inst_id, inst in labelled}
+        Path(args.truth).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.truth).write_text(json.dumps(truth))
+
+
+if __name__ == "__main__":
+    main()
