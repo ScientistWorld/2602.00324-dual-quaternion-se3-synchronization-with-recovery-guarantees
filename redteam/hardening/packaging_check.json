@@ -1,0 +1,29 @@
+{
+  "status": "verified_with_unresolved_comparison",
+  "all_requested_conditions_met": false,
+  "unresolved_requirements": [
+    "The reproduced method does not establish the paper's claimed superiority over matrix EIG."
+  ],
+  "slices": {
+    "train": {
+      "canonical_methods": [
+        "dq_spectral",
+        "dqgpm",
+        "matrix_eig"
+      ],
+      "all_valid": true,
+      "reference_rank": 0.0,
+      "metrics_match_final_raw_audit": true
+    },
+    "test": {
+      "canonical_methods": [
+        "dq_spectral",
+        "dqgpm",
+        "matrix_eig"
+      ],
+      "all_valid": true,
+      "reference_rank": 0.0,
+      "metrics_match_final_raw_audit": true
+    }
+  }
+}

@@ -2640,7 +2640,8 @@
   "limitations": [
     "Finite synthetic instances cannot rule out general-purpose numerical optimization, which is an honest alternative.",
     "Worst-case and percentile metrics retain finite-sample uncertainty; paired bootstrap intervals are reported.",
-    "This gym does not cover SDR, real scans, time complexity, or the theoretical recovery guarantee."
+    "This gym does not cover SDR, real scans, time complexity, or the theoretical recovery guarantee.",
+    "Uniform superiority over matrix EIG was not reproduced. The fixed EIG comparison remains in the scores; it is not counted as evidence of headroom."
   ],
   "paired_rank": {
     "train": {
@@ -2730,5 +2731,9 @@
     "spectral_rank_negative": true,
     "stronger_exceeds_seed_range": true,
     "reference_at_zero_bounds": []
-  }
+  },
+  "unresolved_requirements": [
+    "The reproduced method does not establish the paper's claimed superiority over matrix EIG."
+  ],
+  "all_requested_conditions_met": false
 }
