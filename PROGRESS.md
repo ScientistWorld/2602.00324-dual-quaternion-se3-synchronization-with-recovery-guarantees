@@ -1,5 +1,13 @@
 # Progress
 
+Final status (2026-11-09): the joint scientific/shortcut audit and the
+rescore-only packaging job are complete. Canonical files contain four
+experiments, the reference, and two fixed baselines. Stronger/weaker ordering
+and shortcut rejection are verified. Uniform superiority over matrix EIG is
+unreproduced; see HARDENING.md and VERIFICATION.md. `scripts/run.sh` runs the
+reference end to end. The earlier entries below are historical and are
+superseded by this final status where they describe a different protocol.
+
 ## What Works
 
 The workspace now contains a canonical implementation of the paper's synthetic
@@ -253,3 +261,14 @@ reference-only train/test scores, freeze measured gym-scale targets without
 changing paper numbers, assert artifact consistency, and run all validator
 modes. No method/evaluator changes require another inference run. After this
 job, scripts/run.sh will return to end-to-end reproduction.
+
+### Packaging 40fcc388-e69: verified with the EIG limitation retained
+
+The rescore-only job exited 0. Canonical train/test scores match the final
+raw-output audit exactly, contain no audit candidates, and pass the package
+validators. Numeric gym targets were frozen from the measured development
+reference and fixed baselines; the paper's historical results were preserved.
+The artifact verifier explicitly reports the unresolved matrix-EIG comparison.
+The final entrypoint is restored to full reference reproduction. Milestone is
+`core_claim` for the limited recovery/refinement result, with no claim of
+uniform external-baseline superiority or full-paper reproduction.

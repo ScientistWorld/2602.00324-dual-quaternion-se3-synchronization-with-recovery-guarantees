@@ -12,6 +12,11 @@ all fixed baselines, seed controls, stronger/weaker methods, and repaired
 shortcuts from final solver code. Its final assertion rejected the
 matrix-comparison claim after saving all numerical results. Final packaging
 uses those saved raw outputs; no solver changes or retraining are involved.
+Packaging job `40fcc388-e69` exited 0, regenerated the canonical files from
+those raw poses, and passed artifact consistency and package validation.
+`redteam/hardening/packaging_check.json` explicitly records
+`all_requested_conditions_met: false` for the unresolved EIG comparison.
+`scripts/run.sh` is restored to end-to-end reference reproduction.
 Aggregate evidence is in `redteam/hardening/report.json`. Hidden raw outputs,
 inputs, and per-trial errors stay inside `eval/test/.cache/`.
 

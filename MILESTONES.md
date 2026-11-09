@@ -67,3 +67,12 @@ scope; uniform superiority over matrix EIG was not reproduced and is not part
 of the milestone claim. Final artifact packaging/validation is pending a
 rescore-only job. See HARDENING.md for full numerical evidence and the unmet
 condition.
+
+### 2026-11-09 — core_claim, final packaging verified
+
+Job `40fcc388-e69` exited 0 after rescoring saved final-code outputs. Canonical
+scores, measured targets, artifact consistency, and post-design and
+post-reproducer validation passed. The reference entrypoint again reproduces
+both slices end to end. Milestone remains `core_claim` only for synthetic
+recovery and refinement over the DQ initializer. Uniform superiority over
+matrix EIG remains explicitly unmet; no higher milestone is claimed.
