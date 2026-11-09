@@ -17,6 +17,12 @@ measurement matrix to obtain a spectral initializer. It then applies the dual
 quaternion generalized power method: repeatedly compute `y = C x` and project
 each entry of `y` onto the unit dual-quaternion set.
 
+When writing poses, the implementation fixes the free translation origin by
+one common right translation that makes the mean body-frame translation zero.
+All relative poses and all algorithm iterates are preserved. This output
+convention removes the initializer's arbitrary translation gauge before the
+paper's error alignment; the baselines use the same convention.
+
 ## Main Claims
 
 The central empirical claim is that this DQGPM refinement improves pose

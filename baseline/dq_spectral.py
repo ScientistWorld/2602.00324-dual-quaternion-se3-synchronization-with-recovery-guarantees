@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from baseline.common import CONJ, IDENTITY, instance_arrays, run_cli
+from baseline.common import CONJ, IDENTITY, center_translation_gauge, instance_arrays, run_cli
 
 
 def left_mul_matrices(q: np.ndarray) -> np.ndarray:
@@ -105,7 +105,7 @@ def solve(instance: dict, seed: int, tol: float = 1e-5, max_iter: int = 2000):
         if residual < tol:
             break
     x = np.sqrt(n) * x
-    return project(x[:n4].reshape(n, 4), x[n4:].reshape(n, 4))
+    return center_translation_gauge(*project(x[:n4].reshape(n, 4), x[n4:].reshape(n, 4)))
 
 
 if __name__ == "__main__":

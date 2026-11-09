@@ -167,6 +167,22 @@ def arrays_from_vector(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return x[: 4 * n].reshape(n, 4), x[4 * n :].reshape(n, 4)
 
 
+def center_translation_gauge(st: np.ndarray, dual: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Choose the zero-mean body-translation representative of the same poses.
+
+    Right multiplication by one unit translation changes no x_i x_j^*.
+    Power iteration leaves this noncompact gauge arbitrary. Serialize it at
+    a fixed origin so rotation error does not amplify an arbitrary origin in
+    the paper's subsequent translation alignment. Neither iterate is changed.
+    """
+    st = np.asarray(st, dtype=float)
+    dual = np.asarray(dual, dtype=float)
+    body = np.array([quaternion_multiply(q * _CONJ, d) for q, d in zip(st, dual)])
+    shift = np.r_[0., 2. * body[:, 1:].mean(axis=0)]
+    centered = dual - .5 * np.array([quaternion_multiply(q, shift) for q in st])
+    return st.copy(), centered
+
+
 class MeasurementMatrix:
     """Hermitian measurement matrix C with C_ii = 1 and C_ji = C_ij^*."""
 
@@ -351,7 +367,7 @@ def solve_instance(
         estimate = project_onto_udq_n(estimate)
     else:
         raise ValueError(f"unknown stage: {stage}")
-    return arrays_from_vector(estimate)
+    return center_translation_gauge(*arrays_from_vector(estimate))
 
 CONJ = np.array([1., -1., -1., -1.])
 IDENTITY = np.array([1., 0., 0., 0.])
@@ -503,7 +519,7 @@ def matrix_eig(instance: dict, seed: int = 0):
         indices = [k for k, (i, j) in enumerate(edges) if i in mapping and j in mapping]
         local = np.array([[mapping[int(edges[k, 0])], mapping[int(edges[k, 1])]] for k in indices])
         q[component], t[component] = _component_solve(len(component), local, st[indices], dual[indices])
-    return dq_from_rotation_translation(q, t)
+    return center_translation_gauge(*dq_from_rotation_translation(q, t))
 
 def reference(instance, seed=0):
     return solve_instance(instance, seed=seed)

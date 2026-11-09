@@ -28,6 +28,13 @@ def qmul(p: np.ndarray, q: np.ndarray) -> np.ndarray:
     )
 
 
+def center_translation_gauge(st, dual):
+    """Fix the arbitrary right-translation origin without changing relatives."""
+    body = 2. * qmul(st * CONJ, dual)[:, 1:]
+    shift = np.r_[0., body.mean(axis=0)]
+    return st.copy(), dual - .5 * qmul(st, shift)
+
+
 def rotmat_from_quat(q: np.ndarray) -> np.ndarray:
     q = np.asarray(q, dtype=np.float64)
     q = q / np.linalg.norm(q, axis=-1, keepdims=True)

@@ -20,6 +20,7 @@ from __future__ import annotations
 import numpy as np
 
 from baseline.common import (
+    center_translation_gauge,
     dq_from_rotation_translation,
     instance_arrays,
     normalize_rows,
@@ -97,7 +98,7 @@ def solve(instance: dict, seed: int = 0):
         indices = [k for k, (i, j) in enumerate(edges) if i in mapping and j in mapping]
         local = np.array([[mapping[int(edges[k, 0])], mapping[int(edges[k, 1])]] for k in indices])
         q[component], t[component] = _component_solve(len(component), local, st[indices], dual[indices])
-    return dq_from_rotation_translation(q, t)
+    return center_translation_gauge(*dq_from_rotation_translation(q, t))
 
 
 if __name__ == "__main__":

@@ -211,3 +211,23 @@ workspace is not /home/user during dependency installation. Setup now resolves
 the local wheel relative to BASH_SOURCE and falls back to the pinned public
 package during the internet-enabled setup phase when a fresh clone has no
 wheel. Runtime compute remains offline. No scientific job has run yet.
+
+### Joint check 817ad207-04c: incomplete, corrected and resubmitted
+
+The container built and the protocol and arithmetic checks passed. Reference
+and fixed comparisons ran from final code, but temporary solver input files
+filled the container's /tmp before the control suite completed. Their resulting
+I/O failures are not evidence of closed shortcuts. The audit analysis failed
+and was incorrectly allowed to continue packaging; that path now fails the job.
+Solver files now live under each evaluator's cache and are removed after each
+experiment, keeping hidden inputs within eval/test/.
+
+Completed comparisons also exposed a free translation-origin mismatch: power
+initialization leaves an arbitrary noncompact gauge while the matrix baseline
+chooses a centered origin. All reference and baseline outputs now use the same
+zero-mean body-translation representation, preserving every relative pose and
+the paper's algorithm. A joint rerun will include relative-pose invariance,
+reference and all baselines, seed controls, stronger/weaker methods, and every
+repaired attack. Matrix-baseline rank and paired confidence bounds are also
+checked explicitly. No new numerical success is claimed from the incomplete
+job; milestone stays core_claim pending verification.

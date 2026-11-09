@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 CONTROL_COMMANDS={
+'baseline_matrix_eig':['python3','-m','baseline.matrix_eig'],
 'reference_seed1':['python3','-m','method.solve','--seed','1'],
 'reference_seed2':['python3','-m','method.solve','--seed','2'],
 'weaker_spectral':['python3','-m','method.solve','--stage','spectral'],

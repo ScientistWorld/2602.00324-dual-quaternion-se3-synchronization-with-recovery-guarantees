@@ -8,9 +8,9 @@ python3 -m redteam.hardening.legacy_check
 python3 -m redteam.hardening.register
 bash scripts/evaluate_train.sh --output redteam/hardening/scores_train_all.json
 bash scripts/evaluate_test.sh --output redteam/hardening/scores_test_all.json
-# Paired uncertainty and shortcut diagnostics are all produced from saved raw
-# output. Continue packaging even if a headroom assertion needs review.
-python3 -m redteam.hardening.analyze || touch tmp/hardening_needs_review
+# Paired uncertainty and shortcut diagnostics come from saved raw outputs.
+# An incomplete audit or a failed scientific assertion must fail this job.
+python3 -m redteam.hardening.analyze
 python3 - <<'PY'
 from pathlib import Path
 import shutil

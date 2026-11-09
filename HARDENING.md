@@ -1,7 +1,9 @@
 # Final hardening
 
-Verification is prepared for one joint CPU job. Results below will be completed
-from that job's saved raw outputs; no post-fix numerical claim is made yet.
+The first joint CPU check completed the reference and fixed comparisons but
+exhausted the container's temporary filesystem before completing the controls.
+Its zero exit code did not establish hardening success. The corrected joint
+check will complete the numerical tables from saved raw outputs.
 
 The old test did not consistently reward better science. Stored reference rank
 was zero, but rerunning it gave -0.081313, -0.033993, and -0.264303 in the audit
@@ -28,6 +30,12 @@ All fixes were decided from REDTEAM.md before the joint verification job:
   now uses the source method's homogeneous-row least-squares/nullspace rounding
   (https://fusiello.github.io/papers/siims16.pdf, sections 2.2-2.3). Its connected
   component extension uses no truth; isolated nodes receive identity poses.
+* The incomplete check exposed an arbitrary translation origin in the power
+  initializer. Reference and baseline output serialization now choose zero
+  mean body-frame translation by one common right translation. This preserves
+  every relative pose and every algorithm iterate; it prevents a random origin
+  amplifying noisy rotations in the paper's translation alignment. The joint
+  check verifies relative-pose invariance and checks the matrix baseline too.
 * Test sizes rise from 57 selected trials to 200/200/150/100 independent trials,
   at the original n=100. Public evaluation uses 100 per setting. Initializer
   seeds are fixed, and seed controls and all variants see the same instances.
@@ -63,3 +71,9 @@ on observed data is permitted; exhaustive lookup of the old public family is
 not. Finite synthetic trials cannot establish theoretical recovery guarantees,
 and this package does not reproduce SDR, real scan registration, or runtime
 speed claims. These limitations are not scored targets.
+
+The temporary-file failure is repaired by keeping one experiment's solver
+files inside its evaluator cache, removing them immediately after reading raw
+output, and treating evaluator I/O errors as job failures. An incomplete audit
+or failed scientific assertion now stops packaging. No shortcut is considered
+closed merely because its solver encountered an infrastructure failure.

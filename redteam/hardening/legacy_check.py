@@ -25,3 +25,19 @@ for noise in (0.,.1):
     assert diff<1e-10 and spectral<1e-8 and refined<1e-8,(diff,spectral,refined)
     report.append({'noise':noise,'matvec_max_difference':diff,'spectral_max_difference':spectral,'refined_max_difference':refined})
 Path('redteam/hardening/algorithm_check.json').write_text(json.dumps(report,indent=2)+'\n')
+
+# Output gauge fixing must preserve every measured relative pose exactly.
+from method.dual_quaternion import quaternion_conjugate as qc, quaternion_multiply as qm
+st,du=new.arrays_from_vector(nb)
+cs,cd=new.center_translation_gauge(st,du)
+relative_difference=0.
+for i in range(len(st)):
+    for j in range(len(st)):
+        original=qm(st[i],qc(du[j]))+qm(du[i],qc(st[j]))
+        centered=qm(cs[i],qc(cd[j]))+qm(cd[i],qc(cs[j]))
+        relative_difference=max(relative_difference,float(np.max(np.abs(original-centered))))
+assert relative_difference<1e-10,relative_difference
+body=np.array([2.*qm(qc(q),d)[1:] for q,d in zip(cs,cd)])
+assert np.linalg.norm(body.mean(axis=0))<1e-10
+report.append({'gauge_relative_pose_max_difference':relative_difference,'gauge_body_translation_mean_norm':float(np.linalg.norm(body.mean(axis=0)))})
+Path('redteam/hardening/algorithm_check.json').write_text(json.dumps(report,indent=2)+'\n')

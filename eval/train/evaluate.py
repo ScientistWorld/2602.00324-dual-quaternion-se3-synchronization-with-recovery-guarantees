@@ -284,18 +284,23 @@ def load_manifest(path, reserved):
 def run_solver(manifest, payload, directory):
     directory.mkdir(parents=True, exist_ok=True)
     inp, out, log = directory / "input.json", directory / "output.json", directory / "solver.log"
-    inp.write_text(json.dumps(payload))
-    with log.open("w") as fh:
-        try:
-            proc = subprocess.run([*manifest["command"], "--input", str(inp), "--output", str(out)],
-                                  cwd=WORKSPACE, stdout=fh, stderr=subprocess.STDOUT, timeout=SOLVER_TIMEOUT_S)
-        except (OSError, subprocess.TimeoutExpired) as exc:
-            raise InvalidOutput(f"solver execution failed: {exc}") from exc
-    if proc.returncode != 0:
-        raise InvalidOutput(f"solver exit {proc.returncode}; {log.read_text(errors='replace')[-300:]}")
-    if not out.is_file():
-        raise InvalidOutput("missing raw output")
-    return out.read_text()
+    try:
+        inp.write_text(json.dumps(payload))
+        with log.open("w") as fh:
+            try:
+                proc = subprocess.run([*manifest["command"], "--input", str(inp), "--output", str(out)],
+                                      cwd=WORKSPACE, stdout=fh, stderr=subprocess.STDOUT, timeout=SOLVER_TIMEOUT_S)
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                raise InvalidOutput(f"solver execution failed: {exc}") from exc
+        if proc.returncode != 0:
+            raise InvalidOutput(f"solver exit {proc.returncode}; {log.read_text(errors='replace')[-300:]}")
+        if not out.is_file():
+            raise InvalidOutput("missing raw output")
+        return out.read_text()
+    finally:
+        # Only one experiment's files need exist, and hidden inputs stay here.
+        shutil.rmtree(directory, ignore_errors=True)
+
 
 
 def raw_comparator(fn, payload):
@@ -392,7 +397,8 @@ def main():
     jobs = [("_reference", module.reference, None)]
     jobs += [(name, fn, None) for name, fn in module.COMPARATORS.items()]
     jobs += [(m["name"], None, m) for m in manifests]
-    tmp_root = Path(tempfile.mkdtemp(prefix=f"se3_{SLICE}_"))
+    CACHE.mkdir(parents=True, exist_ok=True)
+    tmp_root = Path(tempfile.mkdtemp(prefix="solver_", dir=CACHE))
     try:
         for name, fn, manifest in jobs:
             measured, pertrial, failure = {}, {}, None
@@ -405,6 +411,8 @@ def main():
                     r, t = score_output(strict_json(raw), scored[exp])
                     measured[exp] = summarize(r,t)
                     pertrial[exp] = {"error_R":r, "error_T":t}
+                except OSError as exc:
+                    raise RuntimeError(f"evaluator I/O failed for {name}/{exp}: {exc}") from exc
                 except Exception as exc:
                     failure = f"{exp}: {type(exc).__name__}: {exc}"
                     break

@@ -24,9 +24,9 @@ from __future__ import annotations
 import numpy as np
 
 try:
-    from .dual_quaternion import DualQuaternion, normalize_dual_quaternion
+    from .dual_quaternion import DualQuaternion, normalize_dual_quaternion, quaternion_multiply
 except ImportError:  # pragma: no cover - script execution path
-    from dual_quaternion import DualQuaternion, normalize_dual_quaternion
+    from dual_quaternion import DualQuaternion, normalize_dual_quaternion, quaternion_multiply
 
 
 _CONJ = np.array([1.0, -1.0, -1.0, -1.0])
@@ -58,6 +58,22 @@ def vector_from_arrays(st: np.ndarray, dual: np.ndarray) -> np.ndarray:
 def arrays_from_vector(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     n = len(x) // 8
     return x[: 4 * n].reshape(n, 4), x[4 * n :].reshape(n, 4)
+
+
+def center_translation_gauge(st: np.ndarray, dual: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Choose the zero-mean body-translation representative of the same poses.
+
+    Right multiplication by one unit translation changes no x_i x_j^*.
+    Power iteration leaves this noncompact gauge arbitrary. Serialize it at
+    a fixed origin so rotation error does not amplify an arbitrary origin in
+    the paper's subsequent translation alignment. Neither iterate is changed.
+    """
+    st = np.asarray(st, dtype=float)
+    dual = np.asarray(dual, dtype=float)
+    body = np.array([quaternion_multiply(q * _CONJ, d) for q, d in zip(st, dual)])
+    shift = np.r_[0., 2. * body[:, 1:].mean(axis=0)]
+    centered = dual - .5 * np.array([quaternion_multiply(q, shift) for q in st])
+    return st.copy(), centered
 
 
 class MeasurementMatrix:
@@ -244,4 +260,4 @@ def solve_instance(
         estimate = project_onto_udq_n(estimate)
     else:
         raise ValueError(f"unknown stage: {stage}")
-    return arrays_from_vector(estimate)
+    return center_translation_gauge(*arrays_from_vector(estimate))
