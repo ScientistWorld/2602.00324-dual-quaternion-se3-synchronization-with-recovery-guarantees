@@ -10,5 +10,9 @@
     "matvec_max_difference": 1.7763568394002505e-15,
     "spectral_max_difference": 8.881784197001252e-16,
     "refined_max_difference": 1.2212453270876722e-15
+  },
+  {
+    "gauge_relative_pose_max_difference": 6.661338147750939e-16,
+    "gauge_body_translation_mean_norm": 1.7068303862538612e-16
   }
 ]
