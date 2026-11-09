@@ -2,6 +2,7 @@
 Per-instance errors remain in the corresponding eval slice cache.
 """
 import json
+import math
 from pathlib import Path
 import numpy as np
 
@@ -23,7 +24,24 @@ def main():
         scores=read(f'redteam/hardening/scores_{side}_all.json')
         details=read(f'eval/{side}/.cache/details.json')
         report['after'][side]={'methods':scores['_metadata']['methods'],'rejected_manifests':scores['_metadata']['rejected_manifests'],
+                               'failure_values':scores['_metadata']['failure_values'],
                                'metrics':{n:{e:v['results'].get(n,{}) for e,v in scores['experiments'].items()} for n in scores['_metadata']['methods']}}
+        candidates={n:v for n,v in scores['_metadata']['methods'].items() if not v['evaluator_owned']}
+        successful=[v['rank'] for v in candidates.values() if v['status']=='ok']
+        failed=[]
+        for name,entry in candidates.items():
+            assert math.isfinite(entry['rank']), (side,name,entry)
+            for exp,spec in scores['experiments'].items():
+                values=spec['results'][name]
+                assert set(values)==set(scores['_metadata']['reference'][exp]), (side,name,exp)
+                assert all(math.isfinite(v) for v in values.values()), (side,name,exp)
+                if entry['status']!='ok':
+                    assert values==scores['_metadata']['failure_values'][exp], (side,name,exp)
+            if entry['status']!='ok':
+                assert entry['rank']<min(successful), (side,name,entry)
+                failed.append(name)
+        report.setdefault('complete_failure_checks',{})[side]={'passed':True,'failed_candidates':failed,
+            'every_scored_field_penalized':True,'every_failure_below_every_success':True}
         # Common-input paired mean improvements (positive is better).
         report['paired'][side]={}
         for name in ('better_noise_aware','weaker_spectral','baseline_matrix_eig','reference_seed1','reference_seed2'):
@@ -84,7 +102,7 @@ def main():
     assert all(report['headroom_check'][k] for k in ('seed_controls_pass','stronger_passes','stronger_rank_positive','spectral_rank_negative','stronger_exceeds_seed_range')),report['headroom_check']
     for name,entry in test.items():
         if name.startswith('shortcut_'):
-            assert entry['status']=='failed' and entry['rank'] is None,(name,entry)
+            assert entry['status']=='failed' and math.isfinite(entry['rank']),(name,entry)
 
 
 if __name__=='__main__':main()

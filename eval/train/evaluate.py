@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Public training evaluator for SE(3) synchronization solvers.
 
-Run with no arguments (``bash scripts/evaluate_test.sh``).  At test time this
+Run with no arguments (``bash scripts/evaluate_train.sh``). At development time this
 script draws fresh instances from the benchmark distribution with public seeds in data/synthetic.py, gives every registered solver the same measurement-only
 inputs, and scores the returned poses against truth that never leaves this
 process.  Nothing a solver writes is trusted except its pose estimates.
@@ -19,7 +19,8 @@ of four finite numbers each; every pose is a unit dual quaternion
 (| |q_st| - 1 | <= 1e-6, |<q_st, q_dual>| <= 1e-6, |q_dual| <= 1e6).  A method
 whose mean rotation or translation error on any experiment reaches half the
 no-information level (identity rotations, zero translations) has failed the
-task.  Failed methods have no rank; valid raw measurements remain available for diagnosis.
+task. Failed methods receive evaluator-owned worst values for every metric
+in every experiment, and a finite rank below all successful attempts.
 """
 
 from __future__ import annotations
@@ -39,7 +40,7 @@ from pathlib import Path
 WORKSPACE = Path(__file__).resolve().parents[2]
 
 SLICE = "train"
-# Experiment settings (n, p, sigma_t, sigma_r_deg) and hidden test size.
+# Experiment settings (n, p, sigma_t, sigma_r_deg) and public test size.
 SETTINGS = {
     "p005_noise005": (100, 0.05, 0.05, 5.0),
     "p005_noise010": (100, 0.05, 0.10, 10.0),
@@ -64,7 +65,7 @@ class InvalidOutput(Exception):
     pass
 
 
-# ── hidden instance generator (same distribution as the public one) ─────────
+# ── public instance generator ─────────
 
 
 def build_experiment(experiment):
@@ -127,6 +128,14 @@ def aligned_errors(truth, estimate):
     with each term's sign chosen consistently (q and -q are the same rotation,
     so the score must not depend on the double-cover sign of any pose).
     """
+    # Fix the estimate's right-translation gauge before applying the paper's
+    # alignment. Otherwise the score changes under t_i -> t_i + R_i u even
+    # though every relative pose is unchanged. The reference already uses this
+    # convention; applying it here makes the metric independent of the solver.
+    body = [rotate(q_conj(q), t) for q, t in estimate]
+    origin = [sum(v[k] for v in body) / len(body) for k in range(3)]
+    estimate = [(q, [t[k] - shift[k] for k in range(3)])
+                for q, t in estimate for shift in [rotate(q, origin)]]
     terms = [q_mul(q_conj(qh), q) for (qh, _), (q, _) in zip(truth, estimate)]
     s = [sum(t[k] for t in terms) for k in range(4)]
     if norm(s) < 1e-9:
@@ -266,7 +275,9 @@ def _load_comparators():
 
 def discover_manifests():
     paths = [WORKSPACE / "method" / "solver.json"]
-    return [p for p in paths if p.is_file()] + sorted((WORKSPACE / "methods").glob("*/solver.json"))
+    # A missing primary manifest is a failed attempt, not an empty submission
+    # that earns the reference score by omitting all candidate metrics.
+    return paths + sorted((WORKSPACE / "methods").glob("*/solver.json"))
 
 
 def load_manifest(path, reserved):
@@ -274,7 +285,7 @@ def load_manifest(path, reserved):
     name, command = data.get("name"), data.get("command")
     if not isinstance(name, str) or not NAME_RE.fullmatch(name):
         raise InvalidOutput("invalid solver name")
-    if name in reserved:
+    if name in reserved or name.startswith("invalid_manifest_"):
         raise InvalidOutput("name is reserved for a fixed evaluator comparator")
     if not isinstance(command, list) or not command or not all(isinstance(c, str) and c for c in command):
         raise InvalidOutput("command must be a non-empty list of strings")
@@ -338,14 +349,51 @@ def task_failure(metrics, noinfo):
     return None
 
 
-def normalized_ranks(metrics, statuses, anchor, config):
-    """Only successful attempts enter the population scale; reference is fixed.
+def failure_values(noinfo):
+    """Finite values no passing attempt can beat in the worse direction.
 
-    Each coefficient's magnitude determines importance. Unit changes therefore
-    do not change rank. Failed tasks have rank None and sort below all passes.
+    If N nonnegative trial errors have mean below L, max < N*L,
+    std < sqrt(N-1)*L, and the interpolated p90 < N*L/(N-ceil(.9*(N-1))).
+    Rotation errors also lie in [0, 2*pi], so std <= pi. The small margin
+    makes penalties strictly worse even at a physical boundary. These are
+    failure sentinels, never presented as measured pose errors.
     """
-    names = [n for n in metrics if statuses[n]["status"] == "ok" and not statuses[n].get("evaluator_owned")]
-    ranks = {n: (0.0 if statuses[n]["status"] == "ok" else None) for n in names}
+    penalties = {}
+    for exp, n in TRIALS.items():
+        penalties[exp] = {}
+        for prefix in ("error_R", "error_T"):
+            limit = TASK_FAILURE_FRACTION * noinfo[exp][prefix]
+            bounds = {
+                "": limit,
+                "_std": math.sqrt(n-1)*limit,
+                "_p90": n*limit / max(1, n-math.ceil(.9*(n-1))),
+                "_max": n*limit,
+            }
+            if prefix == "error_R":
+                bounds = {suffix: min(v, math.pi if suffix == "_std" else 2*math.pi)
+                          for suffix, v in bounds.items()}
+            for suffix, bound in bounds.items():
+                penalties[exp][prefix+suffix] = 1.01*bound + 1e-9
+    return penalties
+
+
+def finalized_metrics(measured, failure, penalties):
+    # A failure anywhere invalidates the whole run. Do not leave successful
+    # prefixes, empty experiments, or low dispersion values in scored results.
+    return {e: dict(v) for e, v in (penalties if failure else measured).items()}
+
+
+def normalized_ranks(metrics, statuses, anchor, config):
+    """Rank every candidate, including fully populated failure penalties.
+
+    Coefficient magnitude sets importance; direction comes from the metric.
+    All candidate attempts on disk and the fixed anchor enter the population
+    scale. Comparators are evaluator-owned diagnostics, not candidate attempts.
+    Componentwise worse failure sentinels guarantee failure cannot compensate
+    through another metric, including for consumers that ignore status flags.
+    """
+    names = [n for n in metrics if not statuses[n].get("evaluator_owned")]
+    ranks = {n: 0.0 for n in names}
     scales = {}
     for exp, spec in config["experiments"].items():
         scales[exp] = {}
@@ -361,9 +409,6 @@ def normalized_ranks(metrics, statuses, anchor, config):
             coefficient = abs(definition["coefficient"])*spec["weight"]
             for name in names:
                 ranks[name] += coefficient*direction*(metrics[name][exp][key]-a)/sd
-    for name in metrics:
-        if statuses[name]["status"] != "ok":
-            ranks[name] = None
     return ranks, scales
 
 
@@ -393,7 +438,17 @@ def main():
         identity = [([1.,0.,0.,0.], [0.,0.,0.])]*SETTINGS[exp][0]
         errs = [aligned_errors(truth, identity) for _, _, truth in scored[exp]]
         noinfo[exp] = summarize([v[0] for v in errs], [v[1] for v in errs])
-    metrics, statuses, details = {}, {}, {}
+    penalties = failure_values(noinfo)
+    metrics, statuses, details, diagnostics = {}, {}, {}, {}
+    # Rejected manifests must still cost a complete failed attempt. Their IDs
+    # are evaluator-owned so invalid/reserved/duplicate names cannot overwrite
+    # a fixed comparator or a valid method's results.
+    for rejected_entry in rejected:
+        name = "invalid_manifest_" + hashlib.sha256(rejected_entry["source"].encode()).hexdigest()[:12]
+        rejected_entry["result_name"] = name
+        metrics[name] = finalized_metrics({}, True, penalties)
+        statuses[name] = {**rejected_entry, "evaluator_owned": False,
+                          "constraints": {"complete_valid_outputs": False}}
     jobs = [("_reference", module.reference, None)]
     jobs += [(name, fn, None) for name, fn in module.COMPARATORS.items()]
     jobs += [(m["name"], None, m) for m in manifests]
@@ -417,7 +472,8 @@ def main():
                     failure = f"{exp}: {type(exc).__name__}: {exc}"
                     break
             failure = failure or task_failure(measured, noinfo)
-            metrics[name], details[name] = measured, pertrial
+            metrics[name] = finalized_metrics(measured, failure, penalties)
+            details[name], diagnostics[name] = pertrial, measured
             statuses[name] = {"status":"failed" if failure else "ok", "evaluator_owned":fn is not None,
                               "source":f"eval/{SLICE}/comparators.py" if fn else manifest["source"]}
             statuses[name]["constraints"] = {
@@ -445,7 +501,9 @@ def main():
         statuses[name]["rank"] = ranks.get(name)
     result = {"_metadata": {"slice":SLICE, "evaluator":f"eval/{SLICE}/evaluate.py", "trials":TRIALS,
         "methods":statuses, "rejected_manifests":rejected, "no_information":noinfo,
-        "reference":anchor, "rank_scales":scales, "rank_definition":"sum weight*abs(coefficient)*direction*(value-reference)/cohort_population_std; failures unranked"},
+        "reference":anchor, "failure_values":penalties, "measured_before_failure":{
+            n:diagnostics.get(n,{}) for n,v in statuses.items() if v["status"] != "ok"},
+        "rank_scales":scales, "rank_definition":"sum weight*abs(coefficient)*direction*(value-reference)/cohort_population_std; every candidate including failed attempts; failures have worst values in all metrics"},
         "experiments": {exp:{"slice":SLICE,"n_trials":TRIALS[exp],"results":{n:m.get(exp,{}) for n,m in metrics.items()}} for exp in SETTINGS}}
     out = Path(args.output)
     if not out.is_absolute():

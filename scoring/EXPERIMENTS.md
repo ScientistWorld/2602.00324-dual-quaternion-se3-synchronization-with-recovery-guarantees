@@ -23,7 +23,9 @@ observation model. None discards outlying trials or disconnected graphs.
 There is a hard constraint on task success: in every setting, both mean errors
 must remain below half the error of a fixed no-information estimate. All poses
 and trial IDs must also be valid and complete. These constraints are recomputed
-from raw outputs and recorded in score metadata. Failed attempts are unranked.
+from raw outputs and recorded in score metadata. Failed attempts receive finite
+worst-case penalties in every scored field of every experiment and rank below
+every successful attempt. Raw errors before failure remain separate diagnostics.
 
 The scored statistics describe recovery, not agreement with a reported number.
 Paper-reported trimmed statistics are historical context under `_paper_reported`

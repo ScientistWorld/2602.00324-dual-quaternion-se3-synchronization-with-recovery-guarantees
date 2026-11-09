@@ -18,6 +18,11 @@ def main():
         'slices': {},
     }
     for side in ('train', 'test'):
+        assert audit['complete_failure_checks'][side]['passed']
+        protocol = read('redteam/hardening/protocol_check.json')[side]
+        assert all(protocol[k] for k in ('finite_failure_penalties_all_experiments',
+            'manifest_failures_have_complete_metrics', 'all_attempts_enter_population_scale',
+            'failed_rank_below_every_success', 'gauge_invariant', 'direction_sign_and_units_invariant'))
         scores = read(f'scoring/scores_{side}.json')
         meta = scores['_metadata']
         assert set(meta['methods']) == expected
@@ -47,6 +52,7 @@ def main():
                 assert hidden[key] < audit['after']['test']['metrics']['weaker_spectral'][exp][key]
         result['slices'][side] = {'canonical_methods': sorted(expected),
                                   'all_valid': True, 'reference_rank': 0.,
+                                  'failure_and_rank_protocol_verified': True,
                                   'metrics_match_final_raw_audit': True}
     assert read('scoring/scores.json') == read('scoring/scores_train.json')
     # Preserve both the positive refinement/headroom result and the negative

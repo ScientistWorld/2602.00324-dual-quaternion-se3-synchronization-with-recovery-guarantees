@@ -12,6 +12,8 @@ must satisfy tolerance 1e-6, with dual norm at most 1e6.
 
 Recover both rotation and translation: each mean error in each experiment
 must be strictly below half the evaluator's identity-pose error on the same
-instances. A failed constraint gives a failed run, regardless of other metrics.
+instances. A failed constraint gives a failed run with evaluator-owned worst-case
+values in every scored field of every experiment, regardless of other metrics.
+Its finite rank is below every successful attempt, even when output is absent.
 Comparisons and thresholds are fixed by eval/. Test inputs and answers are
 private; development and test have matching distributions and conventions.

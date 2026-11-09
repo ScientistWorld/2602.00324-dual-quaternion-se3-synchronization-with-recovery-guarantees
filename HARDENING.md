@@ -1,7 +1,11 @@
 # Final hardening
 
-The hidden test now separates the honest stronger and weaker controls by much
-more than seed variation, and every repaired shortcut fails without a rank.
+The hidden test separates the honest stronger and weaker controls by much
+more than seed variation. A final evaluator-only check is pending: failures
+now receive finite worst-case values in all scored fields, rejected manifests
+are included as failed candidates, and ranking uses all attempts on disk.
+The numerical tables below describe the previous joint audit and will be
+refreshed from its saved raw outputs in one combined rescore job.
 One requested scientific condition remains unresolved: the reproduction does
 **not** establish the paper's uniform superiority over matrix EIG. That
 comparison is retained, rather than weakened or hidden. The supported scope is
@@ -23,7 +27,7 @@ inputs, and per-trial errors stay inside `eval/test/.cache/`.
 ## Does better science score higher?
 
 The old ranks below are the REDTEAM all-finite-attempt cohort. The new ranks
-use the final successful-attempt cohort and a frozen reference. Since each
+use the previous successful-attempt cohort and a frozen reference. Since each
 metric is divided by its variation across that cohort, magnitudes across the
 two columns are not directly comparable. Their ordering and paired intervals
 are the relevant checks.
@@ -80,11 +84,20 @@ magnitudes remain 1 for each mean, 0.25 for standard deviation, 0.35 for p90,
 and 0.20 for maximum. No weights were adjusted in response to the EIG result.
 
 Rank adds `weight * abs(coefficient) * direction * (value-reference) / std`
-over all metrics, with std taken across successful candidate attempts on disk
+over all metrics, with std taken across all candidate attempts on disk
 and the frozen reference. Direction comes only from `higher_is_better`.
 Evaluator-owned baselines are comparisons, not extra reward terms. A failed
-validity or recovery constraint makes the entire attempt failed and unranked,
-so other metrics cannot compensate for failure.
+validity or recovery constraint assigns evaluator-owned worst-case values to
+the entire attempt, so other metrics cannot compensate for failure. For N
+nonnegative trial errors with passing mean below L, maximum is below N*L,
+standard deviation below sqrt(N-1)*L, and the interpolated p90 is bounded by
+N*L/(N-ceil(0.9*(N-1))). Rotation also has its physical bounds. Each penalty
+exceeds the corresponding passing bound by 1% plus 1e-9. This guarantees every
+failure scores below every successful attempt in every field, even for a
+consumer that ignores status metadata. Missing, malformed, reserved, and
+duplicate manifests receive the same complete penalties. Rejected manifests
+use a reserved evaluator namespace, so their entries cannot be overwritten.
+The penalties are failure sentinels; actual errors remain separate diagnostics.
 
 ## Major shortcuts
 
@@ -133,6 +146,13 @@ rounding, as described in the [EIG source paper, section 2.2](https://fusiello.g
 Disconnected components are solved separately, with identity at isolated
 nodes, using no truth. The shared output origin is an explicitly documented
 convention. The matrix implementation was not degraded to force an ordering.
+
+Alignment now removes the mean body-frame translation in the evaluator too,
+before fitting the paper's gauge. A method's arbitrary global origin then
+cannot alter scientific error under imperfect recovered rotations. The
+reference already serialized this convention; its algorithm is unchanged.
+Both independent evaluators are checked with a common right translation and
+rotation applied to deliberately imperfect estimates.
 
 Evaluation recomputes all scored statistics from raw complete poses; every
 baseline, reference, threshold, setting and comparison implementation is

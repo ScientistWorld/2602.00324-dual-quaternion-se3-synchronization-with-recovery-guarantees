@@ -5,7 +5,8 @@ Run `bash scripts/evaluate_train.sh` for public development and
 and discover `method/solver.json` plus every `methods/*/solver.json`. A manifest
 has a unique `name` and a `command` array, such as
 `{"name":"candidate","command":["python3","-m","method.solve"]}`.
-The names `dq_spectral`, `matrix_eig`, and `_reference` are reserved.
+The names `dq_spectral`, `matrix_eig`, and `_reference`, and the prefix
+`invalid_manifest_`, are reserved.
 
 Each command receives `--input PATH --output PATH`. Input JSON has `format`
 (`se3-sync-measurements/v1`), `experiment`, `setting`, and `instances`. Each
@@ -26,7 +27,9 @@ settings use (0.10,10 degrees). Public evaluation has 100 trials per setting;
 hidden evaluation has 200, 200, 150, and 100. Instances are shared by all methods
 in an evaluation. Public and hidden random families are independent.
 
-Each trial first fits one global right gauge. Quaternion double-cover signs
+Each trial removes the estimate's mean body-frame translation and then fits
+one global right gauge. Thus an arbitrary global origin cannot alter the
+score, including with imperfect rotations. Quaternion double-cover signs
 are treated consistently. Rotation error is
 `2 acos(2 <q1,q2>^2 - 1)` (range 0 to 2 pi, the paper's convention).
 Translation error is Euclidean distance after alignment. Each trial averages
@@ -37,18 +40,22 @@ separately for rotation and translation. Lower is better for all eight.
 The evaluator fixes the inputs, true poses, comparison solvers, reference,
 and task thresholds. If either mean error in any setting reaches half that of
 the fixed identity-pose estimate on the same instances, the attempt fails.
-Invalid or failed attempts have no rank and sort below every successful one;
-there is no compensating reward from other metrics. Measurable raw errors may
-still be retained for diagnosis.
+Invalid or failed attempts receive finite worst-case penalties in every
+metric of every experiment, including when no output or manifest is usable.
+The evaluator bounds any passing attempt's statistics from its nonnegative
+trial errors, trial count, and mean-error thresholds, then places each penalty
+strictly above that bound. Penalties are marked failures, not measured errors.
+Their finite ranks are below every successful attempt; other metrics cannot
+compensate. Measured errors before failure remain separate diagnostics.
 
-For successful attempts, rank is the sum over experiments and metrics of
+Rank is the sum over experiments and metrics of
 `weight * abs(coefficient) * direction * (value-reference) / population_std`.
 Direction is +1 for higher-is-better metrics and -1 otherwise. The scale is
-computed across successful candidate attempts on disk and the frozen reference;
+computed across all candidate attempts on disk and the frozen reference;
 evaluator-owned baselines do not enter this population. An exactly constant
 metric contributes zero. Adding attempts changes numerical rank scales, so
-ranks from different cohorts are not numerically comparable. Failure always
-precedes this arithmetic. `scoring/reference.json` defines coefficients, with
+ranks from different cohorts are not numerically comparable. Failure penalties
+are assigned before this arithmetic. `scoring/reference.json` defines coefficients, with
 identical fixed evaluator snapshots.
 
 The evaluator saves raw outputs in its own slice cache. `--reuse-outputs`

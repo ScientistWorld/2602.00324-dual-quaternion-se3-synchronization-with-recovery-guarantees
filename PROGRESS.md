@@ -272,3 +272,20 @@ The artifact verifier explicitly reports the unresolved matrix-EIG comparison.
 The final entrypoint is restored to full reference reproduction. Milestone is
 `core_claim` for the limited recovery/refinement result, with no claim of
 uniform external-baseline superiority or full-paper reproduction.
+
+### Final evaluator hardening: joint rescore prepared
+
+Read the paper and REDTEAM report before deciding the complete patch set.
+The inherited evaluator still gave failed attempts empty/partial results and
+null ranks. Every failure now receives finite evaluator-owned worst-case
+values for all 32 metrics. Invalid and missing manifests are scored failures,
+and all candidates enter the required population normalization. A reserved
+failure namespace prevents collisions. The evaluator also fixes the global
+translation origin before alignment, so equivalent predictions score alike.
+
+The actual method, fixed comparators, data distribution, and weights are
+unchanged. One joint CPU job will rescore the saved final-code outputs for the
+reference, baselines, stronger/weaker/seed controls and affected shortcuts,
+check paired uncertainty, regenerate canonical scores and measured targets,
+and run protocol and package validators. No new training or inference is
+needed. The unresolved matrix-EIG comparison remains disclosed.
