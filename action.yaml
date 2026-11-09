@@ -1,8 +1,8 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: done
+action: pending
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Audit committed as 6b8f3b0: genuine gains exceed seed spread, but answer leakage, undercoverage, and baseline replacement reward shortcuts; gym files restored."
+notes: ""
