@@ -1,8 +1,11 @@
 {
   "case": "reference_seed2",
-  "details": {},
+  "details": {
+    "implementation": "unmodified method.sync",
+    "fixed_baseline_seed": 260200324
+  },
   "train_exit_code": 0,
   "test_exit_code": 0,
-  "elapsed_seconds": 28.976184368133545,
+  "elapsed_seconds": 144.70278406143188,
   "finite_scores": true
 }

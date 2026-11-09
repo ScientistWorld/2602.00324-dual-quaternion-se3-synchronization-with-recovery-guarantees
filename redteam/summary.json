@@ -4,6 +4,7 @@
   "cohorts": {
     "all_finite_audit_attempts": {
       "members": [
+        "reference_stored_artifacts",
         "reference_seed0",
         "reference_seed1",
         "reference_seed2",
@@ -17,47 +18,54 @@
         "shortcut_select_trials",
         "shortcut_easier_inputs",
         "shortcut_replace_baseline",
+        "shortcut_compensate_failure",
         "shortcut_forged_scalars",
         "shortcut_constant"
       ],
       "rank_proposed": {
-        "reference_seed0": -0.03678568159303325,
-        "reference_seed1": 0.008805365312041145,
-        "reference_seed2": -0.21122856477790855,
-        "better_noise_aware": 0.5286078111425435,
-        "weaker_spectral": -0.07778581376898798,
-        "weaker_one_iteration": -9.631172770397427,
-        "shortcut_rebuild_answers": 0.9512356174640645,
-        "shortcut_rewrite_truth": 0.9512356200821926,
-        "shortcut_bruteforce_seed_bank": 0.9512356174640645,
-        "shortcut_one_pose": 0.9512356200821903,
-        "shortcut_select_trials": 0.7208315196436723,
-        "shortcut_easier_inputs": 0.9512356003010937,
-        "shortcut_replace_baseline": -0.03678568159303325,
-        "shortcut_forged_scalars": -7.166185789714864,
-        "shortcut_constant": -7.166185789714864
+        "reference_stored_artifacts": -2.441408957137366e-15,
+        "reference_seed0": -0.03916798002779715,
+        "reference_seed1": 0.008152000830106382,
+        "reference_seed2": -0.22215814187069308,
+        "better_noise_aware": 0.5384068383177218,
+        "weaker_spectral": -0.0803661902185975,
+        "weaker_one_iteration": -9.432976999643444,
+        "shortcut_rebuild_answers": 0.9540821743023964,
+        "shortcut_rewrite_truth": 0.954082176725505,
+        "shortcut_bruteforce_seed_bank": 0.9540821743023964,
+        "shortcut_one_pose": 0.9540821767255027,
+        "shortcut_select_trials": 0.72809305923046,
+        "shortcut_easier_inputs": 0.9540821569135207,
+        "shortcut_replace_baseline": -0.03916798002779715,
+        "shortcut_compensate_failure": -6.886647362612541,
+        "shortcut_forged_scalars": -6.886647362612541,
+        "shortcut_constant": -6.886647362612541
       },
       "rank_all_results": {
-        "reference_seed0": -0.06927079890525922,
-        "reference_seed1": 0.2995411265533565,
-        "reference_seed2": -0.9602270427002021,
-        "better_noise_aware": 0.4961226938303176,
-        "weaker_spectral": -0.11027093108121397,
-        "weaker_one_iteration": -9.663657887709652,
-        "shortcut_rebuild_answers": 0.9187505001518385,
-        "shortcut_rewrite_truth": 0.9187505027699666,
-        "shortcut_bruteforce_seed_bank": 0.9187505001518385,
-        "shortcut_one_pose": 0.9187505027699643,
-        "shortcut_select_trials": 0.6883464023314463,
-        "shortcut_easier_inputs": 0.9187504829888676,
-        "shortcut_replace_baseline": 14.122323290463518,
-        "shortcut_forged_scalars": -7.198670907027089,
-        "shortcut_constant": -7.198670907027089
+        "reference_stored_artifacts": -2.9717690413587786e-14,
+        "reference_seed0": -0.08131264428102407,
+        "reference_seed1": -0.033992663423120545,
+        "reference_seed2": -0.26430280612392,
+        "better_noise_aware": 0.4962621740644949,
+        "weaker_spectral": -0.12251085447182439,
+        "weaker_one_iteration": -9.47512166389667,
+        "shortcut_rebuild_answers": 0.9119375100491693,
+        "shortcut_rewrite_truth": 0.911937512472278,
+        "shortcut_bruteforce_seed_bank": 0.9119375100491693,
+        "shortcut_one_pose": 0.9119375124722758,
+        "shortcut_select_trials": 0.685948394977233,
+        "shortcut_easier_inputs": 0.9119374926602937,
+        "shortcut_replace_baseline": 11.078712267928674,
+        "shortcut_compensate_failure": 4.23123288534393,
+        "shortcut_forged_scalars": -6.928792026865768,
+        "shortcut_constant": -6.928792026865768
       },
-      "reference_seed_rank_range": 0.2200339300899497
+      "reference_seed_rank_range": 0.23031014270079947,
+      "reference_seed_all_results_rank_range": 0.23031014270079944
     },
     "honest_quality_variants": {
       "members": [
+        "reference_stored_artifacts",
         "reference_seed0",
         "reference_seed1",
         "reference_seed2",
@@ -66,154 +74,179 @@
         "weaker_one_iteration"
       ],
       "rank_proposed": {
-        "reference_seed0": -0.019639241056712144,
-        "reference_seed1": 0.006975126866646246,
-        "reference_seed2": -0.17245628677118005,
-        "better_noise_aware": 0.4826776746572735,
-        "weaker_spectral": -0.05801301180551818,
-        "weaker_one_iteration": -9.540231410198132
+        "reference_stored_artifacts": -3.4404673791198617e-15,
+        "reference_seed0": -0.02090215537509856,
+        "reference_seed1": 0.007437349176645577,
+        "reference_seed2": -0.18389600106729884,
+        "better_noise_aware": 0.5149649446697876,
+        "weaker_spectral": -0.0618344297505244,
+        "weaker_one_iteration": -10.170266111514577
       },
       "rank_all_results": {
-        "reference_seed0": 1.788977745217098,
-        "reference_seed1": 1.783278810951383,
-        "reference_seed2": -1.5554080648147992,
-        "better_noise_aware": 2.291294660931084,
-        "weaker_spectral": 1.7506039744682917,
-        "weaker_one_iteration": -7.731614423924324
+        "reference_stored_artifacts": -2.9589211219714223e-12,
+        "reference_seed0": -0.0209021553780536,
+        "reference_seed1": 0.0074373491736901874,
+        "reference_seed2": -0.18389600107025428,
+        "better_noise_aware": 0.5149649446668321,
+        "weaker_spectral": -0.06183442975347933,
+        "weaker_one_iteration": -10.170266111517531
       },
-      "reference_seed_rank_range": 0.1794314136378263
+      "reference_seed_rank_range": 0.1913333502439444,
+      "reference_seed_all_results_rank_range": 0.19133335024394446
     }
   },
   "raw_scores": {
-    "reference_seed0": {
+    "reference_stored_artifacts": {
       "p005_noise005": {
-        "error_R": 0.10624691837047937,
-        "error_R_std": 0.035950133598575656,
-        "error_R_p90": 0.14678980970542738,
-        "error_R_max": 0.19879542290916652,
-        "error_T": 0.14149892300606845,
-        "error_T_std": 0.0599265761526643,
-        "error_T_p90": 0.22075165720294115,
-        "error_T_max": 0.3564875760440277
+        "error_R": 0.10729022310043455,
+        "error_R_std": 0.04060451362383376,
+        "error_R_p90": 0.17835002847108433,
+        "error_R_max": 0.21658773821059132,
+        "error_T": 0.13374792510112063,
+        "error_T_std": 0.05467494156793135,
+        "error_T_p90": 0.20019594668195456,
+        "error_T_max": 0.32151246939407796
       },
       "p005_noise010": {
-        "error_R": 0.18073387611731198,
-        "error_R_std": 0.03600399648887289,
-        "error_R_p90": 0.22271586536634616,
-        "error_R_max": 0.2824430608485059,
+        "error_R": 0.18160882439935527,
+        "error_R_std": 0.03976687101681512,
+        "error_R_p90": 0.2402066122325106,
+        "error_R_max": 0.28921519700382803,
+        "error_T": 0.24034610362252554,
+        "error_T_std": 0.08539648433702687,
+        "error_T_p90": 0.3547751132641153,
+        "error_T_max": 0.48954581724104246
+      }
+    },
+    "reference_seed0": {
+      "p005_noise005": {
+        "error_R": 0.10624691837047869,
+        "error_R_std": 0.03595013359857737,
+        "error_R_p90": 0.1467898097054196,
+        "error_R_max": 0.19879542290916896,
+        "error_T": 0.14149892300606845,
+        "error_T_std": 0.0599265761526643,
+        "error_T_p90": 0.2207516572029414,
+        "error_T_max": 0.35648757604402737
+      },
+      "p005_noise010": {
+        "error_R": 0.1807338761173118,
+        "error_R_std": 0.036003996488872855,
+        "error_R_p90": 0.2227158653663442,
+        "error_R_max": 0.28244306084850307,
         "error_T": 0.24783373059728894,
-        "error_T_std": 0.09016388256741854,
-        "error_T_p90": 0.3729694867742759,
-        "error_T_max": 0.5577401754410605
+        "error_T_std": 0.09016388256741857,
+        "error_T_p90": 0.3729694867742761,
+        "error_T_max": 0.5577401754410607
       }
     },
     "reference_seed1": {
       "p005_noise005": {
-        "error_R": 0.10714501506784214,
-        "error_R_std": 0.04025572350671246,
-        "error_R_p90": 0.1566948102461208,
-        "error_R_max": 0.23844347466783822,
-        "error_T": 0.1261116652999553,
-        "error_T_std": 0.057737333417859,
-        "error_T_p90": 0.2139353332277329,
-        "error_T_max": 0.30387125020770805
+        "error_R": 0.10714501506784206,
+        "error_R_std": 0.040255723506712304,
+        "error_R_p90": 0.15669481024612422,
+        "error_R_max": 0.2384434746678375,
+        "error_T": 0.1261116652999552,
+        "error_T_std": 0.057737333417858916,
+        "error_T_p90": 0.21393533322773287,
+        "error_T_max": 0.3038712502077074
       },
       "p005_noise010": {
-        "error_R": 0.18160105311927413,
-        "error_R_std": 0.03985455792838212,
-        "error_R_p90": 0.23776515993452665,
-        "error_R_max": 0.3150829494376642,
+        "error_R": 0.1816010531192739,
+        "error_R_std": 0.03985455792838192,
+        "error_R_p90": 0.23776515993452552,
+        "error_R_max": 0.31508294943766263,
         "error_T": 0.22162091236674794,
-        "error_T_std": 0.08757193398715207,
-        "error_T_p90": 0.3456828447907144,
-        "error_T_max": 0.4779982500557708
+        "error_T_std": 0.08757193398715206,
+        "error_T_p90": 0.3456828447907143,
+        "error_T_max": 0.47799825005577046
       }
     },
     "reference_seed2": {
       "p005_noise005": {
-        "error_R": 0.10938312886841411,
-        "error_R_std": 0.03530941807626922,
-        "error_R_p90": 0.15411479462013605,
-        "error_R_max": 0.20251817968660168,
+        "error_R": 0.10938312886841485,
+        "error_R_std": 0.035309418076267904,
+        "error_R_p90": 0.15411479462013433,
+        "error_R_max": 0.2025181796865971,
         "error_T": 0.1423445508061723,
-        "error_T_std": 0.08712973865579891,
-        "error_T_p90": 0.22650698318901513,
-        "error_T_max": 0.5329606474150058
+        "error_T_std": 0.08712973865579886,
+        "error_T_p90": 0.22650698318901497,
+        "error_T_max": 0.532960647415005
       },
       "p005_noise010": {
-        "error_R": 0.1818500027428829,
-        "error_R_std": 0.03210291965151725,
-        "error_R_p90": 0.2280629514757861,
-        "error_R_max": 0.25577264338224326,
-        "error_T": 0.2433366647578714,
-        "error_T_std": 0.12590038529161368,
-        "error_T_p90": 0.3704195373424737,
-        "error_T_max": 0.8391387585966558
+        "error_R": 0.1818500027428824,
+        "error_R_std": 0.032102919651517584,
+        "error_R_p90": 0.2280629514757897,
+        "error_R_max": 0.2557726433822472,
+        "error_T": 0.24333666475787138,
+        "error_T_std": 0.12590038529161363,
+        "error_T_p90": 0.3704195373424735,
+        "error_T_max": 0.8391387585966551
       }
     },
     "better_noise_aware": {
       "p005_noise005": {
-        "error_R": 0.07294246940076239,
-        "error_R_std": 0.03934119755996472,
-        "error_R_p90": 0.11747990818614268,
-        "error_R_max": 0.1683089149774617,
-        "error_T": 0.056601220290473084,
-        "error_T_std": 0.01936785986580298,
-        "error_T_p90": 0.08997917763785016,
-        "error_T_max": 0.11000052276416401
+        "error_R": 0.07294246939269741,
+        "error_R_std": 0.03934119755875226,
+        "error_R_p90": 0.11747990825031474,
+        "error_R_max": 0.16830891497716874,
+        "error_T": 0.05660122028754212,
+        "error_T_std": 0.01936785986307916,
+        "error_T_p90": 0.0899791776378482,
+        "error_T_max": 0.11000052276416565
       },
       "p005_noise010": {
-        "error_R": 0.1225954075557046,
-        "error_R_std": 0.0375465882830721,
-        "error_R_p90": 0.16713484754090918,
-        "error_R_max": 0.22256495519199632,
-        "error_T": 0.098820866319774,
-        "error_T_std": 0.019145395441885857,
-        "error_T_p90": 0.129792684418916,
-        "error_T_max": 0.14780827364258675
+        "error_R": 0.1225954075557066,
+        "error_R_std": 0.037546588283076394,
+        "error_R_p90": 0.16713484754095537,
+        "error_R_max": 0.2225649551918492,
+        "error_T": 0.09882086631977399,
+        "error_T_std": 0.019145395441885812,
+        "error_T_p90": 0.12979268441891575,
+        "error_T_max": 0.14780827364258695
       }
     },
     "weaker_spectral": {
       "p005_noise005": {
-        "error_R": 0.11083936844734897,
-        "error_R_std": 0.03601625013853468,
-        "error_R_p90": 0.15168112812742668,
-        "error_R_max": 0.20418757152618938,
-        "error_T": 0.1478453323060257,
-        "error_T_std": 0.0609764664540683,
-        "error_T_p90": 0.23212693174625032,
-        "error_T_max": 0.3724918642502398
+        "error_R": 0.11083936844734808,
+        "error_R_std": 0.036016250138534586,
+        "error_R_p90": 0.15168112812741974,
+        "error_R_max": 0.20418757152618247,
+        "error_T": 0.14784533230602573,
+        "error_T_std": 0.060976466454068304,
+        "error_T_p90": 0.23212693174625038,
+        "error_T_max": 0.3724918642502392
       },
       "p005_noise010": {
-        "error_R": 0.1902472973666358,
-        "error_R_std": 0.03662891998841496,
-        "error_R_p90": 0.23512002751514505,
-        "error_R_max": 0.2941282571843071,
+        "error_R": 0.19024729736663512,
+        "error_R_std": 0.036628919988414436,
+        "error_R_p90": 0.23512002751514421,
+        "error_R_max": 0.29412825718430363,
         "error_T": 0.2609352404175725,
-        "error_T_std": 0.09397748743087922,
-        "error_T_p90": 0.3874152378572321,
-        "error_T_max": 0.5942392456295883
+        "error_T_std": 0.09397748743087919,
+        "error_T_p90": 0.38741523785723186,
+        "error_T_max": 0.5942392456295877
       }
     },
     "weaker_one_iteration": {
       "p005_noise005": {
         "error_R": 4.282050931960101,
-        "error_R_std": 0.20677299233000715,
-        "error_R_p90": 4.563359108652233,
-        "error_R_max": 4.732282733517245,
-        "error_T": 2.633644048159045,
-        "error_T_std": 0.2360883021843676,
-        "error_T_p90": 2.9058262938341115,
-        "error_T_max": 3.227276313464796
+        "error_R_std": 0.20677299233000707,
+        "error_R_p90": 4.563359108652232,
+        "error_R_max": 4.732282733517243,
+        "error_T": 2.6336440481590464,
+        "error_T_std": 0.2360883021843675,
+        "error_T_p90": 2.905826293834112,
+        "error_T_max": 3.2272763134647953
       },
       "p005_noise010": {
         "error_R": 4.282494317920591,
-        "error_R_std": 0.20484280507929678,
-        "error_R_p90": 4.5699386173397185,
-        "error_R_max": 4.713274023500637,
+        "error_R_std": 0.20484280507929686,
+        "error_R_p90": 4.569938617339719,
+        "error_R_max": 4.713274023500636,
         "error_T": 2.634112036002506,
-        "error_T_std": 0.23257854263590247,
-        "error_T_p90": 2.9191336997583113,
+        "error_T_std": 0.23257854263590258,
+        "error_T_p90": 2.9191336997583117,
         "error_T_max": 3.242263037821144
       }
     },
@@ -307,24 +340,24 @@
     },
     "shortcut_select_trials": {
       "p005_noise005": {
-        "error_R": 0.0590191528221431,
+        "error_R": 0.059019152822140326,
         "error_R_std": 0.0,
-        "error_R_p90": 0.0590191528221431,
-        "error_R_max": 0.0590191528221431,
-        "error_T": 0.05152181391407243,
+        "error_R_p90": 0.059019152822140326,
+        "error_R_max": 0.059019152822140326,
+        "error_T": 0.051521813914072415,
         "error_T_std": 0.0,
-        "error_T_p90": 0.05152181391407243,
-        "error_T_max": 0.05152181391407243
+        "error_T_p90": 0.051521813914072415,
+        "error_T_max": 0.051521813914072415
       },
       "p005_noise010": {
-        "error_R": 0.11879038494404126,
+        "error_R": 0.11879038494404089,
         "error_R_std": 0.0,
-        "error_R_p90": 0.11879038494404126,
-        "error_R_max": 0.11879038494404126,
-        "error_T": 0.10324434679339131,
+        "error_R_p90": 0.11879038494404089,
+        "error_R_max": 0.11879038494404089,
+        "error_T": 0.10324434679339133,
         "error_T_std": 0.0,
-        "error_T_p90": 0.10324434679339131,
-        "error_T_max": 0.10324434679339131
+        "error_T_p90": 0.10324434679339133,
+        "error_T_max": 0.10324434679339133
       }
     },
     "shortcut_easier_inputs": {
@@ -351,24 +384,46 @@
     },
     "shortcut_replace_baseline": {
       "p005_noise005": {
-        "error_R": 0.10624691837047937,
-        "error_R_std": 0.035950133598575656,
-        "error_R_p90": 0.14678980970542738,
-        "error_R_max": 0.19879542290916652,
+        "error_R": 0.10624691837047869,
+        "error_R_std": 0.03595013359857737,
+        "error_R_p90": 0.1467898097054196,
+        "error_R_max": 0.19879542290916896,
         "error_T": 0.14149892300606845,
         "error_T_std": 0.0599265761526643,
-        "error_T_p90": 0.22075165720294115,
-        "error_T_max": 0.3564875760440277
+        "error_T_p90": 0.2207516572029414,
+        "error_T_max": 0.35648757604402737
       },
       "p005_noise010": {
-        "error_R": 0.18073387611731198,
-        "error_R_std": 0.03600399648887289,
-        "error_R_p90": 0.22271586536634616,
-        "error_R_max": 0.2824430608485059,
+        "error_R": 0.1807338761173118,
+        "error_R_std": 0.036003996488872855,
+        "error_R_p90": 0.2227158653663442,
+        "error_R_max": 0.28244306084850307,
         "error_T": 0.24783373059728894,
-        "error_T_std": 0.09016388256741854,
-        "error_T_p90": 0.3729694867742759,
-        "error_T_max": 0.5577401754410605
+        "error_T_std": 0.09016388256741857,
+        "error_T_p90": 0.3729694867742761,
+        "error_T_max": 0.5577401754410607
+      }
+    },
+    "shortcut_compensate_failure": {
+      "p005_noise005": {
+        "error_R": 4.17722520097277,
+        "error_R_std": 0.4650083187284415,
+        "error_R_p90": 4.854545239800108,
+        "error_R_max": 5.057775409526797,
+        "error_T": 1.5787634972672457,
+        "error_T_std": 0.06841460190662411,
+        "error_T_p90": 1.6571201118662493,
+        "error_T_max": 1.73022275321949
+      },
+      "p005_noise010": {
+        "error_R": 4.17722520097277,
+        "error_R_std": 0.4650083187284415,
+        "error_R_p90": 4.854545239800108,
+        "error_R_max": 5.057775409526797,
+        "error_T": 1.5787634972672457,
+        "error_T_std": 0.06841460190662411,
+        "error_T_p90": 1.6571201118662493,
+        "error_T_max": 1.73022275321949
       }
     },
     "shortcut_forged_scalars": {
@@ -423,7 +478,7 @@
       "train_exit_code": 1,
       "train_failure": "Traceback (most recent call last):\n  File \"/home/user/eval/train/evaluate.py\", line 116, in <module>\n    main()\n  File \"/home/user/eval/train/evaluate.py\", line 91, in main\n    result = evaluate_artifact(Path(artifact_path))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/train/evaluate.py\", line 50, in evaluate_artifact\n    r, t = MAIN_EVAL.aligned_errors(trial[\"truth\"], trial[\"estimate\"])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 92, in aligned_errors\n    t_align = scale(1.0 / len(truth), t_align)\n                    ~~~~^~~~~~~~~~~~\nZeroDivisionError: float division by zero\n",
       "test_exit_code": 1,
-      "elapsed_seconds": 1.9120211601257324,
+      "elapsed_seconds": 2.006640672683716,
       "test_failure": "Traceback (most recent call last):\n  File \"/home/user/eval/test/evaluate.py\", line 145, in <module>\n    main()\n  File \"/home/user/eval/test/evaluate.py\", line 111, in main\n    result = evaluate_artifact(Path(artifact_path))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/test/evaluate.py\", line 49, in evaluate_artifact\n    r, t = MAIN_EVAL.aligned_errors(trial[\"truth\"], trial[\"estimate\"])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 92, in aligned_errors\n    t_align = scale(1.0 / len(truth), t_align)\n                    ~~~~^~~~~~~~~~~~\nZeroDivisionError: float division by zero\n"
     },
     "shortcut_null": {
@@ -432,7 +487,7 @@
       "train_exit_code": 1,
       "train_failure": "Traceback (most recent call last):\n  File \"/home/user/eval/train/evaluate.py\", line 116, in <module>\n    main()\n  File \"/home/user/eval/train/evaluate.py\", line 91, in main\n    result = evaluate_artifact(Path(artifact_path))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/train/evaluate.py\", line 50, in evaluate_artifact\n    r, t = MAIN_EVAL.aligned_errors(trial[\"truth\"], trial[\"estimate\"])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 78, in aligned_errors\n    q_e, t_e = record_pose(est)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 62, in record_pose\n    q_st = q_norm([float(x) for x in record[\"q_st\"]])\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 62, in <listcomp>\n    q_st = q_norm([float(x) for x in record[\"q_st\"]])\n                   ^^^^^^^^\nTypeError: float() argument must be a string or a real number, not 'NoneType'\n",
       "test_exit_code": 1,
-      "elapsed_seconds": 2.485241651535034,
+      "elapsed_seconds": 2.575535297393799,
       "test_failure": "Traceback (most recent call last):\n  File \"/home/user/eval/test/evaluate.py\", line 145, in <module>\n    main()\n  File \"/home/user/eval/test/evaluate.py\", line 111, in main\n    result = evaluate_artifact(Path(artifact_path))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/test/evaluate.py\", line 49, in evaluate_artifact\n    r, t = MAIN_EVAL.aligned_errors(trial[\"truth\"], trial[\"estimate\"])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 78, in aligned_errors\n    q_e, t_e = record_pose(est)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 62, in record_pose\n    q_st = q_norm([float(x) for x in record[\"q_st\"]])\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/evaluate.py\", line 62, in <listcomp>\n    q_st = q_norm([float(x) for x in record[\"q_st\"]])\n                   ^^^^^^^^\nTypeError: float() argument must be a string or a real number, not 'NoneType'\n"
     },
     "shortcut_nan": {
@@ -440,7 +495,7 @@
       "details": {},
       "train_exit_code": 0,
       "test_exit_code": 0,
-      "elapsed_seconds": 3.3090178966522217,
+      "elapsed_seconds": 3.345198631286621,
       "finite_scores": false
     }
   },
@@ -448,136 +503,136 @@
     "p005_noise005": {
       "error_R": {
         "values": [
-          0.10624691837047937,
-          0.10714501506784214,
-          0.10938312886841411
+          0.10624691837047869,
+          0.10714501506784206,
+          0.10938312886841485
         ],
-        "max_minus_min": 0.0031362104979347494
+        "max_minus_min": 0.003136210497936165
       },
       "error_R_std": {
         "values": [
-          0.035950133598575656,
-          0.04025572350671246,
-          0.03530941807626922
+          0.03595013359857737,
+          0.040255723506712304,
+          0.035309418076267904
         ],
-        "max_minus_min": 0.004946305430443235
+        "max_minus_min": 0.0049463054304444
       },
       "error_R_p90": {
         "values": [
-          0.14678980970542738,
-          0.1566948102461208,
-          0.15411479462013605
+          0.1467898097054196,
+          0.15669481024612422,
+          0.15411479462013433
         ],
-        "max_minus_min": 0.009905000540693432
+        "max_minus_min": 0.009905000540704617
       },
       "error_R_max": {
         "values": [
-          0.19879542290916652,
-          0.23844347466783822,
-          0.20251817968660168
+          0.19879542290916896,
+          0.2384434746678375,
+          0.2025181796865971
         ],
-        "max_minus_min": 0.0396480517586717
+        "max_minus_min": 0.039648051758668534
       },
       "error_T": {
         "values": [
           0.14149892300606845,
-          0.1261116652999553,
+          0.1261116652999552,
           0.1423445508061723
         ],
-        "max_minus_min": 0.016232885506217015
+        "max_minus_min": 0.0162328855062171
       },
       "error_T_std": {
         "values": [
           0.0599265761526643,
-          0.057737333417859,
-          0.08712973865579891
+          0.057737333417858916,
+          0.08712973865579886
         ],
-        "max_minus_min": 0.029392405237939914
+        "max_minus_min": 0.029392405237939942
       },
       "error_T_p90": {
         "values": [
-          0.22075165720294115,
-          0.2139353332277329,
-          0.22650698318901513
+          0.2207516572029414,
+          0.21393533322773287,
+          0.22650698318901497
         ],
-        "max_minus_min": 0.012571649961282239
+        "max_minus_min": 0.0125716499612821
       },
       "error_T_max": {
         "values": [
-          0.3564875760440277,
-          0.30387125020770805,
-          0.5329606474150058
+          0.35648757604402737,
+          0.3038712502077074,
+          0.532960647415005
         ],
-        "max_minus_min": 0.22908939720729776
+        "max_minus_min": 0.22908939720729765
       }
     },
     "p005_noise010": {
       "error_R": {
         "values": [
-          0.18073387611731198,
-          0.18160105311927413,
-          0.1818500027428829
+          0.1807338761173118,
+          0.1816010531192739,
+          0.1818500027428824
         ],
-        "max_minus_min": 0.0011161266255709235
+        "max_minus_min": 0.0011161266255706181
       },
       "error_R_std": {
         "values": [
-          0.03600399648887289,
-          0.03985455792838212,
-          0.03210291965151725
+          0.036003996488872855,
+          0.03985455792838192,
+          0.032102919651517584
         ],
-        "max_minus_min": 0.0077516382768648695
+        "max_minus_min": 0.007751638276864335
       },
       "error_R_p90": {
         "values": [
-          0.22271586536634616,
-          0.23776515993452665,
-          0.2280629514757861
+          0.2227158653663442,
+          0.23776515993452552,
+          0.2280629514757897
         ],
-        "max_minus_min": 0.015049294568180493
+        "max_minus_min": 0.015049294568181326
       },
       "error_R_max": {
         "values": [
-          0.2824430608485059,
-          0.3150829494376642,
-          0.25577264338224326
+          0.28244306084850307,
+          0.31508294943766263,
+          0.2557726433822472
         ],
-        "max_minus_min": 0.059310306055420925
+        "max_minus_min": 0.05931030605541543
       },
       "error_T": {
         "values": [
           0.24783373059728894,
           0.22162091236674794,
-          0.2433366647578714
+          0.24333666475787138
         ],
         "max_minus_min": 0.026212818230541002
       },
       "error_T_std": {
         "values": [
-          0.09016388256741854,
-          0.08757193398715207,
-          0.12590038529161368
+          0.09016388256741857,
+          0.08757193398715206,
+          0.12590038529161363
         ],
-        "max_minus_min": 0.03832845130446161
+        "max_minus_min": 0.03832845130446157
       },
       "error_T_p90": {
         "values": [
-          0.3729694867742759,
-          0.3456828447907144,
-          0.3704195373424737
+          0.3729694867742761,
+          0.3456828447907143,
+          0.3704195373424735
         ],
-        "max_minus_min": 0.027286641983561455
+        "max_minus_min": 0.027286641983561788
       },
       "error_T_max": {
         "values": [
-          0.5577401754410605,
-          0.4779982500557708,
-          0.8391387585966558
+          0.5577401754410607,
+          0.47799825005577046,
+          0.8391387585966551
         ],
-        "max_minus_min": 0.361140508540885
+        "max_minus_min": 0.36114050854088464
       }
     }
   },
   "reference_metrics_at_lower_bound_zero": [],
-  "regenerated_reference_max_score_difference": 0.06898191344576854
+  "regenerated_reference_max_score_difference": 0.06898191344576798
 }

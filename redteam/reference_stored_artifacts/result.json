@@ -1,0 +1,10 @@
+{
+  "case": "reference_stored_artifacts",
+  "details": {
+    "source": "preexisting reference artifacts, unchanged"
+  },
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 11.97677230834961,
+  "finite_scores": true
+}

@@ -1,4 +1,4 @@
 action: submit
 gpus: 0
 test: false
-notes: "Run full-scale scoring audit: three reference seeds, honest stronger/weaker variants, and 12 artifact/data/degenerate shortcuts in one CPU batch."
+notes: "Resolve reference mismatch with three unmodified full-scale reruns; repeat scientific variants and shortcuts with fixed comparison, including failed-method baseline compensation."

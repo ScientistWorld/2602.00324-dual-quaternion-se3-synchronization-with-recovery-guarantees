@@ -1,0 +1,354 @@
+{
+  "p005_noise005": {
+    "stored_vs_unmodified": {
+      "trial_counts": [
+        100,
+        100
+      ],
+      "truth_and_seeds_identical": true,
+      "artifact_settings": [
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.05,
+          "sigma_r_deg": 5.0,
+          "max_iter": 200
+        },
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.05,
+          "sigma_r_deg": 5.0,
+          "max_iter": 200
+        }
+      ],
+      "max_pose_component_difference": 4.629608597865771,
+      "max_aligned_error_difference": 0.14585799944602912,
+      "worst_trials": [
+        {
+          "seed": 260295352,
+          "pose_component_max_abs_difference": 4.629608597865771,
+          "aligned_error_difference": [
+            -0.04232637068783544,
+            -0.14585799944602912
+          ],
+          "init_iters": [
+            43,
+            43
+          ]
+        },
+        {
+          "seed": 260453732,
+          "pose_component_max_abs_difference": 1.4831449412447486,
+          "aligned_error_difference": [
+            0.08727851979344485,
+            0.017801411069326478
+          ],
+          "init_iters": [
+            37,
+            37
+          ]
+        },
+        {
+          "seed": 260770492,
+          "pose_component_max_abs_difference": 1.526642120859981,
+          "aligned_error_difference": [
+            0.07526846521362626,
+            0.07326002890425176
+          ],
+          "init_iters": [
+            42,
+            42
+          ]
+        },
+        {
+          "seed": 260303271,
+          "pose_component_max_abs_difference": 0.8313127200179666,
+          "aligned_error_difference": [
+            0.07427300888315505,
+            0.015437694105503857
+          ],
+          "init_iters": [
+            33,
+            33
+          ]
+        },
+        {
+          "seed": 260311190,
+          "pose_component_max_abs_difference": 0.6117942740507645,
+          "aligned_error_difference": [
+            -0.0731563554398012,
+            -0.04012536603164979
+          ],
+          "init_iters": [
+            36,
+            36
+          ]
+        }
+      ]
+    },
+    "vectorized_vs_unmodified": {
+      "trial_counts": [
+        100,
+        100
+      ],
+      "truth_and_seeds_identical": true,
+      "artifact_settings": [
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.05,
+          "sigma_r_deg": 5.0,
+          "max_iter": 200
+        },
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.05,
+          "sigma_r_deg": 5.0,
+          "max_iter": 200
+        }
+      ],
+      "max_pose_component_difference": 3.552713678800501e-15,
+      "max_aligned_error_difference": 1.6903145549918008e-14,
+      "worst_trials": [
+        {
+          "seed": 260501246,
+          "pose_component_max_abs_difference": 1.3322676295501878e-15,
+          "aligned_error_difference": [
+            -1.6903145549918008e-14,
+            -2.7755575615628914e-17
+          ],
+          "init_iters": [
+            33,
+            33
+          ]
+        },
+        {
+          "seed": 260509165,
+          "pose_component_max_abs_difference": 6.661338147750939e-16,
+          "aligned_error_difference": [
+            1.4516166046973922e-14,
+            -1.3877787807814457e-16
+          ],
+          "init_iters": [
+            35,
+            35
+          ]
+        },
+        {
+          "seed": 260374542,
+          "pose_component_max_abs_difference": 4.440892098500626e-16,
+          "aligned_error_difference": [
+            1.3600232051658168e-14,
+            -4.163336342344337e-17
+          ],
+          "init_iters": [
+            36,
+            36
+          ]
+        },
+        {
+          "seed": 260461651,
+          "pose_component_max_abs_difference": 7.771561172376096e-16,
+          "aligned_error_difference": [
+            -1.3100631690576847e-14,
+            6.938893903907228e-17
+          ],
+          "init_iters": [
+            36,
+            36
+          ]
+        },
+        {
+          "seed": 260287433,
+          "pose_component_max_abs_difference": 1.7763568394002505e-15,
+          "aligned_error_difference": [
+            1.211530875622202e-14,
+            -1.3877787807814457e-16
+          ],
+          "init_iters": [
+            39,
+            39
+          ]
+        }
+      ]
+    }
+  },
+  "p005_noise010": {
+    "stored_vs_unmodified": {
+      "trial_counts": [
+        100,
+        100
+      ],
+      "truth_and_seeds_identical": true,
+      "artifact_settings": [
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.1,
+          "sigma_r_deg": 10.0,
+          "max_iter": 200
+        },
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.1,
+          "sigma_r_deg": 10.0,
+          "max_iter": 200
+        }
+      ],
+      "max_pose_component_difference": 4.6302787494011,
+      "max_aligned_error_difference": 0.1198405173346373,
+      "worst_trials": [
+        {
+          "seed": 260295352,
+          "pose_component_max_abs_difference": 4.6302787494011,
+          "aligned_error_difference": [
+            -0.04036568240898536,
+            -0.1198405173346373
+          ],
+          "init_iters": [
+            44,
+            44
+          ]
+        },
+        {
+          "seed": 260453732,
+          "pose_component_max_abs_difference": 1.476804430312406,
+          "aligned_error_difference": [
+            0.07790176666482568,
+            0.015132268484385814
+          ],
+          "init_iters": [
+            37,
+            37
+          ]
+        },
+        {
+          "seed": 260311190,
+          "pose_component_max_abs_difference": 0.6014526574811835,
+          "aligned_error_difference": [
+            -0.07534984105820092,
+            -0.03482011809814595
+          ],
+          "init_iters": [
+            36,
+            36
+          ]
+        },
+        {
+          "seed": 260770492,
+          "pose_component_max_abs_difference": 1.475729629910668,
+          "aligned_error_difference": [
+            0.07505368818011765,
+            0.055211288444146134
+          ],
+          "init_iters": [
+            43,
+            43
+          ]
+        },
+        {
+          "seed": 260334947,
+          "pose_component_max_abs_difference": 1.9996640773794725,
+          "aligned_error_difference": [
+            -0.0006731417443032739,
+            -0.06819435820001823
+          ],
+          "init_iters": [
+            42,
+            42
+          ]
+        }
+      ]
+    },
+    "vectorized_vs_unmodified": {
+      "trial_counts": [
+        100,
+        100
+      ],
+      "truth_and_seeds_identical": true,
+      "artifact_settings": [
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.1,
+          "sigma_r_deg": 10.0,
+          "max_iter": 200
+        },
+        {
+          "n": 100,
+          "p": 0.05,
+          "sigma_t": 0.1,
+          "sigma_r_deg": 10.0,
+          "max_iter": 200
+        }
+      ],
+      "max_pose_component_difference": 3.9968028886505635e-15,
+      "max_aligned_error_difference": 1.3211653993039363e-14,
+      "worst_trials": [
+        {
+          "seed": 260818006,
+          "pose_component_max_abs_difference": 8.881784197001252e-16,
+          "aligned_error_difference": [
+            1.3211653993039363e-14,
+            2.7755575615628914e-17
+          ],
+          "init_iters": [
+            34,
+            34
+          ]
+        },
+        {
+          "seed": 260509165,
+          "pose_component_max_abs_difference": 6.661338147750939e-16,
+          "aligned_error_difference": [
+            7.91033905045424e-15,
+            0.0
+          ],
+          "init_iters": [
+            36,
+            36
+          ]
+        },
+        {
+          "seed": 260865520,
+          "pose_component_max_abs_difference": 1.9984014443252818e-15,
+          "aligned_error_difference": [
+            7.882583474838611e-15,
+            -1.6653345369377348e-16
+          ],
+          "init_iters": [
+            37,
+            37
+          ]
+        },
+        {
+          "seed": 260794249,
+          "pose_component_max_abs_difference": 1.1102230246251565e-15,
+          "aligned_error_difference": [
+            -6.994405055138486e-15,
+            -5.551115123125783e-17
+          ],
+          "init_iters": [
+            51,
+            51
+          ]
+        },
+        {
+          "seed": 260944710,
+          "pose_component_max_abs_difference": 4.440892098500626e-16,
+          "aligned_error_difference": [
+            5.773159728050814e-15,
+            -5.551115123125783e-17
+          ],
+          "init_iters": [
+            40,
+            40
+          ]
+        }
+      ]
+    }
+  }
+}

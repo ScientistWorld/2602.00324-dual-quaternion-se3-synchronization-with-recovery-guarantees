@@ -4,16 +4,16 @@
     "p005_noise005": {
       "candidates_enumerated": 100,
       "lookups_matched": 100,
-      "seconds": 1.769607397960499
+      "seconds": 1.7514239440206438
     },
     "p005_noise010": {
       "candidates_enumerated": 100,
       "lookups_matched": 100,
-      "seconds": 1.8159081598278135
+      "seconds": 1.8092001220211387
     }
   },
   "train_exit_code": 0,
   "test_exit_code": 0,
-  "elapsed_seconds": 7.082823276519775,
+  "elapsed_seconds": 7.013101100921631,
   "finite_scores": true
 }
