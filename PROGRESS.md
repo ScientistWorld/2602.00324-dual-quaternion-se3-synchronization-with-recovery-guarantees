@@ -195,3 +195,11 @@ settings. All changes precede one joint compute job, including reference,
 seed controls, stronger/weaker methods, fixed comparisons, and repaired attacks.
 No heavy computation was run on the login node. Static compilation and
 `python3 validate.py` pass; numerical claims await the job.
+
+### Environment portability correction
+
+The scheduler rejected the GHCR base before building or submitting the joint
+check. Switched to Docker Hub python:3.11-slim-bookworm. The scheduler setup
+wrapper supplies uv from its host mount, so package installation remains in
+setup.sh and container.def contains only OS package installation. No numerical
+experiment has run; the same joint verification is being resubmitted.
