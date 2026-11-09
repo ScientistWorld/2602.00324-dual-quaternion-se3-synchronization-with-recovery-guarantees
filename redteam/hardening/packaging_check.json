@@ -13,6 +13,7 @@
       ],
       "all_valid": true,
       "reference_rank": 0.0,
+      "failure_and_rank_protocol_verified": true,
       "metrics_match_final_raw_audit": true
     },
     "test": {
@@ -23,6 +24,7 @@
       ],
       "all_valid": true,
       "reference_rank": 0.0,
+      "failure_and_rank_protocol_verified": true,
       "metrics_match_final_raw_audit": true
     }
   }

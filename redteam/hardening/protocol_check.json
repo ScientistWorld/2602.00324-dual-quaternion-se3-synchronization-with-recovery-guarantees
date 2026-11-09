@@ -16,7 +16,11 @@
       "baseline_forgery"
     ],
     "strict_json": true,
-    "failed_rank": null,
+    "finite_failure_penalties_all_experiments": true,
+    "manifest_failures_have_complete_metrics": true,
+    "all_attempts_enter_population_scale": true,
+    "failed_rank_below_every_success": true,
+    "gauge_invariant": true,
     "direction_sign_and_units_invariant": true
   },
   "test": {
@@ -36,7 +40,11 @@
       "baseline_forgery"
     ],
     "strict_json": true,
-    "failed_rank": null,
+    "finite_failure_penalties_all_experiments": true,
+    "manifest_failures_have_complete_metrics": true,
+    "all_attempts_enter_population_scale": true,
+    "failed_rank_below_every_success": true,
+    "gauge_invariant": true,
     "direction_sign_and_units_invariant": true
   }
 }

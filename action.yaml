@@ -1,3 +1,5 @@
-action: done
+action: submit
+gpus: 0
+test: false
 milestone: core_claim
-notes: "Hardening and canonical packaging verified: stronger/weaker paired ordering, all repaired shortcuts failed, reference entrypoint restored. Uniform superiority over matrix EIG remains unreproduced and explicitly documented."
+notes: "One joint evaluator-only rescore of saved final-code reference, baselines, variants and fixed shortcuts; verify complete finite failure penalties, paired ranking, gauge invariance, canonical artifacts and package validators."
