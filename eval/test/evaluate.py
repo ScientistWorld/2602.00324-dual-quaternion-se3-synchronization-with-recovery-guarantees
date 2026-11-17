@@ -313,18 +313,21 @@ def aligned_errors(truth, estimate):
     estimate = [(q, [t[k] - shift[k] for k in range(3)])
                 for q, t in estimate for shift in [rotate(q, origin)]]
     terms = [q_mul(q_conj(qh), q) for (qh, _), (q, _) in zip(truth, estimate)]
-    s = [sum(t[k] for t in terms) for k in range(4)]
-    if norm(s) < 1e-9:
-        s = list(terms[0])
-    signs = None
-    for _ in range(50):
-        new_signs = [1.0 if dot(t, s) >= 0.0 else -1.0 for t in terms]
-        if new_signs == signs:
+    # Resolve the double-cover sign of every term first: the dominant
+    # eigenvector of sum_j t_j t_j^T does not depend on any term's sign (a
+    # plain sign-iteration can stall orthogonal to the true alignment when the
+    # estimate's signs split evenly against the truth representatives).
+    m = [[sum(t[a] * t[b] for t in terms) for b in range(4)] for a in range(4)]
+    v = list(m[max(range(4), key=lambda a: m[a][a])])
+    for _ in range(200):
+        w = [sum(m[a][b] * v[b] for b in range(4)) for a in range(4)]
+        if norm(w) < 1e-300:
             break
-        signs = new_signs
-        s = [sum(g * t[k] for g, t in zip(signs, terms)) for k in range(4)]
+        v = [c / norm(w) for c in w]
+    # Then the paper's aligner q = s/|s|, s = sum_j q^_j* q_j, with those signs.
+    s = [sum((1.0 if dot(t, v) >= 0.0 else -1.0) * t[k] for t in terms) for k in range(4)]
     if norm(s) < 1e-12:
-        s = [1.0, 0.0, 0.0, 0.0]
+        s = v if norm(v) > 1e-12 else [1.0, 0.0, 0.0, 0.0]
     q_align = [c / norm(s) for c in s]
     n = len(truth)
     t_align = [0.0, 0.0, 0.0]
