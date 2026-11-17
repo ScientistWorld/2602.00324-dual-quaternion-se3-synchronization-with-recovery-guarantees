@@ -39,128 +39,128 @@
     "configs": {
       "bunny_sparse": {
         "reference": {
-          "error_R": 0.0,
-          "error_T": 0.0
+          "error_R": 0.03261845824872087,
+          "error_T": 0.0017757030834024516
         },
         "pool_trials": {
-          "error_R": 0.0,
-          "error_T": 0.0
+          "error_R": 0.014930508151082985,
+          "error_T": 0.0004646593546442886
         },
         "public_truth": {
           "error_R": 0.0,
-          "error_T": 0.0
+          "error_T": 1.0970640791291147e-17
         },
         "zero_translation": {
-          "error_R": 0.0,
-          "error_T": 0.0
+          "error_R": 0.03261845824872087,
+          "error_T": 0.06878435661675499
         }
       },
       "buddha_dense": {
         "reference": {
-          "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_R": 3.15968983129617,
+          "error_T": 0.001807550681029081
         },
         "pool_trials": {
-          "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_R": 3.1594303890519395,
+          "error_T": 0.0016785104284655435
         },
         "public_truth": {
           "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_T": 2.010853321142844e-19
         },
         "zero_translation": {
-          "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_R": 3.15968983129617,
+          "error_T": 0.0012786471254231855
         }
       },
       "buddha_sparse": {
         "reference": {
-          "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_R": 2.5083977040266885,
+          "error_T": 0.005848356745821232
         },
         "pool_trials": {
-          "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_R": 2.5083267266433515,
+          "error_T": 0.004098061315077024
         },
         "public_truth": {
           "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_T": 2.010853321142844e-19
         },
         "zero_translation": {
-          "error_R": 0.0,
-          "error_T": 2.168404344971009e-19
+          "error_R": 2.5083977040266885,
+          "error_T": 0.0012786471254231855
         }
       },
       "dragon_dense": {
         "reference": {
-          "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_R": 2.6268954472396175,
+          "error_T": 0.020089965159395585
         },
         "pool_trials": {
-          "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_R": 2.62581573695832,
+          "error_T": 0.01894645199305233
         },
         "public_truth": {
           "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_T": 1.7776025625331571e-19
         },
         "zero_translation": {
-          "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_R": 2.6268954472396175,
+          "error_T": 0.0012495965376309772
         }
       },
       "dragon_sparse": {
         "reference": {
-          "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_R": 2.2260064113879565,
+          "error_T": 0.032245339518489055
         },
         "pool_trials": {
-          "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_R": 2.226136100071168,
+          "error_T": 0.03734249126389796
         },
         "public_truth": {
           "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_T": 1.7776025625331571e-19
         },
         "zero_translation": {
-          "error_R": 0.0,
-          "error_T": 2.2392449821817877e-19
+          "error_R": 2.2260064113879565,
+          "error_T": 0.0012495965376309772
         }
       },
       "armadillo_dense": {
         "reference": {
-          "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_R": 2.835611579904948,
+          "error_T": 0.013476009139704878
         },
         "pool_trials": {
-          "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_R": 2.835968781823437,
+          "error_T": 0.00476774068851588
         },
         "public_truth": {
           "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_T": 1.47839352617138e-19
         },
         "zero_translation": {
-          "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_R": 2.835611579904948,
+          "error_T": 0.0011157912939945291
         }
       },
       "armadillo_sparse": {
         "reference": {
-          "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_R": 2.8863677233968956,
+          "error_T": 0.011441004108969423
         },
         "pool_trials": {
-          "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_R": 2.8887604924347787,
+          "error_T": 0.009029661592152243
         },
         "public_truth": {
           "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_T": 1.47839352617138e-19
         },
         "zero_translation": {
-          "error_R": 0.0,
-          "error_T": 2.168669026613126e-19
+          "error_R": 2.8863677233968956,
+          "error_T": 0.0011157912939945291
         }
       }
     }
