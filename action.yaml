@@ -1,8 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: core_claim
-notes: "Evaluator-only fix (sign-robust gauge alignment): rescore the full audit cohort from saved raw outputs, analysis, canonical rescoring, validation."
+notes: "Final hardening: added paper's real-scan experiment (Stanford ICP graphs, hidden frames, EIG/SDR comparators), connected synthetic graphs, sign-robust alignment; stronger +0.096, weaker -0.019, shortcuts fail/tie; EIG ties and SDR slightly beats DQGPM (paper's superiority claims unreproduced, disclosed in HARDENING.md)."
