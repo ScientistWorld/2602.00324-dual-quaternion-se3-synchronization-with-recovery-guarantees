@@ -6,8 +6,10 @@ Paper Section 4.3: relative rigid motions between range scans of the Stanford
 then perturbed at evaluation time. Ground-truth poses are the repository's own
 alignment (the ``.conf`` files). Two graph types are built per object:
 
-* ``sparse``: ICP without any pose prior (identity start, plus the
-  centroid-aligned identity start; the better ICP fit is kept);
+* ``sparse``: ICP without any pose prior. Following Besl & McKay's global
+  registration strategy, ICP is started from a fixed set of 120 rotations
+  (identity plus quasi-uniform samples, centroids aligned); the 3 best coarse
+  fits are refined and the best final fit (largest overlap) is kept;
 * ``dense``: ICP started from the relative turntable rotation: the angle is
   encoded in the scan file names, about the scan set's turntable axis (bunny
   has no such names, so only ``sparse`` exists).
@@ -60,11 +62,18 @@ SETS = [
 VOXEL = 0.0025          # source down-sampling (m)
 INLIER = 0.001          # overlap / RMSE threshold (m)
 D_FINAL = 0.0025        # final max correspondence distance (m)
-D_INIT = {"sparse": 0.05, "dense": 0.02}
+D_INIT = {"sparse": 0.01, "dense": 0.02}
 ITERS = 80
 VALID_DEG = 3.0
 VALID_M = 0.005
 MIN_OVERLAP = 0.05
+# Multi-start global search for the no-prior (sparse) graphs.
+N_STARTS = 120
+COARSE_SRC_VOXEL = 0.008
+COARSE_TGT_VOXEL = 0.003
+COARSE_ITERS = 25
+COARSE_INLIER = 0.004
+REFINE_TOP = 3
 
 
 # ── PLY / conf parsing ───────────────────────────────────────────────────────
@@ -273,6 +282,28 @@ def icp(src: np.ndarray, target: Neighbours, r: np.ndarray, t: np.ndarray, d_ini
     return r, t, overlap, rmse, it + 1
 
 
+def start_rotations() -> list:
+    rng = np.random.default_rng(0)
+    out = [np.eye(3)]
+    while len(out) < N_STARTS:
+        q = rng.normal(size=4)
+        out.append(quat_to_rot(q / np.linalg.norm(q)))
+    return out
+
+
+def coarse_icp(src: np.ndarray, target: Neighbours, r: np.ndarray, t: np.ndarray):
+    for it in range(COARSE_ITERS):
+        gate = max(0.006, 0.05 * 0.85 ** it)
+        moved = src @ r.T + t
+        _, idx, ok = target.query(moved, gate)
+        if ok.sum() < 10:
+            return None
+        dr, dt = kabsch(moved[ok], target.points[idx[ok]])
+        r, t = dr @ r, dr @ t + dt
+    _, _, ok = target.query(src @ r.T + t, COARSE_INLIER)
+    return float(ok.mean()), r, t
+
+
 def connected(n: int, edges) -> bool:
     adj = [[] for _ in range(n)]
     for i, j in edges:
@@ -312,6 +343,10 @@ def build_object(obj, folder, conf_name, modes, log):
     full = [read_ply_vertices(RAW / folder / name) for name in names]
     small = [voxel_downsample(p, VOXEL) for p in full]
     trees = [Neighbours(p) for p in full]
+    coarse_src = [voxel_downsample(p, COARSE_SRC_VOXEL) for p in full]
+    coarse_tgt = [Neighbours(voxel_downsample(p, COARSE_TGT_VOXEL)) for p in full]
+    centroid = [p.mean(axis=0) for p in full]
+    rotations = start_rotations()
     extent = float(np.median([np.linalg.norm(p.max(0) - p.min(0)) for p in full]))
     log(f"{obj}: n={n} points={[len(p) for p in full]} downsampled={[len(p) for p in small]} extent={extent:.3f} m ({time.time()-t0:.1f}s)")
 
@@ -341,8 +376,11 @@ def build_object(obj, folder, conf_name, modes, log):
                     delta = wrap_deg(turntable_angle(names[j]) - turntable_angle(names[i]))
                     starts.append((rodrigues(axis * math.radians(delta)), np.zeros(3)))
                 else:
-                    starts.append((np.eye(3), np.zeros(3)))
-                    starts.append((np.eye(3), full[i].mean(axis=0) - full[j].mean(axis=0)))
+                    coarse = [coarse_icp(coarse_src[j], coarse_tgt[i], np.eye(3), np.zeros(3))]
+                    coarse += [coarse_icp(coarse_src[j], coarse_tgt[i], r0, centroid[i] - r0 @ centroid[j])
+                               for r0 in rotations]
+                    coarse = sorted((c for c in coarse if c is not None), key=lambda c: -c[0])[:REFINE_TOP]
+                    starts = [(c[1], c[2]) for c in coarse]
                 best = None
                 for r0, t0_ in starts:
                     res = icp(small[j], trees[i], r0, t0_, D_INIT[mode])
