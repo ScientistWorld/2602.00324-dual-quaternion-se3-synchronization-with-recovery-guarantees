@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Rerun joint hardening audit with multi-start ICP for the no-prior sparse scan graphs: rebuild ICP scan graphs, full cohort through train and hidden test, analysis, canonical rescoring, validation."
+notes: "Rerun joint hardening audit with sign-consistent scan measurements (ICP graphs already built): before-fix diagnostics, full cohort through train and hidden test, analysis, canonical rescoring, validation."
