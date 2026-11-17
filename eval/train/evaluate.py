@@ -631,8 +631,8 @@ def main():
                 "complete_valid_outputs": len(measured) == len(required),
                 "recovery_fraction_threshold": TASK_FAILURE_FRACTION,
                 "recovery_fractions": {exp: {
-                    "rotation":v["error_R"]/noinfo[exp]["error_R"],
-                    "translation":v["error_T"]/noinfo[exp]["error_T"]}
+                    "rotation":v["error_R"]/max(noinfo[exp]["error_R"], 1e-300),
+                    "translation":v["error_T"]/max(noinfo[exp]["error_T"], 1e-300)}
                     for exp,v in measured.items()},
             }
             if failure:

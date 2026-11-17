@@ -143,7 +143,12 @@ def rot_to_quat(r):
 
 
 def read_conf(path: Path):
-    """``bmesh <file> tx ty tz qx qy qz qw`` lines, in file order."""
+    """``bmesh <file> tx ty tz qx qy qz qw`` lines, in file order.
+
+    Returns R(q) for q = (qw, qx, qy, qz); how R and t act on scan points is
+    decided from the data (``CONVENTIONS``): for the repository files the
+    scan-to-world map is p -> R(q)^T p + t (conjugate quaternion).
+    """
     scans = []
     for line in path.read_text().splitlines():
         tok = line.split()
@@ -309,7 +314,7 @@ def build_object(obj, folder, conf_name, modes, log):
 
     # Interpret the .conf transform by how well it superimposes neighbours.
     scores = {}
-    for convention in ("rotate_then_translate", "translate_then_rotate"):
+    for convention in CONVENTIONS:
         vals = []
         for i in range(n):
             for j in range(i + 1, n):
@@ -350,6 +355,11 @@ def build_object(obj, folder, conf_name, modes, log):
                                        err_deg=err_deg, err_m=err_m,
                                        valid=bool(overlap >= MIN_OVERLAP and err_deg < VALID_DEG and err_m < VALID_M))
         valid = sorted((k for k, v in results.items() if v["valid"]), key=lambda k: -results[k]["overlap"])
+        correct = [v for v in results.values() if v["err_deg"] < VALID_DEG and v["err_m"] < VALID_M]
+        wrong = [v for v in results.values() if not (v["err_deg"] < VALID_DEG and v["err_m"] < VALID_M)]
+        log(f"{obj}/{mode}: ICP converged to the repository alignment on {len(correct)}/{len(results)} pairs; "
+            f"overlap quartiles correct={np.round(np.quantile([v['overlap'] for v in correct], [.25, .5, .75]), 3).tolist() if correct else []} "
+            f"wrong={np.round(np.quantile([v['overlap'] for v in wrong], [.25, .5, .75]), 3).tolist() if wrong else []}")
         pairs = n * (n - 1) // 2
         count = int(target_count) if isinstance(target_count, int) else int(round(target_count * pairs))
         kept = valid[:count]
@@ -384,9 +394,9 @@ def build_object(obj, folder, conf_name, modes, log):
         nn = len(nodes)
         truth = []
         for a in nodes:
-            _, ra, ta = conf[a]
+            ra, ta = scan_to_world(conf, a, convention)
             # X_a = T_a^{-1}: world -> local frame of scan a.
-            if convention == "rotate_then_translate":
+            if convention.endswith("rotate_then_translate"):
                 rx, tx = ra.T, -ra.T @ ta
             else:
                 rx, tx = ra.T, -ta
@@ -406,6 +416,8 @@ def build_object(obj, folder, conf_name, modes, log):
             f"missing={missing:.4f} connected={nn > 1 and connected(nn, edges)} "
             f"icp_err_deg(mean/max)={deg[0]:.3f}/{deg[1]:.3f} icp_err_mm(mean/max)={mm[0]:.3f}/{mm[1]:.3f} "
             f"invalid_converged={sum(1 for v in results.values() if not v['valid'])} ({time.time()-t1:.1f}s)")
+        if nn < 5:
+            raise SystemExit(f"{obj}/{mode}: only {nn} connected scans survive; check the ICP settings")
         out.append({
             "name": f"{obj}_{mode}", "object": obj, "mode": mode, "n": nn,
             "scans": [names[a] for a in nodes], "conf_convention": convention,
@@ -417,10 +429,19 @@ def build_object(obj, folder, conf_name, modes, log):
     return out
 
 
+CONVENTIONS = ("conjugate/rotate_then_translate", "conjugate/translate_then_rotate",
+               "plain/rotate_then_translate", "plain/translate_then_rotate")
+
+
+def scan_to_world(conf, a, convention):
+    _, r, t = conf[a]
+    return (r.T if convention.startswith("conjugate") else r), t
+
+
 def gt_pair(conf, i, j, convention):
-    _, ri, ti = conf[i]
-    _, rj, tj = conf[j]
-    if convention == "rotate_then_translate":
+    ri, ti = scan_to_world(conf, i, convention)
+    rj, tj = scan_to_world(conf, j, convention)
+    if convention.endswith("rotate_then_translate"):
         return ri.T @ rj, ri.T @ (tj - ti)
     return ri.T @ rj, tj_rot(ri, rj, ti, tj)
 
