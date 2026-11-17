@@ -1,0 +1,237 @@
+{
+ "format": "stanford-icp-measurements/v1",
+ "source": "https://graphics.stanford.edu/data/3Dscanrep/",
+ "pose_convention": "truth X_i maps world to scan i; relative M_ij = X_i X_j^-1 maps scan j into scan i; quaternions scalar-first [w,x,y,z] followed by translation [m]",
+ "icp": {
+  "voxel_m": 0.0025,
+  "inlier_m": 0.001,
+  "final_gate_m": 0.0025,
+  "initial_gate_m": {
+   "sparse": 0.05,
+   "dense": 0.02
+  },
+  "iterations": 80,
+  "valid_deg": 3.0,
+  "valid_m": 0.005,
+  "min_overlap": 0.05
+ },
+ "configs": [
+  {
+   "name": "bunny_sparse",
+   "object": "bunny",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "bun000.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": 21,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "buddha_dense",
+   "object": "buddha",
+   "mode": "dense",
+   "n": 1,
+   "scans": [
+    "happyStandRight_0.ply"
+   ],
+   "conf_convention": "translate_then_rotate",
+   "truth": [
+    [
+     0.9999993408503859,
+     0.00039655602033722583,
+     0.0010305252008763449,
+     0.00031473787026764884,
+     0.00070939353,
+     1.4513731e-05,
+     0.0011662338
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": 90,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "buddha_sparse",
+   "object": "buddha",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "happyStandRight_0.ply"
+   ],
+   "conf_convention": "translate_then_rotate",
+   "truth": [
+    [
+     0.9999993408503859,
+     0.00039655602033722583,
+     0.0010305252008763449,
+     0.00031473787026764884,
+     0.00070939353,
+     1.4513731e-05,
+     0.0011662338
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": 30,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "dragon_dense",
+   "object": "dragon",
+   "mode": "dense",
+   "n": 1,
+   "scans": [
+    "dragonStandRight_0.ply"
+   ],
+   "conf_convention": "translate_then_rotate",
+   "truth": [
+    [
+     0.9999994557910338,
+     -0.000681143947133087,
+     0.00029109036877481,
+     0.0007346611169078349,
+     0.00042573013,
+     3.6194921e-05,
+     0.00096614892
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": 84,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "dragon_sparse",
+   "object": "dragon",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "dragonStandRight_0.ply"
+   ],
+   "conf_convention": "translate_then_rotate",
+   "truth": [
+    [
+     0.9999994557910338,
+     -0.000681143947133087,
+     0.00029109036877481,
+     0.0007346611169078349,
+     0.00042573013,
+     3.6194921e-05,
+     0.00096614892
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": 37,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "armadillo_dense",
+   "object": "armadillo",
+   "mode": "dense",
+   "n": 1,
+   "scans": [
+    "ArmadilloStand_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.9999997009428546,
+     -2.6889018025352433e-05,
+     0.00021934530020681074,
+     0.0007411334706987812,
+     0.00032465782269090374,
+     1.740555740311788e-05,
+     0.0010512249496257052
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": 52,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "armadillo_sparse",
+   "object": "armadillo",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "ArmadilloStand_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.9999997009428546,
+     -2.6889018025352433e-05,
+     0.00021934530020681074,
+     0.0007411334706987812,
+     0.00032465782269090374,
+     1.740555740311788e-05,
+     0.0010512249496257052
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": 24,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  }
+ ],
+ "log": [
+  "nearest neighbours: scipy cKDTree",
+  "bunny: n=10 points=[40256, 40097, 30379, 40251, 31701, 38298, 36023, 35336, 37738, 32193] downsampled=[4783, 4638, 4180, 4760, 4091, 4786, 4361, 4684, 4806, 3997] extent=0.251 m (0.5s)",
+  "bunny: conf convention overlap {'rotate_then_translate': 0.007873399232592143, 'translate_then_rotate': 0.005760329145944253} -> rotate_then_translate",
+  "bunny/sparse: attempted=45 valid=0 target=21 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=45 (46.9s)",
+  "buddha: n=15 points=[78056, 75582, 69158, 61872, 62682, 78212, 85036, 84699, 80617, 71459, 60735, 63298, 72346, 76166, 79087] downsampled=[3806, 3609, 3129, 2804, 2849, 3448, 3544, 3605, 3533, 3413, 2965, 2898, 3412, 3609, 3788] extent=0.223 m (1.6s)",
+  "buddha: conf convention overlap {'rotate_then_translate': 0.05828105690146196, 'translate_then_rotate': 0.05938189629753019} -> translate_then_rotate",
+  "buddha: turntable axis in scan coordinates [0.0015, -1.0, 0.0053]",
+  "buddha/dense: attempted=105 valid=0 target=90 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (37.8s)",
+  "buddha/sparse: attempted=105 valid=0 target=30 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (89.4s)",
+  "dragon: n=15 points=[41841, 34836, 22092, 14879, 20645, 34436, 43181, 44329, 39526, 30492, 19318, 15050, 24573, 40528, 43467] downsampled=[4858, 4324, 3136, 1943, 2496, 3930, 4930, 5085, 4595, 3788, 2797, 2017, 3014, 4840, 5176] extent=0.259 m (0.7s)",
+  "dragon: conf convention overlap {'rotate_then_translate': 0.0142918325345841, 'translate_then_rotate': 0.01432957945951063} -> translate_then_rotate",
+  "dragon: turntable axis in scan coordinates [0.0022, -1.0, 0.0054]",
+  "dragon/dense: attempted=105 valid=0 target=84 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (19.1s)",
+  "dragon/sparse: attempted=105 valid=0 target=37 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (66.3s)",
+  "armadillo: n=12 points=[28220, 27315, 24029, 20960, 26641, 28476, 26941, 25570, 19232, 24034, 27792, 28415] downsampled=[3597, 3409, 2988, 2756, 3550, 3853, 3763, 3483, 2807, 3188, 3510, 3656] extent=0.395 m (0.3s)",
+  "armadillo: conf convention overlap {'rotate_then_translate': 0.06115589615945539, 'translate_then_rotate': 0.05938392459001754} -> rotate_then_translate",
+  "armadillo: turntable axis in scan coordinates [0.0019, -1.0, 0.0055]",
+  "armadillo/dense: attempted=66 valid=0 target=52 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=66 (9.9s)",
+  "armadillo/sparse: attempted=66 valid=0 target=24 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=66 (30.4s)"
+ ]
+}

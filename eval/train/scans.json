@@ -1,0 +1,267 @@
+{
+ "format": "stanford-icp-measurements/v1",
+ "source": "https://graphics.stanford.edu/data/3Dscanrep/",
+ "pose_convention": "truth X_i maps world to scan i; relative M_ij = X_i X_j^-1 maps scan j into scan i; quaternions scalar-first [w,x,y,z] followed by translation [m]",
+ "icp": {
+  "voxel_m": 0.0025,
+  "inlier_m": 0.001,
+  "final_gate_m": 0.0025,
+  "initial_gate_m": {
+   "sparse": 0.05,
+   "dense": 0.02
+  },
+  "iterations": 80,
+  "valid_deg": 3.0,
+  "valid_m": 0.005,
+  "min_overlap": 0.05
+ },
+ "configs": [
+  {
+   "name": "buddha_side_dense",
+   "object": "buddha_side",
+   "mode": "dense",
+   "n": 1,
+   "scans": [
+    "happySideRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.6914743278547841,
+     0.011445204130011492,
+     -0.09594899508993006,
+     0.7159092481323519,
+     0.16407084358599675,
+     -0.12353769354549307,
+     -0.004393677461785797
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "buddha_side_sparse",
+   "object": "buddha_side",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "happySideRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.6914743278547841,
+     0.011445204130011492,
+     -0.09594899508993006,
+     0.7159092481323519,
+     0.16407084358599675,
+     -0.12353769354549307,
+     -0.004393677461785797
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "buddha_back_dense",
+   "object": "buddha_back",
+   "mode": "dense",
+   "n": 1,
+   "scans": [
+    "happyBackRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.4891501056261972,
+     0.5298432652623336,
+     0.4593221758929077,
+     0.5186727553622162,
+     0.1378830157449172,
+     0.011682271420194599,
+     -0.1572107232176209
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "buddha_back_sparse",
+   "object": "buddha_back",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "happyBackRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.4891501056261972,
+     0.5298432652623336,
+     0.4593221758929077,
+     0.5186727553622162,
+     0.1378830157449172,
+     0.011682271420194599,
+     -0.1572107232176209
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "dragon_side_dense",
+   "object": "dragon_side",
+   "mode": "dense",
+   "n": 1,
+   "scans": [
+    "dragonSideRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.7015953625583556,
+     0.7081180724891709,
+     -0.018737760801253306,
+     -0.077341056179663,
+     -0.011026080732376136,
+     -0.12202084241923208,
+     -0.11248997127982686
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "dragon_side_sparse",
+   "object": "dragon_side",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "dragonSideRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.7015953625583556,
+     0.7081180724891709,
+     -0.018737760801253306,
+     -0.077341056179663,
+     -0.011026080732376136,
+     -0.12202084241923208,
+     -0.11248997127982686
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "dragon_up_dense",
+   "object": "dragon_up",
+   "mode": "dense",
+   "n": 1,
+   "scans": [
+    "dragonUpRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.772574530011564,
+     0.08097576195308322,
+     0.19169321752164295,
+     0.5998543422446226,
+     0.054149300041892744,
+     -0.12329067104121635,
+     0.06087146509632377
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  },
+  {
+   "name": "dragon_up_sparse",
+   "object": "dragon_up",
+   "mode": "sparse",
+   "n": 1,
+   "scans": [
+    "dragonUpRight_0.ply"
+   ],
+   "conf_convention": "rotate_then_translate",
+   "truth": [
+    [
+     0.772574530011564,
+     0.08097576195308322,
+     0.19169321752164295,
+     0.5998543422446226,
+     0.054149300041892744,
+     -0.12329067104121635,
+     0.06087146509632377
+    ]
+   ],
+   "edges": [],
+   "relative": [],
+   "paper_observed_pairs": null,
+   "valid_pairs": 0,
+   "observed_pairs": 0,
+   "missing_rate": 0.0,
+   "edge_diagnostics": []
+  }
+ ],
+ "log": [
+  "nearest neighbours: scipy cKDTree",
+  "buddha_side: n=15 points=[59544, 51266, 38741, 25715, 14319, 62196, 71969, 63535, 53718, 38451, 30088, 41791, 40437, 57499, 68890] downsampled=[2813, 2645, 2234, 1406, 779, 3071, 3239, 2634, 2311, 2232, 1465, 1356, 1454, 2959, 3233] extent=0.188 m (1.0s)",
+  "buddha_side: conf convention overlap {'rotate_then_translate': 0.002148602657917691, 'translate_then_rotate': 0.0004439611283343088} -> rotate_then_translate",
+  "buddha_side: turntable axis in scan coordinates [0.9922, 0.0227, 0.1222]",
+  "buddha_side/dense: attempted=18 valid=0 target=86 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=18 (2.8s)",
+  "buddha_side/sparse: attempted=105 valid=0 target=37 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (51.9s)",
+  "buddha_back: n=15 points=[41785, 39276, 34934, 30452, 43783, 58395, 50827, 43011, 35270, 31357, 36852, 41534, 55174, 55045, 53206] downsampled=[1942, 2135, 1921, 1444, 2135, 2879, 2505, 2032, 1930, 1749, 1321, 1362, 2508, 2729, 2369] extent=0.206 m (0.9s)",
+  "buddha_back: conf convention overlap {'rotate_then_translate': 0.008074683401201885, 'translate_then_rotate': 0.0003236303420001598} -> rotate_then_translate",
+  "buddha_back: turntable axis in scan coordinates [0.0215, 0.1048, -0.9943]",
+  "buddha_back/dense: attempted=24 valid=0 target=86 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=24 (2.5s)",
+  "buddha_back/sparse: attempted=105 valid=0 target=37 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (48.9s)",
+  "dragon_side: n=15 points=[25914, 25219, 20501, 13946, 17048, 21834, 23532, 24577, 23218, 20679, 17696, 14980, 21327, 27333, 25823] downsampled=[2909, 3091, 2715, 1731, 2318, 3176, 3299, 3307, 3168, 2940, 2416, 2104, 2859, 3142, 2777] extent=0.260 m (0.5s)",
+  "dragon_side: conf convention overlap {'rotate_then_translate': 0.009331894130161977, 'translate_then_rotate': 0.0017612478089595659} -> rotate_then_translate",
+  "dragon_side: turntable axis in scan coordinates [-0.0824, 0.0167, -0.9965]",
+  "dragon_side/dense: attempted=43 valid=0 target=86 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=43 (3.3s)",
+  "dragon_side/sparse: attempted=105 valid=0 target=37 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (36.2s)",
+  "dragon_up: n=15 points=[42641, 35774, 25141, 16577, 24979, 29756, 26929, 23533, 28443, 27534, 25457, 25557, 30178, 38306, 42140] downsampled=[5170, 4879, 3684, 2337, 3085, 3407, 3004, 2808, 3937, 3441, 2879, 3058, 4076, 4984, 4915] extent=0.273 m (0.6s)",
+  "dragon_up: conf convention overlap {'rotate_then_translate': 0.0017068488390633895, 'translate_then_rotate': 0.0} -> rotate_then_translate",
+  "dragon_up: turntable axis in scan coordinates [0.8924, -0.2689, -0.3623]",
+  "dragon_up/dense: attempted=18 valid=0 target=86 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=18 (2.4s)",
+  "dragon_up/sparse: attempted=105 valid=0 target=37 kept=0 n=1 missing=0.0000 connected=False icp_err_deg(mean/max)=nan/nan icp_err_mm(mean/max)=nan/nan invalid_converged=105 (63.0s)"
+ ]
+}

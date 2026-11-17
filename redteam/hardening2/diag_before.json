@@ -1,0 +1,168 @@
+{
+  "synthetic_unconditioned_p005_noise005": {
+    "trials": 150,
+    "trials_with_isolated_nodes": 77,
+    "mean": {
+      "reference": {
+        "error_R": 0.11126900925207771,
+        "error_T": 0.07849003013305984
+      },
+      "isolated_identity": {
+        "error_R": 0.11451185731033772,
+        "error_T": 0.07337957106462126
+      },
+      "matrix_eig_per_component": {
+        "error_R": 0.112369144602041,
+        "error_T": 0.0721468332167608
+      }
+    },
+    "paired_gain_vs_reference": {
+      "reference": {
+        "error_R": 0.0,
+        "error_T": 0.0,
+        "error_T_se": 0.0
+      },
+      "isolated_identity": {
+        "error_R": -0.0032428480582600006,
+        "error_T": 0.005110459068438579,
+        "error_T_se": 0.0009704474759984537
+      },
+      "matrix_eig_per_component": {
+        "error_R": -0.0011001353499632519,
+        "error_T": 0.006343196916299055,
+        "error_T_se": 0.0013077754948239725
+      }
+    }
+  },
+  "scans_native_frames": {
+    "trials_per_config": 30,
+    "configs": {
+      "bunny_sparse": {
+        "reference": {
+          "error_R": 0.0,
+          "error_T": 0.0
+        },
+        "pool_trials": {
+          "error_R": 0.0,
+          "error_T": 0.0
+        },
+        "public_truth": {
+          "error_R": 0.0,
+          "error_T": 0.0
+        },
+        "zero_translation": {
+          "error_R": 0.0,
+          "error_T": 0.0
+        }
+      },
+      "buddha_dense": {
+        "reference": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        },
+        "pool_trials": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        },
+        "public_truth": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        },
+        "zero_translation": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        }
+      },
+      "buddha_sparse": {
+        "reference": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        },
+        "pool_trials": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        },
+        "public_truth": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        },
+        "zero_translation": {
+          "error_R": 0.0,
+          "error_T": 2.168404344971009e-19
+        }
+      },
+      "dragon_dense": {
+        "reference": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        },
+        "pool_trials": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        },
+        "public_truth": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        },
+        "zero_translation": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        }
+      },
+      "dragon_sparse": {
+        "reference": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        },
+        "pool_trials": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        },
+        "public_truth": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        },
+        "zero_translation": {
+          "error_R": 0.0,
+          "error_T": 2.2392449821817877e-19
+        }
+      },
+      "armadillo_dense": {
+        "reference": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        },
+        "pool_trials": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        },
+        "public_truth": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        },
+        "zero_translation": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        }
+      },
+      "armadillo_sparse": {
+        "reference": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        },
+        "pool_trials": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        },
+        "public_truth": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        },
+        "zero_translation": {
+          "error_R": 0.0,
+          "error_T": 2.168669026613126e-19
+        }
+      }
+    }
+  }
+}
