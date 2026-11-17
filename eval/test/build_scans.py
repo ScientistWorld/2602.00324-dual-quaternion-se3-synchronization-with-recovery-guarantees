@@ -151,6 +151,17 @@ def rot_to_quat(r):
     return q if q[0] >= 0 else -q
 
 
+def quat_mul(a, b):
+    w1, x1, y1, z1 = a
+    w2, x2, y2, z2 = b
+    return np.array([w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2, w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
+                     w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2, w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2])
+
+
+def quat_conj(a):
+    return np.array([a[0], -a[1], -a[2], -a[3]])
+
+
 def read_conf(path: Path):
     """``bmesh <file> tx ty tz qx qy qz qw`` lines, in file order.
 
@@ -443,7 +454,15 @@ def build_object(obj, folder, conf_name, modes, log):
         for i, j in kept:
             v = results[(i, j)]
             edges.append([index[i], index[j]])
-            relative.append([*rot_to_quat(v["r"]).tolist(), *v["t"].tolist()])
+            q = rot_to_quat(v["r"])
+            # Unit (dual) quaternions double-cover SE(3). As in the paper's
+            # model C_ij = x_i x_j^* + noise, give every measurement the sign
+            # consistent with one fixed choice of node representatives (for a
+            # connected low-noise graph this lift follows from cycle consistency).
+            lift = quat_mul(np.array(truth[index[i]][:4]), quat_conj(np.array(truth[index[j]][:4])))
+            if float(np.dot(q, lift)) < 0.0:
+                q = -q
+            relative.append([*q.tolist(), *v["t"].tolist()])
             diag.append({"overlap": round(v["overlap"], 4), "rmse_m": v["rmse"], "icp_error_deg": v["err_deg"],
                          "icp_error_m": v["err_m"], "iterations": v["iters"]})
         missing = 1.0 - (nn + 2 * len(edges)) / (nn * nn)
@@ -500,7 +519,7 @@ def main():
     payload = {
         "format": "stanford-icp-measurements/v1",
         "source": "https://graphics.stanford.edu/data/3Dscanrep/",
-        "pose_convention": "truth X_i maps world to scan i; relative M_ij = X_i X_j^-1 maps scan j into scan i; quaternions scalar-first [w,x,y,z] followed by translation [m]",
+        "pose_convention": "truth X_i maps world to scan i; relative M_ij = X_i X_j^-1 maps scan j into scan i; quaternions scalar-first [w,x,y,z] followed by translation [m]; relative quaternion signs are lifted consistently with the truth representatives",
         "icp": {"voxel_m": VOXEL, "inlier_m": INLIER, "final_gate_m": D_FINAL, "initial_gate_m": D_INIT,
                 "iterations": ITERS, "valid_deg": VALID_DEG, "valid_m": VALID_M, "min_overlap": MIN_OVERLAP},
         "configs": configs,

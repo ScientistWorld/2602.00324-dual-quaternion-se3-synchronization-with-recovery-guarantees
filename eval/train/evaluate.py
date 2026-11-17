@@ -164,6 +164,9 @@ def _generate_scan(experiment, index, config, k):
         if i > j:
             i, j = j, i
             q, t = _np_conj(q), -_np_rot(q).T @ t
+        # Sign-consistent lift of the double cover, as in C_ij = x_i x_j^* + noise.
+        if float(np.dot(q, _np_qmul(np.array(truth[i][0]), _np_conj(np.array(truth[j][0]))))) < 0.0:
+            q = -q
         axis = rng.normal(size=3)
         axis /= np.linalg.norm(axis)
         angle = np.deg2rad(rng.normal(loc=0.0, scale=SCAN_SIGMA_R_DEG))
