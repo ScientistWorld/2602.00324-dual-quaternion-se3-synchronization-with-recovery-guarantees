@@ -1,231 +1,215 @@
-# Final hardening
+# Hardening (final iteration)
 
-The hidden test separates the honest stronger and weaker controls by much
-more than seed variation. Every repaired shortcut scores below every successful
-attempt, with finite worst-case values in all 32 scored fields. Rejected and
-missing manifests are failed candidates, and ranking normalizes over all
-candidate attempts on disk. The final joint check passed.
-One requested scientific condition remains unresolved: the reproduction does
-**not** establish the paper's uniform superiority over matrix EIG. That
-comparison is retained, rather than weakened or hidden. The supported scope is
-synthetic pose recovery and improvement over the rounded DQ initializer.
+This iteration addressed REVIEW.md: it adds the paper's real-data experiment
+(Sec. 4.3, Table 4: multi-view registration of Stanford 3D Scanning Repository
+scans, ICP relative motions, the paper's (1 mm, 1 deg) perturbation, reference,
+EIG and SDR run on it). It also brings the synthetic setup to a well-posed
+version of the paper's settings and states plainly where the paper's
+comparisons do not reproduce. Along the way it fixed one evaluator flaw that
+made a better method score lower, closed three new shortcuts, and replayed the
+previously repaired ones.
 
-The complete inference audit was job `00902d7f-40f`. It regenerated the reference,
-all fixed baselines, seed controls, stronger/weaker methods, and repaired
-shortcuts from final solver code. Its final assertion rejected the
-matrix-comparison claim after saving all numerical results. The final
-evaluator-only fixes were applied together and checked in job `79663ce3-a6a`
-(exit 0, 120 seconds), using those saved raw outputs. No solver, comparator,
-or data change required new inference. This job rescored the reference,
-baselines, seed controls, stronger/weaker controls and repaired shortcuts on
-both slices, checked paired uncertainty and the failure protocol, regenerated
-canonical reference/baseline scores, and passed package validation.
-The validator emits three heuristic warnings about random-number generation
-in the test-input generator and frozen comparison solvers. Submitted methods
-are scored from their raw poses; the hidden interface runs inference and
-performs no training. Artifact-consistency and protocol checks passed.
-`redteam/hardening/packaging_check.json` explicitly records
-`all_requested_conditions_met: false` for the unresolved EIG comparison.
-`scripts/run.sh` is restored to end-to-end reference reproduction.
-Aggregate evidence is in `redteam/hardening/report.json`. Hidden raw outputs,
-inputs, and per-trial errors stay inside `eval/test/.cache/`.
+**Bottom line.** Better results now score higher: the stronger control ranks
++0.0960 on the hidden test (paired 95% interval [+0.0949, +0.0970]) and the
+weaker control −0.0190 ([−0.0198, −0.0183]). Seed variation is 4.6e‑9 in rank.
+Every shortcut probe fails or ties the reference exactly. Matrix EIG ties the
+reference (+0.0003), and SDR is slightly more accurate on the scan experiments
+(+0.0005). The paper's claimed superiority of DQGPM over EIG, and the
+EIG/SDR failures it reports on sparse scan graphs, do **not** reproduce.
+
+Jobs: `1937b8a9-ec3`, `6be339e4-0cc` and `f93ae350-634` were failed builds
+(wrong `.conf` convention; identity-start ICP too weak; inconsistent quaternion
+signs). They are described below because each exposed something real.
+`8544621f-ca5` ran the full cohort. `5b98f5bd-c2d` (exit 0) rescored every saved
+raw output after the evaluator alignment fix and passed
+`validate.py --compare --post-design` and `--post-reproducer`. The evidence is
+in `redteam/hardening2/` (`report.json`, `diag_before.json`,
+`scores_{train,test}_all.json`).
+
+## What changed
+
+1. **Real-scan experiments `scan_sparse` and `scan_dense` (new, scored).**
+   - `eval/test/build_scans.py` registers every pair of scans with
+     point-to-point ICP (Besl & McKay). Scan sets: bunny (10 scans), Buddha
+     standing (15), dragon standing (15), Armadillo standing (12).
+     - *Dense* graphs start ICP from the turntable angle in the file names.
+     - *Sparse* graphs use no pose prior: multi-start ICP from 121 fixed
+       rotations, keeping the best fit by overlap. Identity-only starts
+       registered just 4 of 45 bunny pairs.
+   - A pair is observed when ICP converged to the repository alignment
+     (≥5% overlap at 1 mm, within 3° and 5 mm). Pairs with the largest
+     overlap are kept, up to the paper's Table 4 edge counts.
+   - Ground truth is the repository's `.conf` alignment. That file maps scan
+     points by `R(q)^T p + t`; the builder detects this from the data, with a
+     0.64 vs 0.008 overlap separation.
+   - ICP error relative to the repository alignment averages 0.24–1.07° and
+     0.38–1.23 mm per kept edge, depending on the configuration. Hidden edge
+     counts are 12/27/30/24 (sparse; paper 21/30/37/24) and 51/62/42 (dense;
+     paper 90/84/52).
+   - The graphs (`eval/test/scans.json`) and the raw scans (`eval/test/.raw`,
+     fetched by `download.sh`) live only in `eval/test/`. The public train
+     slice uses other scan sets of the same repository: Buddha and dragon on
+     their side, back and upright (`eval/train/scans.json`).
+   - **Per trial.** Every hidden trial (100 per configuration) re-expresses
+     each scan in a fresh random rigid frame, randomly relabels the scans, and
+     right-multiplies each relative pose by the paper's perturbation (angle
+     N(0, 1°) about a uniform axis, translation N(0, 1 mm) per axis). This keeps
+     the noise distribution and graph exactly as specified.
+   - **Sign lift.** Measurement signs are lifted consistently with the truth
+     representatives, as the paper's model `C = x x^* + Δ` assumes. Without
+     the lift, 10–20% of edges carried the opposite sign. DQGPM then failed the
+     task (train dense rotation error 3.25), while its own spectral
+     initializer gave 0.17. For a connected low-noise graph the lift follows
+     from cycle consistency, so it adds no pose information.
+2. **SDR comparator** (`sdr`, Rosen et al. 2019 SE-Sync relaxation),
+   evaluator-owned, on the scan experiments only, as in the paper (Table 2
+   excludes SDR). Translations are eliminated in closed form. The rotation SDP
+   is solved by ADMM and rounded as in SE-Sync, with weights from the declared
+   noise. A public copy is in `baseline/sdr.py`.
+3. **Synthetic graphs are conditioned on connectivity** (test generator,
+   public generator, train evaluator). On the previous unconditioned graphs,
+   77 of 150 p=0.05 trials had isolated nodes. Their placement is
+   unidentifiable, so part of the score paid for guessing (see shortcuts).
+4. **Evaluator gauge alignment made sign-robust (test flaw).** The paper's
+   aligner `q = s/|s|`, `s = Σ q̂_j* q_j`, used a sign-fixing loop. When an
+   estimate's quaternion signs split evenly against the truth
+   representatives, the loop could stall orthogonal to the true alignment.
+   Every node then scored ≈180° off (trial error ≈2π) while translations were
+   fine. It hit EIG, SDR and the MLE refinement, whose signs come from
+   rotation matrices, in 1–3% of scan trials. The stronger control scored
+   −0.112 on the test before the fix and +0.0960 after it. Signs are now
+   resolved by the dominant eigenvector of `Σ t t^T`, then the paper's sum is
+   applied. Sign-consistent outputs score exactly as before: all 48 hidden
+   reference statistics are bit-identical.
+5. **Weights.** p005_noise005 0.30→0.20, p005_noise010 0.30→0.20, p008 0.25→0.15,
+   p030 0.15→0.10; scan_sparse 0.20 and scan_dense 0.15 (new). Real-data
+   registration is one of the paper's two empirical pillars (abstract,
+   Sec. 4.3), so it now carries 35%. Sparse graphs weigh more because the
+   paper stresses robustness to missing measurements. Coefficients per metric
+   are unchanged (1, 0.25, 0.35, 0.2).
+6. Packaging:
+   - `download.sh` fetches the scans (checksummed) and the SciPy wheel used
+     only by the ICP builder.
+   - `setup.sh` installs SciPy.
+   - `reproduce.sh` rebuilds the scan graphs if missing.
+   - The obsolete `scripts/hardening_*.sh` scripts were removed.
 
 ## Does better science score higher?
 
-The old ranks below are the REDTEAM all-finite-attempt cohort. The new ranks
-use all final candidate attempts, including failures, and a frozen reference. Since each
-metric is divided by its variation across that cohort, magnitudes across the
-two columns are not directly comparable. Their ordering and paired intervals
-are the relevant checks.
+The before ranks are from the previous hardening's cohort. After ranks are
+hidden-test ranks of this audit's cohort: 13 candidate attempts including the
+failures, normalized by their spread. Magnitudes are cohort-dependent; the
+ordering and the paired intervals are the checks.
 
-| Method | Before rank | After hidden rank | Paired 95% interval after |
+| Method | Before (prev. gym, test) | After (test) | Paired 95% interval after |
 |---|---:|---:|---:|
-| Stored / final reference | 0 | 0 | fixed anchor |
-| Reference seed 0, fresh | −0.081313 | 0 | same as anchor |
-| Reference seed 1 | −0.033993 | +0.0000003154 | [−0.0000001155, +0.0000005167] |
-| Reference seed 2 | −0.264303 | +0.0000001082 | [−0.0000003279, +0.0000003198] |
-| Stronger noise-aware refinement | +0.496262 | **+0.156129** | **[+0.154125, +0.159224]** |
-| Weaker rounded DQ spectral estimator | −0.122511 | **−0.025081** | **[−0.026678, −0.022918]** |
-| One power iteration | −9.475122 | −7.364029, failed | failed recovery threshold |
-| Matrix EIG, registered as an honest candidate | not run | +0.008799 | [+0.004819, +0.011829] |
+| Reference (DQGPM) | 0 | 0 | anchor |
+| Reference, seeds 1 / 2 | +3.2e‑7 / +1.1e‑7 | +4.6e‑9 / +3.0e‑9 | ±1.7e‑8 |
+| Stronger: noise-aware refinement (synthetic) + SE(3) MLE refinement (scans) | +0.156 (synthetic only) | **+0.0960** | [+0.0949, +0.0970] |
+| Stronger, before the alignment fix (same raw outputs) | — | −0.112 | [−0.142, −0.023] |
+| Weaker: rounded DQ spectral initializer | −0.025 | **−0.0190** | [−0.0198, −0.0183] |
+| Matrix EIG (evaluator comparator, as if ranked) | +0.0088 | +0.0003 | [+0.0002, +0.0004] |
+| SDR (scan experiments only, as if ranked) | not run | +0.0005 | scan experiments only |
 
-The old weaker-versus-fresh-reference gap was only 0.041198, smaller than the
-0.230310 range across reference seeds. After fixing the translation origin and
-freezing the default initializer seed, the three-seed hidden rank range is
-0.0000003154. The stronger gain and weaker loss exceed that range by orders of
-magnitude. Every method sees the same instances. Mean-error uncertainty uses
-1,000 paired bootstrap resamples; complete weighted-rank uncertainty uses 500,
-recomputing mean, standard deviation, p90, and maximum with common resampled
-indices and the audit cohort's fixed metric scales.
+The stronger control improves both mean errors in all six experiments, e.g.
+hidden p005_noise010 R/T 0.0932/0.0866 vs reference 0.1529/0.1197. Paired
+improvements are 28–70% on synthetic data. On scans it gains +2.7%
+(sparse rotation) and +1.5% (dense rotation), both with paired intervals
+above zero. The weaker control is worse in every experiment, e.g. scan_sparse
+R 0.0305 vs 0.0260. Public and hidden reference means agree within 2% on
+synthetic data and within 13% (R) and 26% (T) on scans (different objects).
 
-Immediately before this final evaluator patch, the same raw-output cohort
-gave stronger/weaker ranks +8.488435/−1.342277 and failed attempts null ranks
-with empty or partial metric entries. Those magnitudes used only successful
-candidates for normalization. The final all-attempt normalization changes the
-units of rank; it preserves the strong ordering and now makes every failed
-attempt costly to consumers of the numeric metrics as well as status flags.
-Reference rank remains exactly zero before and after. Re-aligning its saved
-poses changed no scientific metric by more than 2.8e-17.
+## Reference scores before and after
 
-The reference and honest controls also behave alike on development and test.
-For example, reference development R/T means are 0.107338/0.077709 and
-0.180722/0.135395 on the two sparse settings, versus hidden
-0.108040/0.077601 and 0.179398/0.134035. Public-answer memorization still wins
-on public instances and fails on the private instances; this is the intended
-generalization distinction.
+| Hidden experiment | Before R / T | After R / T | Why it changed |
+|---|---|---|---|
+| p005_noise005 | 0.10804 / 0.07760 | 0.07659 / 0.05953 | connected graphs only |
+| p005_noise010 | 0.17940 / 0.13404 | 0.15291 / 0.11965 | connected graphs only |
+| p008_noise010 | 0.11254 / 0.08669 | 0.11134 / 0.08557 | connected graphs only (few changed) |
+| p030_noise010 | 0.05220 / 0.04050 | 0.05227 / 0.04092 | new instances, same distribution |
+| scan_sparse | — | 0.02601 / 0.001694 | new |
+| scan_dense | — | 0.01845 / 0.000902 | new |
 
-## Reference recovery and headroom
-
-| Hidden setting | Reference R/T before | Reference R/T after | DQ spectral R/T after | Stronger R/T after |
-|---|---|---|---|---|
-| p005_noise005 | 0.107290 / 0.133748 | 0.108040 / 0.077601 | 0.113220 / 0.081901 | 0.075657 / 0.055027 |
-| p005_noise010 | 0.181609 / 0.240346 | 0.179398 / 0.134035 | 0.189593 / 0.142989 | 0.121707 / 0.096609 |
-| p008_noise010 | absent | 0.112537 / 0.086686 | 0.117958 / 0.090836 | 0.050204 / 0.058766 |
-| p030_noise010 | absent | 0.052201 / 0.040496 | 0.052587 / 0.040897 | 0.015738 / 0.026606 |
-
-No reference metric sits at its lower bound: all 32 scored statistics are
-strictly above zero, and all vary across the honest methods. No tried variant
-reaches all bounds. The stronger method improves both means in every setting,
-retaining substantial error even on the denser experiment. Its gain supplies
-headroom independently of the competitive matrix baseline.
-
-The added p=0.08 and p=0.30 experiments extend the paper's own noise/density
-study at its original n=100. They expose the remaining noise floor when sparse
-graph ambiguity is reduced. The old test selected 57 public-seed trials; the
-new hidden sizes are 200/200/150/100, with 100 development trials per setting.
-Sparse settings retain 60% total weight; added settings receive 25% and 15%.
-This weights noise handling as well as sparse recovery. Per-metric coefficient
-magnitudes remain 1 for each mean, 0.25 for standard deviation, 0.35 for p90,
-and 0.20 for maximum. No weights were adjusted in response to the EIG result.
-
-Rank adds `weight * abs(coefficient) * direction * (value-reference) / std`
-over all metrics, with std taken across all candidate attempts on disk
-and the frozen reference. Direction comes only from `higher_is_better`.
-Evaluator-owned baselines are comparisons, not extra reward terms. A failed
-validity or recovery constraint assigns evaluator-owned worst-case values to
-the entire attempt, so other metrics cannot compensate for failure. For N
-nonnegative trial errors with passing mean below L, maximum is below N*L,
-standard deviation below sqrt(N-1)*L, and the interpolated p90 is bounded by
-N*L/(N-ceil(0.9*(N-1))). Rotation also has its physical bounds. Each penalty
-exceeds the corresponding passing bound by 1% plus 1e-9. This guarantees every
-failure scores below every successful attempt in every field, even for a
-consumer that ignores status metadata. Missing, malformed, reserved, and
-duplicate manifests receive the same complete penalties. Rejected manifests
-use a reserved evaluator namespace, so their entries cannot be overwritten.
-The penalties are failure sentinels; actual errors remain separate diagnostics.
+The method code is unchanged. The reference and every baseline were rerun from
+the final code on the final data (job `8544621f-ca5`), and the canonical
+`scoring/scores_{train,test}.json` contain only the reference and the fixed
+comparators. Paper-reported numbers are unchanged under `_paper_reported`;
+Table 4 is added under `_paper_reported_table4`.
 
 ## Major shortcuts
 
-“Failed” below means status `failed`, rank −7.364029 in the final audit cohort,
-and worst-case penalties in every metric of every experiment. Every row's raw
-output was rescored through the hidden interface after the evaluator fixes.
+| Shortcut | Before | Fix | After (test) |
+|---|---|---|---|
+| Guess identity for unidentifiable isolated nodes (hand-written rule) | Unconditioned p=0.05 graphs: translation gain +0.0051 (SE 0.0010) over the reference. Explains EIG's old +0.0088 rank (its per-component solver did this). | Synthetic graphs conditioned on connectivity | rank 0.0, identical to reference |
+| Pool the 100 perturbation trials of one scan graph (average, solve once) | Native frames: error −25…−55%, e.g. bunny R 0.0326→0.0149, Armadillo-sparse R 0.0188→0.0083 | Fresh random frame per scan and random labels per trial | rank 0.0 (no two trials share a graph; reduces to the reference) |
+| Hard-code the published Stanford alignment | Native frames: exactly zero error | Hidden per-trial frames and labels | failed, −7.2645 |
+| All translations zero (tiny native translations) | Native frames: T 0.00128/0.00125 beats the reference's 0.00146/0.00177 on Buddha/dragon sparse | Frame translations N(0, 5 cm) per axis make translation estimation non-trivial | failed, −7.2645 |
+| Rebuild public answers / one pose per instance / select trials / NaN (previously repaired) | +0.91 / +0.91 / +0.69 / invalid | unchanged protocol | all failed, −7.2645 |
 
-| Shortcut | Before rank / behavior | Fix | After hidden result |
-|---|---:|---|---|
-| Rebuild answers from visible generator | +0.911938 | Test family and answer generator only in eval/test; solver receives measurements without seeds or truth | −7.364029, failed recovery |
-| Enumerate the 100 public seeds | +0.911938, about 1.8 seconds | Independent private test family; exact public-bank fingerprint enumeration finds no hidden match | −7.364029, failed recovery |
-| Replace truth / duplicate instance IDs | +0.911938 | Evaluator owns truth and IDs; strict duplicate-key rejection; only raw pose fields accepted | −7.364029, rejected |
-| Return one pose with n=100 metadata | +0.911938 | Actual arrays must contain exactly the requested node count; submitted metadata ignored/rejected | −7.364029, rejected |
-| Select easiest trials | +0.685948 | Exact full evaluator-owned ID set and test size | −7.364029, rejected |
-| Substitute p=0.30 low-noise data | +0.911937 | Evaluator fixes graph, noise, instances and truth | −7.364029, failed recovery |
-| Forge an oracle comparison baseline | +11.078712 | Fixed comparison implementations and operating points in eval; no submitted comparison accepted | −7.364029, rejected |
-| Identity poses plus forged baseline compensation | +4.231233 | Complete-task validity/recovery gate precedes rank; candidate's own errors only | −7.364029, rejected |
-| NaN translation | exit 0 with NaN metric; no valid finite old rank | Strict finite JSON and pose checks; impossible metrics fail | −7.364029, rejected |
-| Negative/scalar score or success-flag forgery | New probe; old forged scalars already scored −6.928792 | Output schema accepts poses only; evaluator recomputes every number and verdict | −7.364029, rejected |
+"Before" for the three scan rows is `redteam/hardening2/diag_before.json`:
+the same graphs and perturbations in native frames with fixed labels. That is
+the naive version of the new experiment, which never shipped. Failed attempts
+carry finite worst-case values in all 48 scored fields.
 
-For additional evidence that the hidden instances are unseen, public-bank
-lookup, answer reconstruction, and easier-input substitution all scored
-+0.465918 on development in this audit, then failed hidden recovery. Genuine
-methods did not suffer that distribution gap.
+## Headroom check
 
-The full historical constant-output and empty/null solver runs were not
-replayed. Protocol fixtures now explicitly exercise missing, malformed,
-reserved and duplicate manifests, empty/partial IDs, invalid JSON and recovery
-failure through each scorer's main entrypoint. Every failure receives all
-metric keys and ranks below the valid control. Smaller checks also reject
-nulls, booleans, overflow, NaN/infinity, nonunit rotations,
-nonorthogonal dual parts, huge translations, partial IDs, and forged truth or
-baselines. The same checks verify coefficient-sign invariance, unit invariance,
-metric direction, and failure precedence on both independent evaluators.
+No reference metric sits at its bound: all 48 hidden statistics are strictly
+positive. The stronger control is above the reference in every experiment.
 
-## Implementation and packaging fixes
+- **Synthetic experiments:** large headroom (stronger +28–70%).
+- **Scan experiments:** small headroom. The best estimators tried (SDR, which
+  is the global MLE here, and local MLE refinement) gain only 1.5–3%. The
+  remaining error is dominated by real ICP registration error, which no
+  synchronization method can remove from the measurements.
+- The new experiment comes from the paper's own Table 4. No simple variant
+  reaches a bound.
+- Brute force does not apply: the problems are continuous and the hidden
+  instances are unseen.
 
-The actual Algorithms 1 and 2 are retained: dual-number vector normalization,
-unprojected spectral initialization, Hermitian dual-quaternion multiplication,
-and entrywise UDQ projection. Vectorized multiplication was checked against
-the original per-entry computation to within 1.8e-15. The initializer's
-arbitrary translation origin was removed at serialization by one common right
-translation that makes mean body-frame translation zero. This preserves every
-relative pose and every algorithm iterate; its invariance was explicitly
-checked. All reference and baseline serializers use the same convention. It
-removes seed-dependent translation inflation under the paper's alignment.
+## Paper comparisons, stated plainly
 
-The matrix comparator now uses homogeneous-row nullspace/least-squares
-rounding, as described in the [EIG source paper, section 2.2](https://fusiello.github.io/papers/siims16.pdf).
-Disconnected components are solved separately, with identity at isolated
-nodes, using no truth. The shared output origin is an explicitly documented
-convention. The matrix implementation was not degraded to force an ordering.
+- **Synthetic (Table 2), DQGPM vs EIG: tie.** On connected graphs the two agree
+  within 0.6% in rotation (EIG marginally lower) and 1.1% in translation
+  (either direction), e.g. hidden p005_noise010 R 0.1529 vs 0.1524,
+  T 0.1197 vs 0.1194.
+  - On the old unconditioned graphs, a per-component EIG beat DQGPM only by
+    guessing isolated nodes better.
+  - The paper's "largest gains on sparse graphs" plausibly come from EIG's
+    instability on disconnected graphs (it trims 15% "due to EIG
+    instability"). That regime is not identifiable and is no longer scored.
+- **Real scans (Table 4):** DQGPM and EIG are equal to four digits on every
+  object. SDR is slightly better:
+  - rotation: bunny 0.0309 vs 0.0320, Armadillo-sparse 0.0180 vs 0.0190,
+    Armadillo-dense 0.0154 vs 0.0160;
+  - translation within ±9%.
+  - The paper's "comparable best accuracy" holds. The EIG/SDR failures it
+    reports (rotation error ≈3.1–3.6 on all sparse graphs) do not reproduce
+    with correct implementations. Runtime, the paper's other advantage over SDR,
+    is not scored.
+- **Absolute synthetic errors stay far above Table 2.** Paper rotation errors
+  are consistent with a rotation noise about 57× smaller than stated
+  (p=0.30: 0.0005 at "5°", scaling ∝σ_r). That fits a degree-to-radian
+  conversion applied twice. The gym keeps the stated noise and does not tune
+  any setting toward paper numbers.
+- **Dense scan graphs are sparser than the paper's** (missing 33–48% vs
+  13–19%), because ICP reached the repository alignment on only about 60% of
+  pairs. Sparse graphs are close: 58–69% missing vs 58–67%; bunny 66% vs 48%.
 
-Alignment now removes the mean body-frame translation in the evaluator too,
-before fitting the paper's gauge. A method's arbitrary global origin then
-cannot alter scientific error under imperfect recovered rotations. The
-reference already serialized this convention; its algorithm is unchanged.
-Both independent evaluators are checked with a common right translation and
-rotation applied to deliberately imperfect estimates.
+## Shortcuts and limitations left
 
-Evaluation recomputes all scored statistics from raw complete poses; every
-baseline, reference, threshold, setting and comparison implementation is
-owned by eval. Train and test share no code or imports, and eval never imports
-method. Test answers and their generator exist only in eval/test. The hidden
-test performs inference, never training. No-argument evaluate_test.sh discovers
-all registered solver manifests, without hardcoding a submitted method name.
-
-The first joint job (817ad207-04c) filled /tmp and incorrectly continued after
-an incomplete audit. That was not a successful verification. Temporary solver
-inputs now stay in the appropriate evaluator cache, are deleted after each
-experiment, and evaluator I/O failures stop the job. Scientific and shortcut
-checks remain fatal; the unresolved external comparison is separately exposed
-in the report as `all_requested_conditions_met: false`.
-
-The container now uses Docker Hub python:3.11-slim-bookworm and only OS package
-installation in container.def. setup.sh resolves its wheel relative to its
-own location and can install the pinned dependency during internet-enabled
-setup. download.sh includes the real public wheel fetch and checksum. Runtime
-needs no internet, external model, dataset, or shared directory.
-
-The paper's reported Table 2 values remain unchanged under `_paper_reported`
-in scoring/reference.json. Its 15% trimmed statistics are historical context,
-not targets for the gym's untrimmed statistics and added tail metrics. Numeric
-gym targets and canonical train/test score files come only from final-code
-reference runs and fixed baselines; audit-only candidate scores stay in the
-audit report. No seed or setup was selected to match a paper value.
-
-## Remaining limitations and shortcuts left
-
-The published **uniform advantage over matrix EIG is unreproduced**. Hidden
-EIG R/T means are 0.112000/0.071695, 0.181953/0.128651,
-0.112205/0.085952, and 0.051901/0.040949. It trades rotation against
-translation and has rank +0.008799 with paired interval [+0.004819,+0.011829].
-Under the required all-attempt normalization it is measurably above the
-reference, strengthening rather than resolving this negative finding.
-Copying that honest estimator is an allowed alternative, not a loophole or the
-headroom evidence. The weaker DQ spectral baseline is clearly below the
-reference, while the stronger control is clearly above both. The reproduction
-has the paper's procedure and original node count; no justified remaining
-setup correction was identified that establishes the EIG claim. This requested
-condition is left unmet, and no full-paper success is claimed.
-
-General optimization on the supplied observations remains allowed. For this
-continuous estimation problem, more optimization can be a scientific method;
-it does not compute hidden truth. Exhaustive lookup of the finite public
-instance bank no longer solves the hidden test. Direct hidden-file access,
-code tampering, and malicious external side effects remain for the separate
-attempt grader; no defenses target leftover processes or Python environments
-in the fresh test container.
-
-The test is finite, so max/p90 estimates retain sampling uncertainty and the
-reported bootstrap intervals are conditional on this cohort's metric scales.
-The package does not establish theoretical recovery guarantees or reproduce
-SDR, real scan registration, or runtime-speed claims. These are not scored
-experiments. Historical modulo-split and paper-matching claims in old logs are
-superseded by the final protocol.
+- **Reading hidden files** (`eval/test/scans.json`, `eval/test/.raw/`) or the
+  internet copy of the Stanford alignments, and then matching relative poses
+  to undo the per-trial frames: this needs hidden data or hard-coded external
+  answers. It is left to the attempt grader.
+- **EIG (+0.0003) and SDR (+0.0005) are honest alternatives** at or slightly
+  above the reference. Copying them gains about 0.3–0.5% of the stronger
+  control's margin. This is an unresolved paper comparison, not a loophole.
+- **The scan experiments discriminate weakly** among good methods; their
+  headroom is a few percent.
+- **The validator warns** that evaluator files use random generators (hidden
+  instance generation and the builder). Candidates are scored only from their
+  raw poses.
+- **SDR solver:** the SDP is solved by ADMM, not SE-Sync's Riemannian
+  staircase. It is the same relaxation, and runtime is not scored.
+- **Not scored:** the theory (recovery guarantees, linear rate) and the
+  runtime claims (Table 3, Table 4 timing).

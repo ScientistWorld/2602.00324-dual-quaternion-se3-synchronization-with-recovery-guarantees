@@ -1,5 +1,13 @@
 # Progress
 
+Final status (2026-11-17): final hardening iteration complete (jobs
+`8544621f-ca5` full cohort, `5b98f5bd-c2d` evaluator-only rescore, exit 0).
+The gym now scores four connected-graph synthetic settings and two real-scan
+registration settings (Stanford scans, paper Table 4) against the reference
+and three fixed comparators (DQ spectral, matrix EIG, SDR). See HARDENING.md
+for before/after ranks, shortcuts and the unreproduced comparisons.
+`scripts/run.sh` runs the reference end to end. Entries below are historical.
+
 Final status (2026-11-09): the joint scientific/shortcut audit and the
 rescore-only packaging job are complete. Canonical files contain four
 experiments, the reference, and two fixed baselines. Stronger/weaker ordering

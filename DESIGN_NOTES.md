@@ -1,21 +1,11 @@
 # Final gym design
 
-The final protocol uses measurement-only solver commands, private instances at
-test time, and independent public instances from the same distribution. A
-method returns complete raw poses; evaluators fix all comparisons and
-recompute every scientific quantity. Constraints precede rank arithmetic.
-
-The n=100 problems cover four density/noise settings. Enlarged paired tests
-and fixed initializer seeds address the seed-noise problem identified by the
-red-team audit. The complete joint audit reruns all affected solvers together; final packaging
-rescores those raw outputs. See
-HARDENING.md for before/after results, uncertainty, fixes, and limitations.
-
-Historical public-seed splits and truth-bearing result artifacts are no longer
-accepted. Paper trimmed statistics are preserved as context, while the gym
-scores untrimmed error and reliability. Evaluator-owned references are frozen
-source snapshots, with no runtime imports from method/ or between slices.
-
-The audit establishes stronger/weaker ordering and improvement over the DQ
-initializer. It does not establish uniform superiority over matrix EIG. The
-comparison is retained, with no coefficient changes to manufacture an advantage.
+Measurement-only solver commands; private instances at test time; public
+instances from the same procedures. Six scored experiments: four synthetic
+n=100 settings on connected Erdos-Renyi graphs (paper Table 2 settings), and
+two real multi-view registration settings built from pairwise ICP of Stanford
+3D Scanning Repository scans (paper Sec. 4.3, Table 4), with hidden objects,
+hidden per-trial rigid frames and labels, and sign-consistent measurements.
+Evaluators fix all comparisons (DQ spectral, matrix EIG, SDR), recompute every
+quantity from raw poses with a double-cover-robust gauge alignment, and apply
+complete failure penalties before ranking. See HARDENING.md.

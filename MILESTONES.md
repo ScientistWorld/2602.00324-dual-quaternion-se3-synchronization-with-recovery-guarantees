@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-11-17] - core_claim
+- Added the paper's real-data experiment (Sec. 4.3, Table 4) as two scored experiments: ICP registration graphs of Stanford scans (bunny, Buddha, dragon, Armadillo hidden; other scan sets public), (1 mm, 1 deg) perturbation, hidden per-trial frames, reference + DQ spectral + EIG + SDR (new SE-Sync comparator).
+- Synthetic graphs conditioned on connectivity (closes an isolated-node guessing rule); evaluator alignment made double-cover-sign robust (a better method had scored lower).
+- Hidden ranks: stronger +0.0960 [0.0949, 0.0970], weaker -0.0190, seeds ~5e-9; all shortcut probes fail or tie. DQGPM ties EIG and is slightly below SDR on scans; the paper's superiority claims over EIG/SDR do not reproduce (HARDENING.md). Milestone unchanged.
+
 ### [2026-11-09] - core_claim
 - Final evaluator hardening passed joint CPU job 79663ce3-a6a: complete finite failure penalties, all-attempt normalization, gauge invariance, paired headroom and artifact consistency.
 - Stronger/weaker hidden ranks are +0.156129/−0.025081, versus a reference seed range of 0.0000003154; all repaired shortcuts score −7.364029.

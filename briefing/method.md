@@ -23,12 +23,20 @@ All relative poses and all algorithm iterates are preserved. This output
 convention removes the initializer's arbitrary translation gauge before the
 paper's error alignment; the baselines use the same convention.
 
+The method needs measurements whose dual-quaternion signs are consistent with
+one choice of node representatives (the model `C = x x^* + noise`); the scan
+experiments supply relative poses in that lifted form.
+
 ## Main Claims
 
 The paper claims accurate and stable recovery, improvement during projected
-refinement, and uniform superiority over matrix EIG in its synthetic study.
+refinement, uniform superiority over matrix EIG in its synthetic study, and
+on real scan registration accuracy comparable to the best of EIG and SDR at
+lower cost than SDR (with EIG and SDR failing on sparse scan graphs).
 The reproduction verifies refinement over the rounded DQ initializer and
-recovery of both pose components. It does not reproduce uniform superiority
-over matrix EIG; that comparison remains visible in the scores. Theoretical
-recovery guarantees and linear convergence rates are not established by this
-finite empirical suite.
+recovery of both pose components on synthetic and real-scan graphs, with
+accuracy comparable to SDR and EIG on real scans. It does not reproduce
+superiority over matrix EIG (the two tie on connected graphs) nor the
+failures of EIG and SDR on sparse scan graphs; SDR is slightly more accurate.
+Runtime is not scored. Theoretical recovery guarantees and linear convergence
+rates are not established by this finite empirical suite.
