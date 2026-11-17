@@ -1,8 +1,8 @@
 {
   "experiments": {
     "p005_noise005": {
-      "description": "SE(3) synchronization, n=100, p005_noise005; untrimmed trial statistics.",
-      "weight": 0.3,
+      "description": "SE(3) synchronization, n=100, p=0.05 connected Erdos-Renyi graphs, noise (0.05, 5 deg); untrimmed trial statistics.",
+      "weight": 0.2,
       "primary_metric": "error_T",
       "metrics": {
         "error_R": {
@@ -48,43 +48,13 @@
       },
       "results": {
         "dqgpm": {
-          "type": "proposed",
-          "error_R": 0.1073379144172171,
-          "error_R_std": 0.04164983607148021,
-          "error_R_p90": 0.1448028333942147,
-          "error_R_max": 0.3305278466280812,
-          "error_T": 0.07770942778903604,
-          "error_T_std": 0.025090707408853316,
-          "error_T_p90": 0.10862890752788706,
-          "error_T_max": 0.19273906861937326
-        },
-        "dq_spectral": {
-          "type": "baseline",
-          "error_R": 0.11164882037648369,
-          "error_R_std": 0.039395525180622525,
-          "error_R_p90": 0.15078098980353719,
-          "error_R_max": 0.2881120361017438,
-          "error_T": 0.08170305162447908,
-          "error_T_std": 0.02461810017078165,
-          "error_T_p90": 0.11369471747265203,
-          "error_T_max": 0.18531544111695705
-        },
-        "matrix_eig": {
-          "type": "baseline",
-          "error_R": 0.11204041521567118,
-          "error_R_std": 0.04654042534188769,
-          "error_R_p90": 0.18123866426308374,
-          "error_R_max": 0.326341401143598,
-          "error_T": 0.07289161603685118,
-          "error_T_std": 0.018724179583821842,
-          "error_T_p90": 0.09724549061759877,
-          "error_T_max": 0.16784541809416317
+          "type": "proposed"
         }
       }
     },
     "p005_noise010": {
-      "description": "SE(3) synchronization, n=100, p005_noise010; untrimmed trial statistics.",
-      "weight": 0.3,
+      "description": "SE(3) synchronization, n=100, p=0.05 connected Erdos-Renyi graphs, noise (0.10, 10 deg); untrimmed trial statistics.",
+      "weight": 0.2,
       "primary_metric": "error_T",
       "metrics": {
         "error_R": {
@@ -130,124 +100,12 @@
       },
       "results": {
         "dqgpm": {
-          "type": "proposed",
-          "error_R": 0.18072239260078482,
-          "error_R_std": 0.040449619513705376,
-          "error_R_p90": 0.22029964243975464,
-          "error_R_max": 0.3906195699374144,
-          "error_T": 0.13539538533395384,
-          "error_T_std": 0.02421820335224202,
-          "error_T_p90": 0.165397720979047,
-          "error_T_max": 0.2434300165355448
-        },
-        "dq_spectral": {
-          "type": "baseline",
-          "error_R": 0.19016429636447124,
-          "error_R_std": 0.03919478347622537,
-          "error_R_p90": 0.23193427724645338,
-          "error_R_max": 0.3591220521260274,
-          "error_T": 0.14377618532160982,
-          "error_T_std": 0.02454059235972411,
-          "error_T_p90": 0.17766951127577615,
-          "error_T_max": 0.24271699032849256
-        },
-        "matrix_eig": {
-          "type": "baseline",
-          "error_R": 0.18341661846030358,
-          "error_R_std": 0.04742613126253614,
-          "error_R_p90": 0.2324515447701728,
-          "error_R_max": 0.4325510575597476,
-          "error_T": 0.13125590719287536,
-          "error_T_std": 0.019016729841800757,
-          "error_T_p90": 0.15612282690319376,
-          "error_T_max": 0.22352616213989573
+          "type": "proposed"
         }
       }
     },
     "p008_noise010": {
-      "description": "SE(3) synchronization, n=100, p008_noise010; untrimmed trial statistics.",
-      "weight": 0.25,
-      "primary_metric": "error_T",
-      "metrics": {
-        "error_R": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Mean aligned rotation error over the scored synthetic trials."
-        },
-        "error_R_std": {
-          "higher_is_better": false,
-          "coefficient": -0.25,
-          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
-        },
-        "error_R_p90": {
-          "higher_is_better": false,
-          "coefficient": -0.35,
-          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
-        },
-        "error_R_max": {
-          "higher_is_better": false,
-          "coefficient": -0.2,
-          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
-        },
-        "error_T": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Mean aligned translation error over the scored synthetic trials."
-        },
-        "error_T_std": {
-          "higher_is_better": false,
-          "coefficient": -0.25,
-          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
-        },
-        "error_T_p90": {
-          "higher_is_better": false,
-          "coefficient": -0.35,
-          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
-        },
-        "error_T_max": {
-          "higher_is_better": false,
-          "coefficient": -0.2,
-          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
-        }
-      },
-      "results": {
-        "dqgpm": {
-          "type": "proposed",
-          "error_R": 0.11083838978262356,
-          "error_R_std": 0.012046788419333517,
-          "error_R_p90": 0.12021042939964206,
-          "error_R_max": 0.16449037131463906,
-          "error_T": 0.08722447712634616,
-          "error_T_std": 0.00892203240080739,
-          "error_T_p90": 0.09511702923013192,
-          "error_T_max": 0.13901691894539275
-        },
-        "dq_spectral": {
-          "type": "baseline",
-          "error_R": 0.11628686408641452,
-          "error_R_std": 0.011754896711258766,
-          "error_R_p90": 0.1281303496635748,
-          "error_R_max": 0.16521071342799043,
-          "error_T": 0.09170957115106776,
-          "error_T_std": 0.008781740134875985,
-          "error_T_p90": 0.1009999884566682,
-          "error_T_max": 0.14036924672936638
-        },
-        "matrix_eig": {
-          "type": "baseline",
-          "error_R": 0.11065301167591024,
-          "error_R_std": 0.01345572791758783,
-          "error_R_p90": 0.11947168898710074,
-          "error_R_max": 0.1905159007260135,
-          "error_T": 0.08664705247667884,
-          "error_T_std": 0.007085112917790292,
-          "error_T_p90": 0.09534880942510948,
-          "error_T_max": 0.1166231717725126
-        }
-      }
-    },
-    "p030_noise010": {
-      "description": "SE(3) synchronization, n=100, p030_noise010; untrimmed trial statistics.",
+      "description": "SE(3) synchronization, n=100, p=0.08 connected Erdos-Renyi graphs, noise (0.10, 10 deg); untrimmed trial statistics.",
       "weight": 0.15,
       "primary_metric": "error_T",
       "metrics": {
@@ -294,37 +152,163 @@
       },
       "results": {
         "dqgpm": {
-          "type": "proposed",
-          "error_R": 0.05224003267516915,
-          "error_R_std": 0.0029087636143756814,
-          "error_R_p90": 0.056033618230707787,
-          "error_R_max": 0.05971265462679946,
-          "error_T": 0.0402544726186989,
-          "error_T_std": 0.0021887768671792714,
-          "error_T_p90": 0.042663643292668196,
-          "error_T_max": 0.04559590345026463
+          "type": "proposed"
+        }
+      }
+    },
+    "p030_noise010": {
+      "description": "SE(3) synchronization, n=100, p=0.30 connected Erdos-Renyi graphs, noise (0.10, 10 deg); untrimmed trial statistics.",
+      "weight": 0.1,
+      "primary_metric": "error_T",
+      "metrics": {
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored synthetic trials."
         },
-        "dq_spectral": {
-          "type": "baseline",
-          "error_R": 0.05275706498011342,
-          "error_R_std": 0.0029305017136412384,
-          "error_R_p90": 0.05684299562237398,
-          "error_R_max": 0.05979751527791579,
-          "error_T": 0.04069868442747616,
-          "error_T_std": 0.002242421824598055,
-          "error_T_p90": 0.04342555138924582,
-          "error_T_max": 0.046242498221486
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
         },
-        "matrix_eig": {
-          "type": "baseline",
-          "error_R": 0.05196891187353137,
-          "error_R_std": 0.002880691403344915,
-          "error_R_p90": 0.05579386185381495,
-          "error_R_max": 0.05935436374026704,
-          "error_T": 0.04071392917880432,
-          "error_T_std": 0.002198331669441551,
-          "error_T_p90": 0.04326856556426829,
-          "error_T_max": 0.04586036730466508
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored synthetic trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
+      },
+      "results": {
+        "dqgpm": {
+          "type": "proposed"
+        }
+      }
+    },
+    "scan_sparse": {
+      "description": "Multiple point-set registration on Stanford scans (paper Sec. 4.3): sparse ICP graphs without pose prior (bunny, Buddha, dragon, Armadillo), relative motions perturbed by (1 mm, 1 deg).",
+      "weight": 0.2,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored real-scan trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored real-scan trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
+      },
+      "results": {
+        "dqgpm": {
+          "type": "proposed"
+        }
+      }
+    },
+    "scan_dense": {
+      "description": "Multiple point-set registration on Stanford scans (paper Sec. 4.3): dense ICP graphs from turntable-angle initialization (Buddha, dragon, Armadillo), relative motions perturbed by (1 mm, 1 deg).",
+      "weight": 0.15,
+      "primary_metric": "error_R",
+      "metrics": {
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored real-scan trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored real-scan trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
+      },
+      "results": {
+        "dqgpm": {
+          "type": "proposed"
         }
       }
     }
@@ -385,5 +369,134 @@
       }
     }
   },
-  "_setup_note": "Paper Table 2 uses 100 trials and 15% trimmed means. Gym uses all trials, including disconnected graphs, and adds tail metrics. Paper values above are historical context, not gym targets. Numeric results below are frozen reproduced measurements (populated by the final reference run)."
+  "_paper_reported_table4": {
+    "_note": "Paper Table 4, (sigma_t, sigma_r) = (0.001 m, 1 deg), 100 trials, native scan frames. Missing = zero entries of the n x n measurement matrix. Times in seconds. Context only: the gym pools configurations per graph type, re-expresses every scan in a hidden random frame, and uses its own ICP graphs.",
+    "bunny_sparse": {
+      "missing": 0.48,
+      "dqgpm": {
+        "time": 0.0072,
+        "error_R": 0.0188,
+        "error_T": 0.0012
+      },
+      "sdr": {
+        "time": 0.0954,
+        "error_R": 3.6349,
+        "error_T": 0.0675
+      },
+      "matrix_eig": {
+        "time": 0.003,
+        "error_R": 3.4519,
+        "error_T": 0.0506
+      }
+    },
+    "buddha_dense": {
+      "missing": 0.1333,
+      "dqgpm": {
+        "time": 0.0023,
+        "error_R": 0.0192,
+        "error_T": 0.0007
+      },
+      "sdr": {
+        "time": 0.0887,
+        "error_R": 0.1395,
+        "error_T": 0.0014
+      },
+      "matrix_eig": {
+        "time": 0.0032,
+        "error_R": 0.0923,
+        "error_T": 0.0006
+      }
+    },
+    "buddha_sparse": {
+      "missing": 0.6667,
+      "dqgpm": {
+        "time": 0.0216,
+        "error_R": 0.0233,
+        "error_T": 0.0016
+      },
+      "sdr": {
+        "time": 0.1078,
+        "error_R": 3.1227,
+        "error_T": 0.0003
+      },
+      "matrix_eig": {
+        "time": 0.0036,
+        "error_R": 3.1022,
+        "error_T": 0.0002
+      }
+    },
+    "dragon_dense": {
+      "missing": 0.1867,
+      "dqgpm": {
+        "time": 0.0024,
+        "error_R": 0.0218,
+        "error_T": 0.0009
+      },
+      "sdr": {
+        "time": 0.0937,
+        "error_R": 0.2079,
+        "error_T": 0.0014
+      },
+      "matrix_eig": {
+        "time": 0.0032,
+        "error_R": 0.1704,
+        "error_T": 0.0009
+      }
+    },
+    "dragon_sparse": {
+      "missing": 0.6044,
+      "dqgpm": {
+        "time": 0.0126,
+        "error_R": 0.0249,
+        "error_T": 0.0019
+      },
+      "sdr": {
+        "time": 0.1226,
+        "error_R": 3.1307,
+        "error_T": 0.0003
+      },
+      "matrix_eig": {
+        "time": 0.0051,
+        "error_R": 3.1346,
+        "error_T": 0.0003
+      }
+    },
+    "armadillo_dense": {
+      "missing": 0.1944,
+      "dqgpm": {
+        "time": 0.0027,
+        "error_R": 0.0198,
+        "error_T": 0.0012
+      },
+      "sdr": {
+        "time": 0.102,
+        "error_R": 0.5665,
+        "error_T": 0.0013
+      },
+      "matrix_eig": {
+        "time": 0.0053,
+        "error_R": 0.3637,
+        "error_T": 0.0006
+      }
+    },
+    "armadillo_sparse": {
+      "missing": 0.5833,
+      "dqgpm": {
+        "time": 0.0137,
+        "error_R": 0.0198,
+        "error_T": 0.0013
+      },
+      "sdr": {
+        "time": 0.1114,
+        "error_R": 3.1251,
+        "error_T": 0.0003
+      },
+      "matrix_eig": {
+        "time": 0.0071,
+        "error_R": 3.1273,
+        "error_T": 0.0003
+      }
+    }
+  },
+  "_setup_note": "Paper Table 2 uses 100 trials, unconditioned Erdos-Renyi graphs and 15% trimmed means; the gym conditions synthetic graphs on connectivity (disconnected placements are unidentifiable), uses all trials and adds tail metrics. Paper Table 4 uses native scan frames; the gym builds its own ICP graphs (edge counts from the paper's missing rates), re-expresses each scan in a hidden random rigid frame per trial, and pools configurations per graph type. Paper values under keys starting with '_' are historical context, not gym targets. Numeric results below are frozen reproduced measurements on the public train slice (populated by the final reference run)."
 }

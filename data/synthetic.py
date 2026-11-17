@@ -1,9 +1,11 @@
 """Method-independent synthetic SE(3) synchronization benchmark generator.
 
-This is the public (train) side of the benchmark: the generator, the fixed
-experiment settings, and the visible trial-seed family.  The hidden test draws
-its instances from the same distribution with seeds that only ``eval/test/``
-holds.
+This is the public (train) side of the synthetic benchmark: the generator,
+the fixed experiment settings, and the visible trial-seed family.  The hidden
+test draws its instances from the same distribution with seeds that only
+``eval/test/`` holds.  Measurement graphs are Erdos-Renyi graphs conditioned on
+being connected.  The real-scan experiments are built by
+``eval/train/build_scans.py`` (public scan sets) and ``eval/test/`` (hidden).
 
 Command line (writes a measurement-only solver input and, separately, truth):
 
@@ -127,6 +129,20 @@ def sample_noise(
     return dq_from_axis_angle_translation(axis, angle, translation)
 
 
+def is_connected(n: int, pairs) -> bool:
+    adjacency = [[] for _ in range(n)]
+    for i, j in pairs:
+        adjacency[i].append(j)
+        adjacency[j].append(i)
+    seen, stack = {0}, [0]
+    while stack:
+        for j in adjacency[stack.pop()]:
+            if j not in seen:
+                seen.add(j)
+                stack.append(j)
+    return len(seen) == n
+
+
 def generate_instance(experiment: str, seed: int) -> BenchmarkInstance:
     """Generate one fixed-protocol synthetic synchronization instance."""
     if experiment not in EXPERIMENTS:
@@ -139,14 +155,17 @@ def generate_instance(experiment: str, seed: int) -> BenchmarkInstance:
     measurements = []
     for i in range(n):
         measurements.append({"i": i, "j": i, **as_record(identity)})
-    for i in range(n):
-        for j in range(i + 1, n):
-            if rng.random() > p:
-                continue
-            relative = dq_mul(poses[i], dq_conj(poses[j]))
-            noise = sample_noise(rng, sigma_t, sigma_r_deg)
-            noisy = (relative[0] + noise[0] - identity[0], relative[1] + noise[1])
-            measurements.append({"i": i, "j": j, **as_record(noisy)})
+    # Erdos-Renyi observation graph conditioned on connectivity: the relative
+    # placement of disconnected components is not identifiable.
+    while True:
+        pairs = [(i, j) for i in range(n) for j in range(i + 1, n) if rng.random() <= p]
+        if is_connected(n, pairs):
+            break
+    for i, j in pairs:
+        relative = dq_mul(poses[i], dq_conj(poses[j]))
+        noise = sample_noise(rng, sigma_t, sigma_r_deg)
+        noisy = (relative[0] + noise[0] - identity[0], relative[1] + noise[1])
+        measurements.append({"i": i, "j": j, **as_record(noisy)})
 
     return BenchmarkInstance(
         experiment=experiment,
@@ -178,7 +197,8 @@ def solver_record(instance: BenchmarkInstance, instance_id: str) -> dict:
 
 def setting(experiment: str) -> dict:
     n, p, sigma_t, sigma_r_deg = EXPERIMENTS[experiment]
-    return {"n": n, "p": p, "sigma_t": sigma_t, "sigma_r_deg": sigma_r_deg}
+    return {"source": "synthetic", "n": n, "p": p, "graph": "connected_erdos_renyi",
+            "measurement_model": "additive", "sigma_t": sigma_t, "sigma_r_deg": sigma_r_deg}
 
 
 def train_instances(experiment: str, trials: int = TRAIN_TRIALS) -> list[tuple[str, BenchmarkInstance]]:

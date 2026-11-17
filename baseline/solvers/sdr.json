@@ -1,0 +1,4 @@
+{
+  "name": "sdr",
+  "command": ["python3", "-m", "baseline.sdr"]
+}

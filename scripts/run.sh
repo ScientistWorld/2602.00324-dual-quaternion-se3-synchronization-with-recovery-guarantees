@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euo pipefail
 cd /home/user
-bash scripts/reproduce.sh
+bash scripts/hardening2_audit.sh

@@ -1,7 +1,7 @@
 {
   "experiments": {
     "p005_noise005": {
-      "weight": 0.3,
+      "weight": 0.2,
       "metrics": {
         "error_R": {
           "higher_is_better": false,
@@ -46,7 +46,7 @@
       }
     },
     "p005_noise010": {
-      "weight": 0.3,
+      "weight": 0.2,
       "metrics": {
         "error_R": {
           "higher_is_better": false,
@@ -91,7 +91,7 @@
       }
     },
     "p008_noise010": {
-      "weight": 0.25,
+      "weight": 0.15,
       "metrics": {
         "error_R": {
           "higher_is_better": false,
@@ -136,7 +136,7 @@
       }
     },
     "p030_noise010": {
-      "weight": 0.15,
+      "weight": 0.1,
       "metrics": {
         "error_R": {
           "higher_is_better": false,
@@ -162,6 +162,96 @@
           "higher_is_better": false,
           "coefficient": -1.0,
           "description": "Mean aligned translation error over the scored synthetic trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
+      }
+    },
+    "scan_sparse": {
+      "weight": 0.2,
+      "metrics": {
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored real-scan trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored real-scan trials."
+        },
+        "error_T_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned translation error across trials, penalizing unstable methods."
+        },
+        "error_T_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned translation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_T_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned translation error on the scored slice, discouraging isolated catastrophic failures."
+        }
+      }
+    },
+    "scan_dense": {
+      "weight": 0.15,
+      "metrics": {
+        "error_R": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned rotation error over the scored real-scan trials."
+        },
+        "error_R_std": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Standard deviation of aligned rotation error across trials, penalizing unstable methods."
+        },
+        "error_R_p90": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Ninetieth-percentile aligned rotation error, included to catch methods that trade a few severe failures for a lower mean."
+        },
+        "error_R_max": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Worst aligned rotation error on the scored slice, discouraging isolated catastrophic failures."
+        },
+        "error_T": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean aligned translation error over the scored real-scan trials."
         },
         "error_T_std": {
           "higher_is_better": false,

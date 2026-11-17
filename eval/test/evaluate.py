@@ -2,16 +2,24 @@
 """Hidden test evaluator for SE(3) synchronization solvers.
 
 Run with no arguments (``bash scripts/evaluate_test.sh``).  At test time this
-script draws fresh instances from the benchmark distribution with seeds that
-exist only here, gives every registered solver the same measurement-only
-inputs, and scores the returned poses against truth that never leaves this
-process.  Nothing a solver writes is trusted except its pose estimates.
+script builds the hidden instances with seeds that exist only here, gives
+every registered solver the same measurement-only inputs, and scores the
+returned poses against truth that never leaves this process.  Nothing a solver
+writes is trusted except its pose estimates.
+
+Experiments:
+* four synthetic settings (n=100, Erdos-Renyi measurement graphs conditioned
+  on being connected, additive dual-quaternion noise);
+* two real-scan settings built from pairwise ICP registrations of the
+  Stanford 3D Scanning Repository (``scans.json`` next to this file): every
+  trial re-expresses each scan in an unknown random rigid frame, relabels the
+  scans at random, and perturbs every relative pose by a random rigid motion.
 
 Solvers are discovered from ``method/solver.json`` and ``methods/*/solver.json``
 (JSON ``{"name": ..., "command": [...]}``; invoked as
 ``<command> --input IN --output OUT`` from the workspace root).  The
-comparators ``dq_spectral`` and ``matrix_eig`` are computed by this evaluator
-itself (``comparators.py``); manifests may not use those names.
+comparators ``dq_spectral``, ``matrix_eig`` and ``sdr`` are computed by this
+evaluator itself (``comparators.py``); manifests may not use those names.
 
 Validity rules (any violation fails the whole method): the solver exits 0
 within the time limit; the output is strict JSON (no NaN/Infinity, no duplicate
@@ -39,17 +47,27 @@ import tempfile
 from pathlib import Path
 
 WORKSPACE = Path(__file__).resolve().parents[2]
+HERE = Path(__file__).resolve().parent
 
 SLICE = "test"
-# Experiment settings (n, p, sigma_t, sigma_r_deg) and hidden test size.
+# Synthetic settings (n, p, sigma_t, sigma_r_deg) and hidden test size.
 SETTINGS = {
     "p005_noise005": (100, 0.05, 0.05, 5.0),
     "p005_noise010": (100, 0.05, 0.10, 10.0),
     "p008_noise010": (100, 0.08, 0.10, 10.0),
     "p030_noise010": (100, 0.30, 0.10, 10.0),
 }
-TRIALS = {"p005_noise005": 200, "p005_noise010": 200, "p008_noise010": 150, "p030_noise010": 100}
-_STREAM = {"p005_noise005": 1, "p005_noise010": 2, "p008_noise010": 3, "p030_noise010": 4}
+SYNTHETIC_TRIALS = {"p005_noise005": 200, "p005_noise010": 200, "p008_noise010": 150, "p030_noise010": 100}
+# Real-scan settings: ICP graph type, perturbation (paper Table 4: 1 deg, 1 mm).
+SCAN_EXPERIMENTS = {"scan_sparse": "sparse", "scan_dense": "dense"}
+SCAN_TRIALS_PER_CONFIG = 100
+SCAN_SIGMA_T = 0.001
+SCAN_SIGMA_R_DEG = 1.0
+FRAME_SIGMA_M = 0.05
+SCAN_FILE = HERE / "scans.json"
+EXPERIMENTS = list(SETTINGS) + list(SCAN_EXPERIMENTS)
+_STREAM = {"p005_noise005": 1, "p005_noise010": 2, "p008_noise010": 3, "p030_noise010": 4,
+           "scan_sparse": 5, "scan_dense": 6}
 _ENTROPY = 4950631582412054879320473732194051212
 COMPARATOR_SEED = 0
 SOLVER_TIMEOUT_S = 3600
@@ -68,7 +86,48 @@ class InvalidOutput(Exception):
     pass
 
 
-# ── hidden instance generator (same distribution as the public one) ─────────
+# ── hidden instance generators ──────────────────────────────────────────────
+
+
+def _np_qmul(a, b):
+    import numpy as np
+    w1, x1, y1, z1 = a
+    w2, x2, y2, z2 = b
+    return np.array([
+        w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2,
+        w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
+        w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2,
+        w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2,
+    ])
+
+
+def _np_conj(a):
+    import numpy as np
+    return np.array([a[0], -a[1], -a[2], -a[3]])
+
+
+def _np_rot(q):
+    import numpy as np
+    w, x, y, z = np.asarray(q, dtype=float) / np.linalg.norm(q)
+    return np.array([
+        [1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
+        [2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)],
+        [2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)],
+    ])
+
+
+def _connected(n, edges):
+    adjacency = [[] for _ in range(n)]
+    for i, j in edges:
+        adjacency[i].append(j)
+        adjacency[j].append(i)
+    seen, stack = {0}, [0]
+    while stack:
+        for j in adjacency[stack.pop()]:
+            if j not in seen:
+                seen.add(j)
+                stack.append(j)
+    return len(seen) == n
 
 
 def _generate(experiment, k):
@@ -77,25 +136,12 @@ def _generate(experiment, k):
     n, p, sigma_t, sigma_r_deg = SETTINGS[experiment]
     rng = np.random.default_rng(np.random.SeedSequence(_ENTROPY, spawn_key=(_STREAM[experiment], k)))
 
-    def qmul(a, b):
-        w1, x1, y1, z1 = a
-        w2, x2, y2, z2 = b
-        return np.array([
-            w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2,
-            w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
-            w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2,
-            w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2,
-        ])
-
-    def conj(a):
-        return np.array([a[0], -a[1], -a[2], -a[3]])
-
     def from_axis_angle(axis, angle, translation):
         axis = axis / np.linalg.norm(axis)
         half = 0.5 * float(angle)
         q = np.array([np.cos(half), *(np.sin(half) * axis)])
         q = q / np.linalg.norm(q)
-        return q, 0.5 * qmul(np.array([0.0, *translation]), q)
+        return q, 0.5 * _np_qmul(np.array([0.0, *translation]), q)
 
     poses = []
     for _ in range(n):
@@ -103,41 +149,106 @@ def _generate(experiment, k):
         angle = rng.uniform(0.0, 2.0 * np.pi)
         translation = rng.normal(size=3)
         poses.append(from_axis_angle(axis, angle, translation))
+    # Erdos-Renyi graph conditioned on connectivity: a disconnected component's
+    # placement is unidentifiable from the measurements.
+    while True:
+        pairs = [(i, j) for i in range(n) for j in range(i + 1, n) if rng.random() <= p]
+        if _connected(n, pairs):
+            break
     edges, q_st, q_dual = [], [], []
-    for i in range(n):
-        for j in range(i + 1, n):
-            if rng.random() > p:
-                continue
-            a_st, a_du = poses[i]
-            b_st, b_du = conj(poses[j][0]), conj(poses[j][1])
-            rel_st = qmul(a_st, b_st)
-            rel_du = qmul(a_st, b_du) + qmul(a_du, b_st)
-            axis = rng.normal(size=3)
-            angle = np.deg2rad(rng.normal(loc=0.0, scale=sigma_r_deg))
-            translation = rng.normal(loc=0.0, scale=sigma_t, size=3)
-            xi_st, xi_du = from_axis_angle(axis, angle, translation)
-            edges.append([i, j])
-            q_st.append((rel_st + xi_st - np.array([1.0, 0.0, 0.0, 0.0])).tolist())
-            q_dual.append((rel_du + xi_du).tolist())
+    for i, j in pairs:
+        a_st, a_du = poses[i]
+        b_st, b_du = _np_conj(poses[j][0]), _np_conj(poses[j][1])
+        rel_st = _np_qmul(a_st, b_st)
+        rel_du = _np_qmul(a_st, b_du) + _np_qmul(a_du, b_st)
+        axis = rng.normal(size=3)
+        angle = np.deg2rad(rng.normal(loc=0.0, scale=sigma_r_deg))
+        translation = rng.normal(loc=0.0, scale=sigma_t, size=3)
+        xi_st, xi_du = from_axis_angle(axis, angle, translation)
+        edges.append([i, j])
+        q_st.append((rel_st + xi_st - np.array([1.0, 0.0, 0.0, 0.0])).tolist())
+        q_dual.append((rel_du + xi_du).tolist())
     record = {"id": f"{k:03d}", "n": n, "edges": edges, "q_st": q_st, "q_dual": q_dual}
     truth = [pose(st.tolist(), du.tolist()) for st, du in poses]
     return record, truth
 
 
+def scan_configs(experiment):
+    data = json.loads(SCAN_FILE.read_text())
+    return [c for c in data["configs"] if c["mode"] == SCAN_EXPERIMENTS[experiment]]
+
+
+def _generate_scan(experiment, index, config, k):
+    """One perturbation trial of an ICP measurement graph in hidden frames."""
+    import numpy as np
+
+    rng = np.random.default_rng(np.random.SeedSequence(_ENTROPY, spawn_key=(_STREAM[experiment], index, k)))
+    n = int(config["n"])
+    perm = rng.permutation(n)
+    frame_q = rng.normal(size=(n, 4))
+    frame_q /= np.linalg.norm(frame_q, axis=1, keepdims=True)
+    frame_t = rng.normal(scale=FRAME_SIGMA_M, size=(n, 3))
+    frame_r = [_np_rot(q) for q in frame_q]
+    truth = [None] * n
+    for a, row in enumerate(config["truth"]):
+        # X_a maps world to scan a; the hidden frame h_a gives h_a X_a.
+        q, t = np.array(row[:4]), np.array(row[4:])
+        new_q = _np_qmul(frame_q[a], q)
+        truth[perm[a]] = ((new_q / np.linalg.norm(new_q)).tolist(), (frame_r[a] @ t + frame_t[a]).tolist())
+    observed = []
+    for (a, b), row in zip(config["edges"], config["relative"]):
+        qm, tm = np.array(row[:4]), np.array(row[4:])
+        # Same ICP registration expressed in the hidden frames: h_a M h_b^-1.
+        q = _np_qmul(_np_qmul(frame_q[a], qm), _np_conj(frame_q[b]))
+        t = frame_r[a] @ (tm - _np_rot(qm) @ frame_r[b].T @ frame_t[b]) + frame_t[a]
+        i, j = int(perm[a]), int(perm[b])
+        if i > j:
+            i, j = j, i
+            q, t = _np_conj(q), -_np_rot(q).T @ t
+        axis = rng.normal(size=3)
+        axis /= np.linalg.norm(axis)
+        angle = np.deg2rad(rng.normal(loc=0.0, scale=SCAN_SIGMA_R_DEG))
+        noise_t = rng.normal(loc=0.0, scale=SCAN_SIGMA_T, size=3)
+        noise_q = np.array([np.cos(angle / 2.0), *(np.sin(angle / 2.0) * axis)])
+        # Rigid perturbation of the relative motion: C = M xi.
+        c_q = _np_qmul(q, noise_q)
+        c_q /= np.linalg.norm(c_q)
+        c_t = _np_rot(q) @ noise_t + t
+        observed.append((i, j, c_q.tolist(), (0.5 * _np_qmul(np.array([0.0, *c_t]), c_q)).tolist()))
+    observed.sort(key=lambda e: (e[0], e[1]))
+    record = {"n": n, "edges": [[i, j] for i, j, _, _ in observed],
+              "q_st": [s for _, _, s, _ in observed], "q_dual": [d for _, _, _, d in observed]}
+    return record, truth
+
+
+def setting(experiment):
+    if experiment in SETTINGS:
+        n, p, sigma_t, sigma_r_deg = SETTINGS[experiment]
+        return {"source": "synthetic", "n": n, "p": p, "graph": "connected_erdos_renyi",
+                "measurement_model": "additive", "sigma_t": sigma_t, "sigma_r_deg": sigma_r_deg}
+    return {"source": "stanford_scans", "graph": SCAN_EXPERIMENTS[experiment],
+            "measurement_model": "rigid_perturbation", "sigma_t": SCAN_SIGMA_T, "sigma_r_deg": SCAN_SIGMA_R_DEG}
+
+
 def build_experiment(experiment):
-    n, p, sigma_t, sigma_r_deg = SETTINGS[experiment]
-    records, scored = [], []
-    for k in range(TRIALS[experiment]):
-        record, truth = _generate(experiment, k)
-        records.append(record)
-        scored.append((record["id"], n, truth))
-    payload = {
-        "format": INPUT_FORMAT,
-        "experiment": experiment,
-        "setting": {"n": n, "p": p, "sigma_t": sigma_t, "sigma_r_deg": sigma_r_deg},
-        "instances": records,
-    }
-    return payload, scored
+    """Payload for solvers, scored truth, and the config of every trial."""
+    records, scored, groups = [], [], []
+    if experiment in SETTINGS:
+        for k in range(SYNTHETIC_TRIALS[experiment]):
+            record, truth = _generate(experiment, k)
+            records.append(record)
+            scored.append((record["id"], record["n"], truth))
+            groups.append(experiment)
+    else:
+        for index, config in enumerate(scan_configs(experiment)):
+            for k in range(SCAN_TRIALS_PER_CONFIG):
+                record, truth = _generate_scan(experiment, index, config, k)
+                record = {"id": f"{len(records):04d}", **record}
+                records.append(record)
+                scored.append((record["id"], record["n"], truth))
+                groups.append(config["name"])
+    payload = {"format": INPUT_FORMAT, "experiment": experiment, "setting": setting(experiment), "instances": records}
+    return payload, scored, groups
 
 
 # ── quaternion arithmetic and metrics (pure Python, scalar-first) ───────────
@@ -375,11 +486,10 @@ def run_solver(manifest, payload, directory):
         shutil.rmtree(directory, ignore_errors=True)
 
 
-
 def raw_comparator(fn, payload):
     estimates = {}
     for k, record in enumerate(payload["instances"]):
-        st, du = fn(record, COMPARATOR_SEED+k)
+        st, du = fn(record, COMPARATOR_SEED+k, payload["setting"])
         estimates[record["id"]] = {"q_st": st.tolist(), "q_dual": du.tolist()}
     return json.dumps({"estimates": estimates}, allow_nan=False)
 
@@ -399,8 +509,8 @@ def cached_raw(name, exp, payload, producer, reuse):
     return raw
 
 
-def task_failure(metrics, noinfo):
-    for exp in SETTINGS:
+def task_failure(metrics, noinfo, experiments):
+    for exp in experiments:
         v = metrics.get(exp, {})
         if set(v) != set(METRICS) or any(not math.isfinite(x) or x < 0 for x in v.values()):
             return f"{exp}: invalid or incomplete measured metrics"
@@ -411,7 +521,7 @@ def task_failure(metrics, noinfo):
     return None
 
 
-def failure_values(noinfo):
+def failure_values(noinfo, counts):
     """Finite values no passing attempt can beat in the worse direction.
 
     If N nonnegative trial errors have mean below L, max < N*L,
@@ -421,7 +531,7 @@ def failure_values(noinfo):
     failure sentinels, never presented as measured pose errors.
     """
     penalties = {}
-    for exp, n in TRIALS.items():
+    for exp, n in counts.items():
         penalties[exp] = {}
         for prefix in ("error_R", "error_T"):
             limit = TASK_FAILURE_FRACTION * noinfo[exp][prefix]
@@ -474,6 +584,15 @@ def normalized_ranks(metrics, statuses, anchor, config):
     return ranks, scales
 
 
+def per_group_means(err_r, err_t, groups):
+    out = {}
+    for g in dict.fromkeys(groups):
+        idx = [k for k, x in enumerate(groups) if x == g]
+        out[g] = {"error_R": sum(err_r[k] for k in idx)/len(idx), "error_T": sum(err_t[k] for k in idx)/len(idx),
+                  "trials": len(idx)}
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser(description="Score every solver on fixed measurement-only instances.")
     parser.add_argument("--output", default=f"scoring/scores_{SLICE}.json")
@@ -481,6 +600,8 @@ def main():
     args = parser.parse_args()
     module = _load_comparators()
     config = strict_json((Path(__file__).resolve().parent / "ranking.json").read_text())
+    if list(config["experiments"]) != EXPERIMENTS:
+        raise RuntimeError("ranking.json experiments do not match the evaluator")
     manifests, rejected, counts = [], [], {}
     for path in discover_manifests():
         try:
@@ -494,14 +615,14 @@ def main():
         if manifest["name"] in duplicates:
             rejected.append({"source":manifest["source"], "reason":"duplicate solver name", "status":"failed", "rank":None})
     manifests = [m for m in manifests if m["name"] not in duplicates]
-    payloads, scored, noinfo = {}, {}, {}
-    for exp in SETTINGS:
-        payloads[exp], scored[exp] = build_experiment(exp)
-        identity = [([1.,0.,0.,0.], [0.,0.,0.])]*SETTINGS[exp][0]
-        errs = [aligned_errors(truth, identity) for _, _, truth in scored[exp]]
+    payloads, scored, groups, noinfo, trials = {}, {}, {}, {}, {}
+    for exp in EXPERIMENTS:
+        payloads[exp], scored[exp], groups[exp] = build_experiment(exp)
+        trials[exp] = len(scored[exp])
+        errs = [aligned_errors(truth, [([1.,0.,0.,0.], [0.,0.,0.])]*n) for _, n, truth in scored[exp]]
         noinfo[exp] = summarize([v[0] for v in errs], [v[1] for v in errs])
-    penalties = failure_values(noinfo)
-    metrics, statuses, details, diagnostics = {}, {}, {}, {}
+    penalties = failure_values(noinfo, trials)
+    metrics, statuses, details, diagnostics, group_means = {}, {}, {}, {}, {}
     # Rejected manifests must still cost a complete failed attempt. Their IDs
     # are evaluator-owned so invalid/reserved/duplicate names cannot overwrite
     # a fixed comparator or a valid method's results.
@@ -518,9 +639,11 @@ def main():
     tmp_root = Path(tempfile.mkdtemp(prefix="solver_", dir=CACHE))
     try:
         for name, fn, manifest in jobs:
+            # Comparators run only where the paper runs them (SDR: real scans).
+            required = [e for e in EXPERIMENTS if fn is None or module.applies(name, e)]
             measured, pertrial, failure = {}, {}, None
             print(f"[{SLICE}] evaluating {name}", flush=True)
-            for exp in SETTINGS:
+            for exp in required:
                 try:
                     def produce():
                         return raw_comparator(fn, payloads[exp]) if fn else run_solver(manifest, payloads[exp], tmp_root/name/exp)
@@ -528,18 +651,23 @@ def main():
                     r, t = score_output(strict_json(raw), scored[exp])
                     measured[exp] = summarize(r,t)
                     pertrial[exp] = {"error_R":r, "error_T":t}
+                    if exp in SCAN_EXPERIMENTS:
+                        group_means.setdefault(name, {})[exp] = per_group_means(r, t, groups[exp])
                 except OSError as exc:
                     raise RuntimeError(f"evaluator I/O failed for {name}/{exp}: {exc}") from exc
                 except Exception as exc:
                     failure = f"{exp}: {type(exc).__name__}: {exc}"
                     break
-            failure = failure or task_failure(measured, noinfo)
-            metrics[name] = finalized_metrics(measured, failure, penalties)
+            failure = failure or task_failure(measured, noinfo, required)
+            if failure:
+                metrics[name] = finalized_metrics(measured, failure, {e: penalties[e] for e in required})
+            else:
+                metrics[name] = finalized_metrics(measured, failure, penalties)
             details[name], diagnostics[name] = pertrial, measured
             statuses[name] = {"status":"failed" if failure else "ok", "evaluator_owned":fn is not None,
                               "source":f"eval/{SLICE}/comparators.py" if fn else manifest["source"]}
             statuses[name]["constraints"] = {
-                "complete_valid_outputs": len(measured) == len(SETTINGS),
+                "complete_valid_outputs": len(measured) == len(required),
                 "recovery_fraction_threshold": TASK_FAILURE_FRACTION,
                 "recovery_fractions": {exp: {
                     "rotation":v["error_R"]/noinfo[exp]["error_R"],
@@ -556,17 +684,20 @@ def main():
         shutil.rmtree(tmp_root, ignore_errors=True)
     anchor = metrics.pop("_reference")
     anchor_status = statuses.pop("_reference")
+    group_means.pop("_reference", None)
     if anchor_status["status"] != "ok":
         raise RuntimeError(f"frozen reference failed: {anchor_status}")
     ranks, scales = normalized_ranks(metrics, statuses, anchor, config)
     for name in statuses:
         statuses[name]["rank"] = ranks.get(name)
-    result = {"_metadata": {"slice":SLICE, "evaluator":f"eval/{SLICE}/evaluate.py", "trials":TRIALS,
+    result = {"_metadata": {"slice":SLICE, "evaluator":f"eval/{SLICE}/evaluate.py", "trials":trials,
         "methods":statuses, "rejected_manifests":rejected, "no_information":noinfo,
         "reference":anchor, "failure_values":penalties, "measured_before_failure":{
             n:diagnostics.get(n,{}) for n,v in statuses.items() if v["status"] != "ok"},
+        "scan_config_means":group_means,
         "rank_scales":scales, "rank_definition":"sum weight*abs(coefficient)*direction*(value-reference)/cohort_population_std; every candidate including failed attempts; failures have worst values in all metrics"},
-        "experiments": {exp:{"slice":SLICE,"n_trials":TRIALS[exp],"results":{n:m.get(exp,{}) for n,m in metrics.items()}} for exp in SETTINGS}}
+        "experiments": {exp:{"slice":SLICE,"n_trials":trials[exp],
+                             "results":{n:m[exp] for n,m in metrics.items() if exp in m}} for exp in EXPERIMENTS}}
     out = Path(args.output)
     if not out.is_absolute():
         out = WORKSPACE/out
