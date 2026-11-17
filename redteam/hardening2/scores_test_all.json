@@ -20,27 +20,27 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.02604927496314381,
+              "rotation": 0.02610068348942459,
               "translation": 0.04052278299600841
             },
             "p005_noise010": {
-              "rotation": 0.05193884590433085,
+              "rotation": 0.052072485003749405,
               "translation": 0.08136421988074753
             },
             "p008_noise010": {
-              "rotation": 0.03681370301484196,
+              "rotation": 0.03690561689473798,
               "translation": 0.056566309094898876
             },
             "p030_noise010": {
-              "rotation": 0.016606637649638024,
+              "rotation": 0.01666397757130549,
               "translation": 0.025833219701643373
             },
             "scan_sparse": {
-              "rotation": 0.008148592925597907,
+              "rotation": 0.008518904783478817,
               "translation": 0.02153504353851969
             },
             "scan_dense": {
-              "rotation": 0.004940018604420831,
+              "rotation": 0.005199773814412937,
               "translation": 0.012046017139462987
             }
           }
@@ -56,27 +56,27 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024380357955671568,
+              "rotation": 0.02442847285616198,
               "translation": 0.037649588194897846
             },
             "p005_noise010": {
-              "rotation": 0.04845319819888505,
+              "rotation": 0.04857786869663109,
               "translation": 0.07560049809412313
             },
             "p008_noise010": {
-              "rotation": 0.03502212754414045,
+              "rotation": 0.035109568343657346,
               "translation": 0.05369909071852912
             },
             "p030_noise010": {
-              "rotation": 0.016324312002303117,
+              "rotation": 0.01638067710108082,
               "translation": 0.025845216761355934
             },
             "scan_sparse": {
-              "rotation": 0.015251291819370901,
+              "rotation": 0.007273172031789612,
               "translation": 0.020232794072304536
             },
             "scan_dense": {
-              "rotation": 0.010325220585771728,
+              "rotation": 0.005104512416059176,
               "translation": 0.012002715899151587
             }
           }
@@ -92,11 +92,11 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "scan_sparse": {
-              "rotation": 0.023478057166014518,
+              "rotation": 0.007076806190530326,
               "translation": 0.019850204729457914
             },
             "scan_dense": {
-              "rotation": 0.010252397345154226,
+              "rotation": 0.005026842108756411,
               "translation": 0.012009614084649326
             }
           }
@@ -112,27 +112,27 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024395308597170703,
+              "rotation": 0.024443453002914044,
               "translation": 0.03765156335013787
             },
             "p005_noise010": {
-              "rotation": 0.04861973335187088,
+              "rotation": 0.048744832346004914,
               "translation": 0.0757400612944541
             },
             "p008_noise010": {
-              "rotation": 0.035171803792075955,
+              "rotation": 0.035259618292784234,
               "translation": 0.05369111305995198
             },
             "p030_noise010": {
-              "rotation": 0.01640949947511854,
+              "rotation": 0.0164661587118862,
               "translation": 0.025568894905905273
             },
             "scan_sparse": {
-              "rotation": 0.0069569214236592835,
+              "rotation": 0.007273077908717437,
               "translation": 0.020226741868185766
             },
             "scan_dense": {
-              "rotation": 0.004849467469371543,
+              "rotation": 0.005104461335129298,
               "translation": 0.012003020054425656
             }
           }
@@ -148,32 +148,32 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.012939254171810527,
+              "rotation": 0.012964789930064315,
               "translation": 0.02704630770911763
             },
             "p005_noise010": {
-              "rotation": 0.029626851705937488,
+              "rotation": 0.029703081851441323,
               "translation": 0.054804355187534355
             },
             "p008_noise010": {
-              "rotation": 0.015339716164614372,
+              "rotation": 0.015378015295474015,
               "translation": 0.03693787098574873
             },
             "p030_noise010": {
-              "rotation": 0.0049380962521093,
+              "rotation": 0.004955146666422912,
               "translation": 0.016645612521324297
             },
             "scan_sparse": {
-              "rotation": 0.03594938915269732,
+              "rotation": 0.007076718486508426,
               "translation": 0.019850103174119574
             },
             "scan_dense": {
-              "rotation": 0.015735623403572922,
+              "rotation": 0.005026839534582331,
               "translation": 0.012009632169084244
             }
           }
         },
-        "rank": -0.11208592938787669
+        "rank": 0.09595877143780802
       },
       "reference_seed1": {
         "status": "ok",
@@ -184,32 +184,32 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024395308595295793,
+              "rotation": 0.024443453001035436,
               "translation": 0.037651563332467095
             },
             "p005_noise010": {
-              "rotation": 0.04861973344433415,
+              "rotation": 0.04874483243870609,
               "translation": 0.07574006135052748
             },
             "p008_noise010": {
-              "rotation": 0.03517180379965332,
+              "rotation": 0.03525961830038052,
               "translation": 0.053691113106565214
             },
             "p030_noise010": {
-              "rotation": 0.016409499479488353,
+              "rotation": 0.016466158716271103,
               "translation": 0.02556889491166421
             },
             "scan_sparse": {
-              "rotation": 0.006956920877113926,
+              "rotation": 0.00727307733733439,
               "translation": 0.020226742529471483
             },
             "scan_dense": {
-              "rotation": 0.0048494675614734525,
+              "rotation": 0.005104461432074093,
               "translation": 0.012003019666744998
             }
           }
         },
-        "rank": 4.606437812581166e-09
+        "rank": 4.624863068060475e-09
       },
       "reference_seed2": {
         "status": "ok",
@@ -220,32 +220,32 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024395308605102573,
+              "rotation": 0.02444345301086157,
               "translation": 0.03765156328952801
             },
             "p005_noise010": {
-              "rotation": 0.04861973341528601,
+              "rotation": 0.04874483240958321,
               "translation": 0.07574006143560653
             },
             "p008_noise010": {
-              "rotation": 0.03517180381462299,
+              "rotation": 0.03525961831538756,
               "translation": 0.05369111308415714
             },
             "p030_noise010": {
-              "rotation": 0.016409499478341364,
+              "rotation": 0.016466158715120156,
               "translation": 0.025568894914130166
             },
             "scan_sparse": {
-              "rotation": 0.00695692172999349,
+              "rotation": 0.007273078228972966,
               "translation": 0.02022674378026972
             },
             "scan_dense": {
-              "rotation": 0.00484946742095576,
+              "rotation": 0.005104461284167724,
               "translation": 0.012003019734018782
             }
           }
         },
-        "rank": 3.0065138757204125e-09
+        "rank": 3.0026187768527842e-09
       },
       "shortcut_isolated_identity": {
         "status": "ok",
@@ -256,27 +256,27 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024395308597170703,
+              "rotation": 0.024443453002914044,
               "translation": 0.03765156335013787
             },
             "p005_noise010": {
-              "rotation": 0.04861973335187088,
+              "rotation": 0.048744832346004914,
               "translation": 0.0757400612944541
             },
             "p008_noise010": {
-              "rotation": 0.035171803792075955,
+              "rotation": 0.035259618292784234,
               "translation": 0.05369111305995198
             },
             "p030_noise010": {
-              "rotation": 0.01640949947511854,
+              "rotation": 0.0164661587118862,
               "translation": 0.025568894905905273
             },
             "scan_sparse": {
-              "rotation": 0.0069569214236592835,
+              "rotation": 0.007273077908717437,
               "translation": 0.020226741868185766
             },
             "scan_dense": {
-              "rotation": 0.004849467469371543,
+              "rotation": 0.005104461335129298,
               "translation": 0.012003020054425656
             }
           }
@@ -293,7 +293,7 @@
           "recovery_fractions": {}
         },
         "reason": "p005_noise005: InvalidOutput: non-finite JSON constant NaN",
-        "rank": -7.2706503897798225
+        "rank": -7.264533423732967
       },
       "shortcut_one_pose": {
         "status": "failed",
@@ -305,7 +305,7 @@
           "recovery_fractions": {}
         },
         "reason": "p005_noise005: InvalidOutput: q_st must list exactly 100 quaternions",
-        "rank": -7.2706503897798225
+        "rank": -7.264533423732967
       },
       "shortcut_pool_trials": {
         "status": "ok",
@@ -316,27 +316,27 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024395308597170703,
+              "rotation": 0.024443453002914044,
               "translation": 0.03765156335013787
             },
             "p005_noise010": {
-              "rotation": 0.04861973335187088,
+              "rotation": 0.048744832346004914,
               "translation": 0.0757400612944541
             },
             "p008_noise010": {
-              "rotation": 0.035171803792075955,
+              "rotation": 0.035259618292784234,
               "translation": 0.05369111305995198
             },
             "p030_noise010": {
-              "rotation": 0.01640949947511854,
+              "rotation": 0.0164661587118862,
               "translation": 0.025568894905905273
             },
             "scan_sparse": {
-              "rotation": 0.0069569214236592835,
+              "rotation": 0.007273077908717437,
               "translation": 0.020226741868185766
             },
             "scan_dense": {
-              "rotation": 0.004849467469371543,
+              "rotation": 0.005104461335129298,
               "translation": 0.012003020054425656
             }
           }
@@ -352,33 +352,33 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024395308597170703,
+              "rotation": 0.024443453002914044,
               "translation": 0.03765156335013787
             },
             "p005_noise010": {
-              "rotation": 0.04861973335187088,
+              "rotation": 0.048744832346004914,
               "translation": 0.0757400612944541
             },
             "p008_noise010": {
-              "rotation": 0.035171803792075955,
+              "rotation": 0.035259618292784234,
               "translation": 0.05369111305995198
             },
             "p030_noise010": {
-              "rotation": 0.01640949947511854,
+              "rotation": 0.0164661587118862,
               "translation": 0.025568894905905273
             },
             "scan_sparse": {
-              "rotation": 1.0016904127040736,
+              "rotation": 1.00090266495701,
               "translation": 1.0650438229319674
             },
             "scan_dense": {
-              "rotation": 1.0049659247185994,
+              "rotation": 1.0061544094233001,
               "translation": 1.0001739946289283
             }
           }
         },
         "reason": "scan_sparse: failed rotation or translation task threshold",
-        "rank": -7.2706503897798225
+        "rank": -7.264533423732967
       },
       "shortcut_rebuild_answers": {
         "status": "failed",
@@ -389,25 +389,25 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 1.2643241529114402,
+              "rotation": 1.2533379017506157,
               "translation": 1.4057864937951796
             },
             "p005_noise010": {
-              "rotation": 1.260831084872299,
+              "rotation": 1.2547416495738608,
               "translation": 1.4069828138405822
             },
             "p008_noise010": {
-              "rotation": 1.2606849343212452,
+              "rotation": 1.2505702901176952,
               "translation": 1.4003356972994705
             },
             "p030_noise010": {
-              "rotation": 1.2369973200649982,
+              "rotation": 1.23125526918502,
               "translation": 1.4021686242236384
             }
           }
         },
-        "reason": "scan_sparse: InvalidOutput: solver exit 1; 206, in <listcomp>\n    (f\"t{k:03d}\", generate_instance(experiment, seed))\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/data/synthetic.py\", line 149, in generate_instance\n    raise ValueError(f\"unknown experiment: {experiment}\")\nValueError: unknown experiment: scan_sparse\n",
-        "rank": -7.2706503897798225
+        "reason": "scan_sparse: InvalidOutput: no raw output cached for these exact inputs",
+        "rank": -7.264533423732967
       },
       "shortcut_select_trials": {
         "status": "failed",
@@ -419,7 +419,7 @@
           "recovery_fractions": {}
         },
         "reason": "p005_noise005: InvalidOutput: instance IDs must match the complete fixed test exactly",
-        "rank": -7.2706503897798225
+        "rank": -7.264533423732967
       },
       "shortcut_zero_translation": {
         "status": "failed",
@@ -430,33 +430,33 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.024395308597170703,
+              "rotation": 0.024443453002914044,
               "translation": 0.03765156335013787
             },
             "p005_noise010": {
-              "rotation": 0.04861973335187088,
+              "rotation": 0.048744832346004914,
               "translation": 0.0757400612944541
             },
             "p008_noise010": {
-              "rotation": 0.035171803792075955,
+              "rotation": 0.035259618292784234,
               "translation": 0.05369111305995198
             },
             "p030_noise010": {
-              "rotation": 0.01640949947511854,
+              "rotation": 0.0164661587118862,
               "translation": 0.025568894905905273
             },
             "scan_sparse": {
-              "rotation": 0.0069569214236592835,
+              "rotation": 0.007273077908717437,
               "translation": 1.0
             },
             "scan_dense": {
-              "rotation": 0.004849467469371543,
+              "rotation": 0.005104461335129298,
               "translation": 1.0
             }
           }
         },
         "reason": "scan_sparse: failed rotation or translation task threshold",
-        "rank": -7.2706503897798225
+        "rank": -7.264533423732967
       },
       "weaker_spectral": {
         "status": "ok",
@@ -467,91 +467,91 @@
           "recovery_fraction_threshold": 0.5,
           "recovery_fractions": {
             "p005_noise005": {
-              "rotation": 0.02604927496314381,
+              "rotation": 0.02610068348942459,
               "translation": 0.04052278299600841
             },
             "p005_noise010": {
-              "rotation": 0.05193884590433085,
+              "rotation": 0.052072485003749405,
               "translation": 0.08136421988074753
             },
             "p008_noise010": {
-              "rotation": 0.03681370301484196,
+              "rotation": 0.03690561689473798,
               "translation": 0.056566309094898876
             },
             "p030_noise010": {
-              "rotation": 0.016606637649638024,
+              "rotation": 0.01666397757130549,
               "translation": 0.025833219701643373
             },
             "scan_sparse": {
-              "rotation": 0.008148592925597907,
+              "rotation": 0.008518904783478817,
               "translation": 0.02153504353851969
             },
             "scan_dense": {
-              "rotation": 0.004940018604420831,
+              "rotation": 0.005199773814412937,
               "translation": 0.012046017139462987
             }
           }
         },
-        "rank": -0.01892422963864784
+        "rank": -0.01897759727599984
       }
     },
     "rejected_manifests": [],
     "no_information": {
       "p005_noise005": {
-        "error_R": 3.139583158849983,
-        "error_R_std": 0.17286359621849054,
-        "error_R_p90": 3.3724303819412436,
-        "error_R_max": 3.6531532166125387,
+        "error_R": 3.133399361272504,
+        "error_R_std": 0.17096495719407562,
+        "error_R_p90": 3.3666345753737317,
+        "error_R_max": 3.6414691973727407,
         "error_T": 1.581131790027748,
         "error_T_std": 0.06769496606881185,
         "error_T_p90": 1.6744481478518563,
         "error_T_max": 1.757724586407939
       },
       "p005_noise010": {
-        "error_R": 3.1449506538025727,
-        "error_R_std": 0.1742477234801094,
-        "error_R_p90": 3.3488312390039967,
-        "error_R_max": 3.637471639916332,
+        "error_R": 3.1368794359019923,
+        "error_R_std": 0.1698374974905874,
+        "error_R_p90": 3.3287793858378834,
+        "error_R_max": 3.5825898774162663,
         "error_T": 1.579777696834734,
         "error_T_std": 0.06595628478443352,
         "error_T_p90": 1.660816972461341,
         "error_T_max": 1.766047820792956
       },
       "p008_noise010": {
-        "error_R": 3.165534132257489,
-        "error_R_std": 0.1867811072864407,
-        "error_R_p90": 3.3969150508865806,
-        "error_R_max": 3.7057385137012364,
+        "error_R": 3.1576503316731785,
+        "error_R_std": 0.1835112527858783,
+        "error_R_p90": 3.3895989266399598,
+        "error_R_max": 3.6433136722937287,
         "error_T": 1.593713528595068,
         "error_T_std": 0.06778425612716435,
         "error_T_p90": 1.683529967478271,
         "error_T_max": 1.772419646408345
       },
       "p030_noise010": {
-        "error_R": 3.185391142067973,
-        "error_R_std": 0.19221504905745201,
-        "error_R_p90": 3.4165489009536545,
-        "error_R_max": 3.761436439222803,
+        "error_R": 3.174430368880128,
+        "error_R_std": 0.18531334880065028,
+        "error_R_p90": 3.4099350068011756,
+        "error_R_max": 3.725126283999084,
         "error_T": 1.6004034749644802,
         "error_T_std": 0.05996471300062579,
         "error_T_p90": 1.6728399642595562,
         "error_T_max": 1.7550625815638927
       },
       "scan_sparse": {
-        "error_R": 3.738630616891839,
-        "error_R_std": 0.35560349916294315,
-        "error_R_p90": 4.16000776206447,
-        "error_R_max": 4.576723865826746,
+        "error_R": 3.576114508910843,
+        "error_R_std": 0.27028155414843624,
+        "error_R_p90": 3.902847939963789,
+        "error_R_max": 4.138625666727107,
         "error_T": 0.08373268551515237,
         "error_T_std": 0.01596295936527898,
         "error_T_p90": 0.10880081394806318,
         "error_T_max": 0.13707180976860045
       },
       "scan_dense": {
-        "error_R": 3.804818754866531,
-        "error_R_std": 0.37490588207639675,
-        "error_R_p90": 4.298446198324652,
-        "error_R_max": 4.728228274857489,
+        "error_R": 3.6147486614496227,
+        "error_R_std": 0.25074010115312817,
+        "error_R_p90": 3.9321018480451877,
+        "error_R_max": 4.112973735488671,
         "error_T": 0.07518702764798249,
         "error_T_std": 0.009800385076468075,
         "error_T_p90": 0.08704985400309727,
@@ -622,7 +622,7 @@
     },
     "failure_values": {
       "p005_noise005": {
-        "error_R": 1.5854894962192414,
+        "error_R": 1.5823666784426147,
         "error_R_std": 3.173008581125691,
         "error_R_p90": 6.346017161251382,
         "error_R_max": 6.346017161251382,
@@ -632,7 +632,7 @@
         "error_T_max": 159.69431079380252
       },
       "p005_noise010": {
-        "error_R": 1.5882000811702992,
+        "error_R": 1.5841241161305062,
         "error_R_std": 3.173008581125691,
         "error_R_p90": 6.346017161251382,
         "error_R_max": 6.346017161251382,
@@ -642,7 +642,7 @@
         "error_T_max": 159.5575473813081
       },
       "p008_noise010": {
-        "error_R": 1.598594737790032,
+        "error_R": 1.5946134184949552,
         "error_R_std": 3.173008581125691,
         "error_R_p90": 6.346017161251382,
         "error_R_max": 6.346017161251382,
@@ -652,7 +652,7 @@
         "error_T_max": 120.7237997920764
       },
       "p030_noise010": {
-        "error_R": 1.6086225277443265,
+        "error_R": 1.6030873372844647,
         "error_R_std": 3.173008581125691,
         "error_R_p90": 6.346017161251382,
         "error_R_max": 6.346017161251382,
@@ -662,7 +662,7 @@
         "error_T_max": 80.82037548670625
       },
       "scan_sparse": {
-        "error_R": 1.8880084625303788,
+        "error_R": 1.8059378279999758,
         "error_R_std": 3.173008581125691,
         "error_R_p90": 6.346017161251382,
         "error_R_max": 6.346017161251382,
@@ -672,7 +672,7 @@
         "error_T_max": 16.914002475060776
       },
       "scan_dense": {
-        "error_R": 1.9214334722075983,
+        "error_R": 1.8254480750320596,
         "error_R_std": 3.173008581125691,
         "error_R_p90": 6.346017161251382,
         "error_R_max": 6.346017161251382,
@@ -727,20 +727,20 @@
           "error_T_max": 0.04712543401588519
         },
         "scan_sparse": {
-          "error_R": 3.7449504455824716,
-          "error_R_std": 0.36270247180296694,
-          "error_R_p90": 4.202587163659069,
-          "error_R_max": 4.751179985378298,
+          "error_R": 3.5793425421602922,
+          "error_R_std": 0.2508031862581685,
+          "error_R_p90": 3.8719880435473697,
+          "error_R_max": 4.164771974547196,
           "error_T": 0.08917897948541804,
           "error_T_std": 0.02454689125422335,
           "error_T_p90": 0.12809733523082248,
           "error_T_max": 0.16553778582613415
         },
         "scan_dense": {
-          "error_R": 3.8237131983711135,
-          "error_R_std": 0.31665821342029765,
-          "error_R_p90": 4.195913519459825,
-          "error_R_max": 4.7508685783921445,
+          "error_R": 3.63699530467451,
+          "error_R_std": 0.20468446250327163,
+          "error_R_p90": 3.891223933091346,
+          "error_R_max": 4.159856351159126,
           "error_T": 0.07520010978695832,
           "error_T_std": 0.00980300762730814,
           "error_T_p90": 0.08708972769962882,
@@ -749,40 +749,40 @@
       },
       "shortcut_rebuild_answers": {
         "p005_noise005": {
-          "error_R": 3.9694508178080286,
-          "error_R_std": 0.17391157735999577,
-          "error_R_p90": 4.189285266309789,
-          "error_R_max": 4.489119094045115,
+          "error_R": 3.927208180804,
+          "error_R_std": 0.133949459959495,
+          "error_R_p90": 4.099298080039473,
+          "error_R_max": 4.27395960134951,
           "error_T": 2.222733715331204,
           "error_T_std": 0.09603121201572842,
           "error_T_p90": 2.341228283936193,
           "error_T_max": 2.462969384595239
         },
         "p005_noise010": {
-          "error_R": 3.9652515447037437,
-          "error_R_std": 0.15325945052643652,
-          "error_R_p90": 4.169390946870738,
-          "error_R_max": 4.4148838953943,
+          "error_R": 3.9359732779179875,
+          "error_R_std": 0.1259108792845697,
+          "error_R_p90": 4.087653242417042,
+          "error_R_max": 4.203125696415039,
           "error_T": 2.222720069135128,
           "error_T_std": 0.09883932713164581,
           "error_T_p90": 2.352952351980895,
           "error_T_max": 2.489852341661651
         },
         "p008_noise010": {
-          "error_R": 3.9907411896166924,
-          "error_R_std": 0.17018721080335011,
-          "error_R_p90": 4.244992399693082,
-          "error_R_max": 4.523937432809458,
+          "error_R": 3.9488636913707635,
+          "error_R_std": 0.12970463196223703,
+          "error_R_p90": 4.135046208428024,
+          "error_R_max": 4.298904706380966,
           "error_T": 2.2317339453607743,
           "error_T_std": 0.09831631900954292,
           "error_T_p90": 2.355014887874207,
           "error_T_max": 2.469302221088493
         },
         "p030_noise010": {
-          "error_R": 3.9403203060968663,
-          "error_R_std": 0.1561327965623478,
-          "error_R_p90": 4.116028685993654,
-          "error_R_max": 4.4237257082398305,
+          "error_R": 3.9085341183446043,
+          "error_R_std": 0.12041200641818944,
+          "error_R_p90": 4.055737779564145,
+          "error_R_max": 4.154418673242929,
           "error_T": 2.2440355386936752,
           "error_T_std": 0.09547085617713852,
           "error_T_p90": 2.367443196619569,
@@ -898,7 +898,7 @@
       "matrix_eig": {
         "scan_sparse": {
           "bunny_sparse": {
-            "error_R": 0.15603231042083157,
+            "error_R": 0.031995308363372506,
             "error_T": 0.0019836091482460117,
             "trials": 100
           },
@@ -930,7 +930,7 @@
             "trials": 100
           },
           "armadillo_dense": {
-            "error_R": 0.0784806841470117,
+            "error_R": 0.01597849361828564,
             "error_T": 0.000784975714331383,
             "trials": 100
           }
@@ -939,7 +939,7 @@
       "sdr": {
         "scan_sparse": {
           "bunny_sparse": {
-            "error_R": 0.15578512159346392,
+            "error_R": 0.030924742612916323,
             "error_T": 0.0019088049241329673,
             "trials": 100
           },
@@ -954,7 +954,7 @@
             "trials": 100
           },
           "armadillo_sparse": {
-            "error_R": 0.14304747778958524,
+            "error_R": 0.01803460056496022,
             "error_T": 0.001123348249210053,
             "trials": 100
           }
@@ -971,7 +971,7 @@
             "trials": 100
           },
           "armadillo_dense": {
-            "error_R": 0.07794434277192926,
+            "error_R": 0.015431114020206877,
             "error_T": 0.00073044224937321,
             "trials": 100
           }
@@ -1021,7 +1021,7 @@
       "better_mle_refinement": {
         "scan_sparse": {
           "bunny_sparse": {
-            "error_R": 0.4048681465353453,
+            "error_R": 0.030924991256483184,
             "error_T": 0.0019087815185797894,
             "trials": 100
           },
@@ -1036,7 +1036,7 @@
             "trials": 100
           },
           "armadillo_sparse": {
-            "error_R": 0.08046906940784805,
+            "error_R": 0.018034899527697202,
             "error_T": 0.001123349500155889,
             "trials": 100
           }
@@ -1053,7 +1053,7 @@
             "trials": 100
           },
           "armadillo_dense": {
-            "error_R": 0.1405324133415818,
+            "error_R": 0.015431112642149771,
             "error_T": 0.0007304421380293026,
             "trials": 100
           }
@@ -1226,39 +1226,39 @@
       "shortcut_public_truth": {
         "scan_sparse": {
           "bunny_sparse": {
-            "error_R": 3.642054022111387,
+            "error_R": 3.4861800789923376,
             "error_T": 0.12721846296916628,
             "trials": 100
           },
           "buddha_sparse": {
-            "error_R": 3.8133123547719134,
+            "error_R": 3.641263796300961,
             "error_T": 0.07691275522461039,
             "trials": 100
           },
           "dragon_sparse": {
-            "error_R": 3.8011842894641306,
+            "error_R": 3.6278606080743945,
             "error_T": 0.07667767771582093,
             "trials": 100
           },
           "armadillo_sparse": {
-            "error_R": 3.7232511159824644,
+            "error_R": 3.562065685273475,
             "error_T": 0.0759070220320748,
             "trials": 100
           }
         },
         "scan_dense": {
           "buddha_dense": {
-            "error_R": 3.8486762199011224,
+            "error_R": 3.686967512625323,
             "error_T": 0.0752931245907523,
             "trials": 100
           },
           "dragon_dense": {
-            "error_R": 3.8307256724313907,
+            "error_R": 3.6326273085779115,
             "error_T": 0.07485571312501721,
             "trials": 100
           },
           "armadillo_dense": {
-            "error_R": 3.791737702780836,
+            "error_R": 3.5913910928202903,
             "error_T": 0.07545149164510553,
             "trials": 100
           }
@@ -1349,7 +1349,7 @@
     },
     "rank_scales": {
       "p005_noise005": {
-        "error_R": 0.748672082180671,
+        "error_R": 0.7471268067965341,
         "error_R_std": 1.567194794389615,
         "error_R_p90": 3.10037974833046,
         "error_R_max": 3.0962639473944025,
@@ -1359,7 +1359,7 @@
         "error_T_max": 78.99275174974868
       },
       "p005_noise010": {
-        "error_R": 0.7135041236969288,
+        "error_R": 0.7114875228357752,
         "error_R_std": 1.5641078540568967,
         "error_R_p90": 3.0600872182758394,
         "error_R_max": 3.046232641664903,
@@ -1369,7 +1369,7 @@
         "error_T_max": 78.88697131795615
       },
       "p008_noise010": {
-        "error_R": 0.7397349720135136,
+        "error_R": 0.737765188183831,
         "error_R_std": 1.5663568700676964,
         "error_R_p90": 3.0837885773954308,
         "error_R_max": 3.0779267703071835,
@@ -1379,7 +1379,7 @@
         "error_T_max": 59.69319483815224
       },
       "p030_noise010": {
-        "error_R": 0.7724702611031208,
+        "error_R": 0.7697312454494535,
         "error_R_std": 1.5690698098123965,
         "error_R_p90": 3.1154066467344204,
         "error_R_max": 3.1136873844066035,
@@ -1389,20 +1389,20 @@
         "error_T_max": 39.97341919169435
       },
       "scan_sparse": {
-        "error_R": 0.9148673348033101,
-        "error_R_std": 1.5296109364620711,
-        "error_R_p90": 3.121977607274436,
-        "error_R_max": 3.1373766381714283,
+        "error_R": 0.880604750695239,
+        "error_R_std": 1.5662720915638635,
+        "error_R_p90": 3.122084126274169,
+        "error_R_max": 3.1102280502737654,
         "error_T": 0.02008271360853761,
         "error_T_std": 0.41774057388956987,
         "error_T_p90": 0.20810966938391431,
         "error_T_max": 8.36818464735452
       },
       "scan_dense": {
-        "error_R": 0.9392053749346259,
-        "error_R_std": 1.5425202949232883,
-        "error_R_p90": 3.1290565636880974,
-        "error_R_max": 3.1540824610036386,
+        "error_R": 0.8942275223974444,
+        "error_R_std": 1.5686042329706107,
+        "error_R_p90": 3.1290646974516054,
+        "error_R_max": 3.1269224577269203,
         "error_T": 0.018343166474975386,
         "error_T_std": 0.324832042768898,
         "error_T_p90": 0.1873454720137316,
@@ -1487,7 +1487,7 @@
           "error_T_max": 0.07389103621023181
         },
         "shortcut_nan": {
-          "error_R": 1.5854894962192414,
+          "error_R": 1.5823666784426147,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1497,7 +1497,7 @@
           "error_T_max": 159.69431079380252
         },
         "shortcut_one_pose": {
-          "error_R": 1.5854894962192414,
+          "error_R": 1.5823666784426147,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1517,7 +1517,7 @@
           "error_T_max": 0.07389103621023181
         },
         "shortcut_public_truth": {
-          "error_R": 1.5854894962192414,
+          "error_R": 1.5823666784426147,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1527,7 +1527,7 @@
           "error_T_max": 159.69431079380252
         },
         "shortcut_rebuild_answers": {
-          "error_R": 1.5854894962192414,
+          "error_R": 1.5823666784426147,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1537,7 +1537,7 @@
           "error_T_max": 159.69431079380252
         },
         "shortcut_select_trials": {
-          "error_R": 1.5854894962192414,
+          "error_R": 1.5823666784426147,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1547,7 +1547,7 @@
           "error_T_max": 159.69431079380252
         },
         "shortcut_zero_translation": {
-          "error_R": 1.5854894962192414,
+          "error_R": 1.5823666784426147,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1643,7 +1643,7 @@
           "error_T_max": 0.1532077790382486
         },
         "shortcut_nan": {
-          "error_R": 1.5882000811702992,
+          "error_R": 1.5841241161305062,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1653,7 +1653,7 @@
           "error_T_max": 159.5575473813081
         },
         "shortcut_one_pose": {
-          "error_R": 1.5882000811702992,
+          "error_R": 1.5841241161305062,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1673,7 +1673,7 @@
           "error_T_max": 0.1532077790382486
         },
         "shortcut_public_truth": {
-          "error_R": 1.5882000811702992,
+          "error_R": 1.5841241161305062,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1683,7 +1683,7 @@
           "error_T_max": 159.5575473813081
         },
         "shortcut_rebuild_answers": {
-          "error_R": 1.5882000811702992,
+          "error_R": 1.5841241161305062,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1693,7 +1693,7 @@
           "error_T_max": 159.5575473813081
         },
         "shortcut_select_trials": {
-          "error_R": 1.5882000811702992,
+          "error_R": 1.5841241161305062,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1703,7 +1703,7 @@
           "error_T_max": 159.5575473813081
         },
         "shortcut_zero_translation": {
-          "error_R": 1.5882000811702992,
+          "error_R": 1.5841241161305062,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1799,7 +1799,7 @@
           "error_T_max": 0.10352848935736142
         },
         "shortcut_nan": {
-          "error_R": 1.598594737790032,
+          "error_R": 1.5946134184949552,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1809,7 +1809,7 @@
           "error_T_max": 120.7237997920764
         },
         "shortcut_one_pose": {
-          "error_R": 1.598594737790032,
+          "error_R": 1.5946134184949552,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1829,7 +1829,7 @@
           "error_T_max": 0.10352848935736142
         },
         "shortcut_public_truth": {
-          "error_R": 1.598594737790032,
+          "error_R": 1.5946134184949552,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1839,7 +1839,7 @@
           "error_T_max": 120.7237997920764
         },
         "shortcut_rebuild_answers": {
-          "error_R": 1.598594737790032,
+          "error_R": 1.5946134184949552,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1849,7 +1849,7 @@
           "error_T_max": 120.7237997920764
         },
         "shortcut_select_trials": {
-          "error_R": 1.598594737790032,
+          "error_R": 1.5946134184949552,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1859,7 +1859,7 @@
           "error_T_max": 120.7237997920764
         },
         "shortcut_zero_translation": {
-          "error_R": 1.598594737790032,
+          "error_R": 1.5946134184949552,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1955,7 +1955,7 @@
           "error_T_max": 0.04712543401588519
         },
         "shortcut_nan": {
-          "error_R": 1.6086225277443265,
+          "error_R": 1.6030873372844647,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1965,7 +1965,7 @@
           "error_T_max": 80.82037548670625
         },
         "shortcut_one_pose": {
-          "error_R": 1.6086225277443265,
+          "error_R": 1.6030873372844647,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1985,7 +1985,7 @@
           "error_T_max": 0.04712543401588519
         },
         "shortcut_public_truth": {
-          "error_R": 1.6086225277443265,
+          "error_R": 1.6030873372844647,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -1995,7 +1995,7 @@
           "error_T_max": 80.82037548670625
         },
         "shortcut_rebuild_answers": {
-          "error_R": 1.6086225277443265,
+          "error_R": 1.6030873372844647,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2005,7 +2005,7 @@
           "error_T_max": 80.82037548670625
         },
         "shortcut_select_trials": {
-          "error_R": 1.6086225277443265,
+          "error_R": 1.6030873372844647,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2015,7 +2015,7 @@
           "error_T_max": 80.82037548670625
         },
         "shortcut_zero_translation": {
-          "error_R": 1.6086225277443265,
+          "error_R": 1.6030873372844647,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2051,20 +2051,20 @@
           "error_T_max": 0.0041167989402137745
         },
         "matrix_eig": {
-          "error_R": 0.05701894654305209,
-          "error_R_std": 0.43867671764967503,
-          "error_R_p90": 0.03673149475456438,
-          "error_R_max": 6.252483500346743,
+          "error_R": 0.026009696028687385,
+          "error_R_std": 0.007768083462365821,
+          "error_R_p90": 0.03640518796707771,
+          "error_R_max": 0.061080381429589437,
           "error_T": 0.0016941461831491147,
           "error_T_std": 0.0004924154827031865,
           "error_T_p90": 0.0022781506874807816,
           "error_T_max": 0.004224207517692888
         },
         "sdr": {
-          "error_R": 0.08777578334599873,
-          "error_R_std": 0.6211865198015751,
-          "error_R_p90": 0.035638849356211234,
-          "error_R_max": 6.270250777344436,
+          "error_R": 0.025307469294705568,
+          "error_R_std": 0.0075680234846640685,
+          "error_R_p90": 0.035370098724882275,
+          "error_R_max": 0.06125822502469356,
           "error_T": 0.0016621109500230896,
           "error_T_std": 0.0005047463799187757,
           "error_T_p90": 0.0022940903985508654,
@@ -2081,10 +2081,10 @@
           "error_T_max": 0.0042158206124855565
         },
         "better_mle_refinement": {
-          "error_R": 0.13440148694483356,
-          "error_R_std": 0.8176447883895268,
-          "error_R_p90": 0.03708657462809297,
-          "error_R_max": 6.273973608939611,
+          "error_R": 0.025307155655080363,
+          "error_R_std": 0.007567335887923917,
+          "error_R_p90": 0.03536526029005841,
+          "error_R_max": 0.06127659023381031,
           "error_T": 0.001662102446521882,
           "error_T_std": 0.0005047483951274993,
           "error_T_p90": 0.0022937360013806744,
@@ -2121,7 +2121,7 @@
           "error_T_max": 0.0042158206124855565
         },
         "shortcut_nan": {
-          "error_R": 1.8880084625303788,
+          "error_R": 1.8059378279999758,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2131,7 +2131,7 @@
           "error_T_max": 16.914002475060776
         },
         "shortcut_one_pose": {
-          "error_R": 1.8880084625303788,
+          "error_R": 1.8059378279999758,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2151,7 +2151,7 @@
           "error_T_max": 0.0042158206124855565
         },
         "shortcut_public_truth": {
-          "error_R": 1.8880084625303788,
+          "error_R": 1.8059378279999758,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2161,7 +2161,7 @@
           "error_T_max": 16.914002475060776
         },
         "shortcut_rebuild_answers": {
-          "error_R": 1.8880084625303788,
+          "error_R": 1.8059378279999758,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2171,7 +2171,7 @@
           "error_T_max": 16.914002475060776
         },
         "shortcut_select_trials": {
-          "error_R": 1.8880084625303788,
+          "error_R": 1.8059378279999758,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2181,7 +2181,7 @@
           "error_T_max": 16.914002475060776
         },
         "shortcut_zero_translation": {
-          "error_R": 1.8880084625303788,
+          "error_R": 1.8059378279999758,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2217,20 +2217,20 @@
           "error_T_max": 0.0013614788152535142
         },
         "matrix_eig": {
-          "error_R": 0.03928559293287826,
-          "error_R_std": 0.36025387911434775,
-          "error_R_p90": 0.02312670130900003,
-          "error_R_max": 6.268398531736156,
+          "error_R": 0.018451529423302887,
+          "error_R_std": 0.003284929257942453,
+          "error_R_p90": 0.022988402386963227,
+          "error_R_max": 0.02728879759265596,
           "error_T": 0.0009024485321603895,
           "error_T_std": 0.00015119748347866815,
           "error_T_p90": 0.001112507631330399,
           "error_T_max": 0.001386019780216302
         },
         "sdr": {
-          "error_R": 0.03900851370118663,
-          "error_R_std": 0.36035133808501313,
-          "error_R_p90": 0.022985653640137195,
-          "error_R_max": 6.269796575532571,
+          "error_R": 0.018170770783945835,
+          "error_R_std": 0.003348833643105016,
+          "error_R_p90": 0.022928236912106638,
+          "error_R_max": 0.027583082117779264,
           "error_T": 0.0009029671862241287,
           "error_T_std": 0.00019487780744968438,
           "error_T_p90": 0.0011778820293941467,
@@ -2247,10 +2247,10 @@
           "error_T_max": 0.00138774095967012
         },
         "better_mle_refinement": {
-          "error_R": 0.05987119504543097,
-          "error_R_std": 0.5088766280831981,
-          "error_R_p90": 0.023059793045158872,
-          "error_R_max": 6.27162347251662,
+          "error_R": 0.018170761478953523,
+          "error_R_std": 0.003348804628923146,
+          "error_R_p90": 0.022928306573259727,
+          "error_R_max": 0.027586666661446067,
           "error_T": 0.000902968545939037,
           "error_T_std": 0.00019487858069341263,
           "error_T_p90": 0.0011778850971431588,
@@ -2287,7 +2287,7 @@
           "error_T_max": 0.00138774095967012
         },
         "shortcut_nan": {
-          "error_R": 1.9214334722075983,
+          "error_R": 1.8254480750320596,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2297,7 +2297,7 @@
           "error_T_max": 11.390834689669347
         },
         "shortcut_one_pose": {
-          "error_R": 1.9214334722075983,
+          "error_R": 1.8254480750320596,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2317,7 +2317,7 @@
           "error_T_max": 0.00138774095967012
         },
         "shortcut_public_truth": {
-          "error_R": 1.9214334722075983,
+          "error_R": 1.8254480750320596,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2327,7 +2327,7 @@
           "error_T_max": 11.390834689669347
         },
         "shortcut_rebuild_answers": {
-          "error_R": 1.9214334722075983,
+          "error_R": 1.8254480750320596,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2337,7 +2337,7 @@
           "error_T_max": 11.390834689669347
         },
         "shortcut_select_trials": {
-          "error_R": 1.9214334722075983,
+          "error_R": 1.8254480750320596,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,
@@ -2347,7 +2347,7 @@
           "error_T_max": 11.390834689669347
         },
         "shortcut_zero_translation": {
-          "error_R": 1.9214334722075983,
+          "error_R": 1.8254480750320596,
           "error_R_std": 3.173008581125691,
           "error_R_p90": 6.346017161251382,
           "error_R_max": 6.346017161251382,

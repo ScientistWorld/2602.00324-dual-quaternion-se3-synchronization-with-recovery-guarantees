@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Rerun joint hardening audit with sign-consistent scan measurements (ICP graphs already built): before-fix diagnostics, full cohort through train and hidden test, analysis, canonical rescoring, validation."
+notes: "Evaluator-only fix (sign-robust gauge alignment): rescore the full audit cohort from saved raw outputs, analysis, canonical rescoring, validation."
