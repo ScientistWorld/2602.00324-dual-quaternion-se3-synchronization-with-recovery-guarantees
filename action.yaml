@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Joint hardening audit: build Stanford-scan ICP graphs (test+train), before-fix diagnostics, full cohort (reference, DQ spectral, EIG, SDR, seeds, stronger/weaker, shortcut probes) through train and hidden test, analysis, canonical rescoring, validation."
+notes: "Rerun joint hardening audit after fixing the Stanford .conf convention: rebuild ICP scan graphs, full cohort through train and hidden test, analysis, canonical rescoring, validation."
